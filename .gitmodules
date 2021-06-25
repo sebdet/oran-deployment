@@ -1,0 +1,3 @@
+[submodule "onap_oom"]
+	path = onap_oom
+	url = https://sebdet@gerrit.onap.org/r/a/oom
