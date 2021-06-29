@@ -1,0 +1,300 @@
+# Copyright © 2019 Amdocs, Bell Canada 
+# Copyright (c) 2020 Nordix Foundation, Modifications 
+# Modifications Copyright © 2020 Nokia 
+# 
+# Licensed under the Apache License, Version 2.0 (the "License"); 
+# you may not use this file except in compliance with the License. 
+# You may obtain a copy of the License at 
+# 
+#       http://www.apache.org/licenses/LICENSE-2.0 
+# 
+# Unless required by applicable law or agreed to in writing, software 
+# distributed under the License is distributed on an "AS IS" BASIS, 
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+# See the License for the specific language governing permissions and 
+# limitations under the License. 
+ 
+################################################################### 
+# This override file enables helm charts for all ONAP applications. 
+################################################################### 
+global: 
+  addTestingComponents: &testing true 
+  centralizedLoggingEnabled: &centralizedLogging false 
+cassandra: 
+  enabled: false
+mariadb-galera: 
+  enabled: false 
+aaf: 
+  enabled: true 
+aai: 
+  enabled: false 
+appc: 
+  enabled: false 
+cds: 
+  enabled: false 
+clamp: 
+  enabled: false 
+cli: 
+  enabled: false 
+# Today, "contrib" chart that hosting these components must also be enabled 
+# in order to make it work. So `contrib.enabled` must have the same value than 
+# addTestingComponents 
+contrib: 
+  enabled: *testing 
+consul: 
+  enabled: false 
+cps: 
+  enabled: false 
+dcaegen2: 
+  enabled: false 
+dcaegen2-services: 
+  enabled: false 
+dcaemod: 
+  enabled: false 
+holmes: 
+  enabled: false 
+dmaap: 
+  enabled: true 
+esr: 
+  enabled: false 
+oof: 
+  enabled: false 
+msb: 
+  enabled: false 
+multicloud: 
+  enabled: false 
+nbi: 
+  enabled: false 
+policy: 
+  enabled: false 
+portal: 
+  enabled: false 
+robot: 
+  enabled: false 
+sdc: 
+  enabled: false 
+sdnc: 
+  enabled: false 
+so: 
+  enabled: false 
+uui: 
+  enabled: false 
+vfc: 
+  enabled: false 
+vid: 
+  enabled: false 
+vnfsdk: 
+  enabled: false 
+modeling: 
+  enabled: false 
+platform: 
+  enabled: false 
+a1policymanagement: 
+  enabled: false 
+ 
+##### ORAN 
+nonrtric: 
+  installPms: true 
+  installA1controller: false 
+  installA1simulator: false 
+  installControlpanel: true 
+  installEnrichmentservice: true 
+  installRappcatalogueservice: false 
+  installNonrtricgateway: true 
+  installKong: false 
+  volume1: 
+    # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
+    size: 2Gi 
+    storageClassName: pms-storage 
+  volume2: 
+     # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
+    size: 2Gi 
+    storageClassName: ecs-storage 
+ 
+common: 
+  releasePrefix: r3-dev-nonrtric 
+# Do not change the namespace 
+  namespace: 
+    nonrtric: onap 
+  ingressClassName: kong 
+enrichmentservice: 
+  enrichmentservice: 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10004/o-ran-sc' 
+      name: 'nonrtric-enrichment-coordinator-service' 
+      tag: 1.1.0 
+    service: 
+      allowHttp: true 
+      httpName: http 
+      internalPort1: 9082 
+      targetPort1: 8083 
+      httpsName: https 
+      internalPort2: 9083 
+      targetPort2: 8434 
+    liveness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    persistence: 
+      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same. 
+      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
+      size: 2Gi 
+      storageClassName: ecs-storage 
+ 
+# Need to check the external port Availability 
+policymanagementservice: 
+  policymanagementservice: 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10004/o-ran-sc' 
+      name: nonrtric-policy-agent 
+      tag: 2.2.0 
+    service: 
+      allowHttp: true 
+      httpName: http 
+      internalPort1: 9080 
+      targetPort1: 8081 
+      httpsName: https 
+      internalPort2: 9081 
+      targetPort2: 8433 
+    liveness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    persistence: 
+      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same. 
+      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
+      size: 2Gi 
+      storageClassName: pms-storage 
+ 
+ 
+# A1 Conttroller may take few more minutes to start. Increase the initialDelaySeconds in liveness to avoid container restart. 
+a1controller: 
+  a1controller: 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
+      name: nonrtric-a1-controller 
+      tag: 2.0.1 
+    replicaCount: 1 
+    service: 
+      allowHttp: true 
+      httpName: http 
+      internalPort1: 8282 
+      targetPort1: 8181 
+      httpsName: https 
+      internalPort2: 8383 
+      targetPort2: 8443 
+    liveness: 
+      initialDelaySeconds: 300 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 60 
+      periodSeconds: 10 
+ 
+a1simulator: 
+  a1simulator: 
+    name: a1-sim 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
+      name: a1-simulator 
+      tag: 2.1.0 
+    service: 
+      allowHttp: true 
+      httpName: http 
+      internalPort1: 8085 
+      targetPort1: 8085 
+      httpsName: https 
+      internalPort2: 8185 
+      targetPort2: 8185 
+    liveness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    oscVersion: 
+      name: a1-sim-osc 
+      replicaCount: 2 
+    stdVersion: 
+      name: a1-sim-std 
+      replicaCount: 2 
+    stdVersion2: 
+      name: a1-sim-std2 
+      replicaCount: 2 
+ 
+controlpanel: 
+  controlpanel: 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10004/o-ran-sc' 
+      name: nonrtric-controlpanel 
+      tag: 2.2.0 
+    replicaCount: 1 
+    service: 
+      allowHttp: true 
+      httpName: http 
+      internalPort1: 8080 
+      targetPort1: 8080 
+      externalPort1: 30091 
+      httpsName: https 
+      internalPort2: 8081 
+      targetPort2: 8082 
+      externalPort2: 30092 
+    liveness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+ 
+    ingress: 
+      enabled: false 
+    ingress: 
+      enabled: false 
+rappcatalogueservice: 
+  rappcatalogueservice: 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
+      name: nonrtric-r-app-catalogue 
+      tag: 1.0.0 
+    service: 
+      allowHttp: true 
+      httpName: http 
+      internalPort1: 9085 
+      targetPort1: 8080 
+      httpsName: https 
+      internalPort2: 9086 
+      targetPort2: 8433 
+    liveness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+ 
+nonrtricgateway: 
+  nonrtricgateway: 
+    imagePullPolicy: IfNotPresent 
+    image: 
+      registry: 'nexus3.o-ran-sc.org:10004/o-ran-sc' 
+      name: nonrtric-gateway 
+      tag: 1.0.0 
+    service: 
+      httpName: http 
+      internalPort1: 9090 
+      targetPort1: 9090 
+      externalPort1: 30093 
+    liveness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10 
+    readiness: 
+      initialDelaySeconds: 20 
+      periodSeconds: 10
