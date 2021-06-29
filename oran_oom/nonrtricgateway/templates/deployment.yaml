@@ -1,0 +1,66 @@
+################################################################################
+#   Copyright (c) 2021 Nordix Foundation.                                      #
+#                                                                              #
+#   Licensed under the Apache License, Version 2.0 (the "License");            #
+#   you may not use this file except in compliance with the License.           #
+#   You may obtain a copy of the License at                                    #
+#                                                                              #
+#       http://www.apache.org/licenses/LICENSE-2.0                             #
+#                                                                              #
+#   Unless required by applicable law or agreed to in writing, software        #
+#   distributed under the License is distributed on an "AS IS" BASIS,          #
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   #
+#   See the License for the specific language governing permissions and        #
+#   limitations under the License.                                             #
+################################################################################
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ include "common.name.nonrtricgateway" . }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  generation: 1
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.nonrtricgateway" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.nonrtricgateway" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.nonrtricgateway" . }}
+        release: {{ .Release.Name }}
+    spec:
+      hostname: {{ include "common.name.nonrtricgateway" . }}
+      containers:
+      - name: {{ include "common.container.nonrtricgateway" . }}
+        image: {{ .Values.nonrtricgateway.image.registry }}/{{ .Values.nonrtricgateway.image.name }}:{{ .Values.nonrtricgateway.image.tag }}
+        imagePullPolicy: {{ .Values.nonrtricgateway.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.nonrtricgateway.service.targetPort1 }}
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.nonrtricgateway.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.nonrtricgateway.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.nonrtricgateway.liveness.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.nonrtricgateway.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.nonrtricgateway.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.nonrtricgateway.liveness.periodSeconds }}
+        volumeMounts:
+        - name: {{ include "common.name.nonrtricgateway" . }}-config
+          mountPath: /opt/app/nonrtric-gateway/config
+      volumes:
+        - name: {{ include "common.name.nonrtricgateway" . }}-config
+          configMap:
+            name: {{ include "common.name.nonrtricgateway" . }}-configmap

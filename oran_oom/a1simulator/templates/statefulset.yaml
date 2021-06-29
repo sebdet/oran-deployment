@@ -1,0 +1,172 @@
+################################################################################
+#   Copyright (c) 2020 Nordix Foundation.                                      #
+#                                                                              #
+#   Licensed under the Apache License, Version 2.0 (the "License");            #
+#   you may not use this file except in compliance with the License.           #
+#   You may obtain a copy of the License at                                    #
+#                                                                              #
+#       http://www.apache.org/licenses/LICENSE-2.0                             #
+#                                                                              #
+#   Unless required by applicable law or agreed to in writing, software        #
+#   distributed under the License is distributed on an "AS IS" BASIS,          #
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   #
+#   See the License for the specific language governing permissions and        #
+#   limitations under the License.                                             #
+################################################################################
+
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.a1simulator.oscVersion.name }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  generation: 1
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: {{ .Values.a1simulator.oscVersion.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+      release: {{ .Release.Name }}
+  serviceName: {{ .Values.a1simulator.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+        release: {{ .Release.Name }}
+    spec:
+      hostname: {{ include "common.name.a1simulator" . }}
+      containers:
+      - name: {{ include "common.containername.a1simulator" . }}
+        image: {{ .Values.a1simulator.image.registry }}/{{ .Values.a1simulator.image.name }}:{{ .Values.a1simulator.image.tag }}
+        imagePullPolicy: {{ .Values.a1simulator.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.a1simulator.service.targetPort1 }}
+          protocol: TCP
+        - containerPort: {{ .Values.a1simulator.service.targetPort2 }}
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.a1simulator.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.a1simulator.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.a1simulator.readiness.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.a1simulator.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.a1simulator.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.a1simulator.liveness.periodSeconds }}
+        env:
+        - name: A1_VERSION
+          value: OSC_2.1.0
+        - name: ALLOW_HTTP
+          value: {{ .Values.a1simulator.service.allowHttp | quote}}
+
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.a1simulator.stdVersion.name }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  generation: 1
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: {{ .Values.a1simulator.stdVersion.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+      release: {{ .Release.Name }}
+  serviceName: {{ .Values.a1simulator.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+        release: {{ .Release.Name }}
+    spec:
+      hostname: {{ include "common.name.a1simulator" . }}
+      containers:
+      - name: {{ include "common.containername.a1simulator" . }}
+        image: {{ .Values.a1simulator.image.registry }}/{{ .Values.a1simulator.image.name }}:{{ .Values.a1simulator.image.tag }}
+        imagePullPolicy: {{ .Values.a1simulator.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.a1simulator.service.targetPort1 }}
+          protocol: TCP
+        - containerPort: {{ .Values.a1simulator.service.targetPort2 }}
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.a1simulator.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.a1simulator.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.a1simulator.readiness.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.a1simulator.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.a1simulator.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.a1simulator.liveness.periodSeconds }}
+        env:
+        - name: A1_VERSION
+          value: STD_1.1.3
+        - name: ALLOW_HTTP
+          value: {{ .Values.a1simulator.service.allowHttp | quote}}
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: {{ .Values.a1simulator.stdVersion2.name }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  generation: 1
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: {{ .Values.a1simulator.stdVersion2.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+      release: {{ .Release.Name }}
+  serviceName: {{ .Values.a1simulator.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.a1simulator" . }}
+        release: {{ .Release.Name }}
+    spec:
+      hostname: {{ include "common.name.a1simulator" . }}
+      containers:
+      - name: {{ include "common.containername.a1simulator" . }}
+        image: {{ .Values.a1simulator.image.registry }}/{{ .Values.a1simulator.image.name }}:{{ .Values.a1simulator.image.tag }}
+        imagePullPolicy: {{ .Values.a1simulator.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.a1simulator.service.targetPort1 }}
+          protocol: TCP
+        - containerPort: {{ .Values.a1simulator.service.targetPort2 }}
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.a1simulator.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.a1simulator.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.a1simulator.readiness.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.a1simulator.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.a1simulator.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.a1simulator.liveness.periodSeconds }}
+        env:
+        - name: A1_VERSION
+          value: STD_2.0.0
+        - name: ALLOW_HTTP
+          value: {{ .Values.a1simulator.service.allowHttp | quote}}
