@@ -1,25 +1,61 @@
-# Copyright © 2019 Amdocs, Bell Canada 
-# Copyright (c) 2020 Nordix Foundation, Modifications 
-# Modifications Copyright © 2020 Nokia 
-# 
-# Licensed under the Apache License, Version 2.0 (the "License"); 
-# you may not use this file except in compliance with the License. 
-# You may obtain a copy of the License at 
-# 
-#       http://www.apache.org/licenses/LICENSE-2.0 
-# 
-# Unless required by applicable law or agreed to in writing, software 
-# distributed under the License is distributed on an "AS IS" BASIS, 
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-# See the License for the specific language governing permissions and 
-# limitations under the License. 
- 
-################################################################### 
-# This override file enables helm charts for all ONAP applications. 
-################################################################### 
-global: 
-  addTestingComponents: &testing true 
-  centralizedLoggingEnabled: &centralizedLogging false 
+# Copyright © 2017 Amdocs, Bell Canada
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#################################################################
+# Global configuration overrides.
+#
+# These overrides will affect all helm charts (ie. applications)
+# that are listed below and are 'enabled'.
+#################################################################
+global:
+  # Change to an unused port prefix range to prevent port conflicts
+  # with other instances running within the same k8s cluster
+  repository: nexus3.onap.org:10001 #__docker_proxy__
+  nodePortPrefix: 302
+  nodePortPrefixExt: 304
+  masterPassword: secretpassword
+  addTestingComponents: true
+  cmpv2Enabled: true
+  flavor: unlimited
+  # ONAP Repository
+  # Uncomment the following to enable the use of a single docker
+  # repository but ONLY if your repository mirrors all ONAP
+  # docker images. This includes all images from dockerhub and
+  # any other repository that hosts images for ONAP components.
+  #repository: nexus3.onap.org:10001
+
+  # readiness check - temporary repo until images migrated to nexus3
+  readinessRepository: oomk8s
+  # logging agent - temporary repo until images migrated to nexus3
+  loggingRepository: docker.elastic.co
+
+  # image pull policy
+  pullPolicy: IfNotPresent
+
+  # override default mount path root directory
+  # referenced by persistent volumes and log files
+  persistence:
+    mountPath: /dockerdata-nfs
+
+  # flag to enable debugging - application support required
+  debugEnabled: false
+
+#################################################################
+# Enable/disable and configure helm charts (ie. applications)
+# to customize the ONAP deployment.
+#################################################################
+
 cassandra: 
   enabled: false
 mariadb-galera: 
@@ -36,11 +72,12 @@ clamp:
   enabled: false 
 cli: 
   enabled: false 
-# Today, "contrib" chart that hosting these components must also be enabled 
-# in order to make it work. So `contrib.enabled` must have the same value than 
-# addTestingComponents 
-contrib: 
-  enabled: *testing 
+contrib:
+  enabled: false
+  awx:
+    enabled: false
+  netbox:
+    enabled: false
 consul: 
   enabled: false 
 cps: 
@@ -57,6 +94,10 @@ dmaap:
   enabled: true 
 esr: 
   enabled: false 
+log:
+  enabled: false
+  log-logstash:
+    replicaCount: 1
 oof: 
   enabled: false 
 msb: 
@@ -75,6 +116,8 @@ sdc:
   enabled: false 
 sdnc: 
   enabled: false 
+sniro-emulator:
+  enabled: false
 so: 
   enabled: false 
 uui: 
