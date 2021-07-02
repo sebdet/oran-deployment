@@ -138,13 +138,13 @@ a1policymanagement:
 ##### ORAN 
 nonrtric: 
   installPms: true 
-  installA1controller: false 
-  installA1simulator: false 
+  installA1controller: true
+  installA1simulator: true
   installControlpanel: true 
   installEnrichmentservice: true 
-  installRappcatalogueservice: false 
+  installRappcatalogueservice: true
   installNonrtricgateway: true 
-  installKong: false 
+  installKong: true
   volume1: 
     # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
     size: 2Gi 

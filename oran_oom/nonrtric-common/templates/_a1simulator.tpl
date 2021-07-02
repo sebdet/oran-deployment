@@ -20,7 +20,7 @@
 
 {{- define "common.fullname.a1simulator" -}}
   {{- $name := ( include "common.name.a1simulator" . ) -}}
-  {{- $namespace := "nonrtric" -}}
+  {{- $namespace := "onap" -}}
   {{- printf "%s-%s" $namespace $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 

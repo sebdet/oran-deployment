@@ -15,5 +15,5 @@
 ################################################################################
 
 {{- define "common.namespace.nonrtric" -}}
-  {{- printf "nonrtric" -}}
+  {{- printf "onap" -}}
 {{- end -}}
