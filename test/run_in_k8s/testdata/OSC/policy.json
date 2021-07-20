@@ -1,0 +1,15 @@
+{
+  "ric_id": "ric1",
+  "policy_id": "aa8feaa88d944d919ef0e83f2172a5000",
+  "service_id": "service1",
+  "policy_data": {
+    "scope": {
+      "ueId": "ue5000",
+      "qosId": "qos5000"
+    },
+    "qosObjectives": {
+      "priorityLevel": 5000
+    }
+  },
+  "policytype_id": "1"
+}

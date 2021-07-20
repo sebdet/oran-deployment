@@ -1,0 +1,16 @@
+{
+    "ric_id": "ric5",
+    "policy_id": "aa8feaa88d944d919ef0e83f2172a5200",
+    "service_id": "service1",
+    "policytype_id": "2",
+    "status_notification_uri": "http://callback-receiver:8090/callbacks/test",
+    "policy_data": {
+        "scope": {
+            "ueId": "ue5200",
+            "qosId": "qos5200"
+        },
+        "qosObjectives": {
+            "priorityLevel": 5200
+        }
+    }
+}
