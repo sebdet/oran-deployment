@@ -39,9 +39,6 @@ nonrtric:
  
 common: 
   releasePrefix: r3-dev-nonrtric 
-# Do not change the namespace 
-  namespace: 
-    nonrtric: onap 
   ingressClassName: kong 
 enrichmentservice: 
   enrichmentservice: 

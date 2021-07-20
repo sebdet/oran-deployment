@@ -15,5 +15,5 @@
 ################################################################################
 
 {{- define "common.namespace.nonrtric" -}}
-  {{- printf "onap" -}}
+  {{- default .Release.Namespace .Values.nsPrefix -}}
 {{- end -}}
