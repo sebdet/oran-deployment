@@ -15,6 +15,8 @@
 ################################################################################
 
 nonrtric:
+  persistence:
+    mountPath: /dockerdata-nfs
   installPms: true
   installA1controller: true
   installA1simulator: true

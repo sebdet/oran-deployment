@@ -29,7 +29,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /dockerdata-nfs/nonrtric/volume2
+    path: {{ .Values.nonrtric.persistence.mountPath }}/nonrtric/volume2
   storageClassName: {{ .Values.nonrtric.volume2.storageClassName }}
 
 {{- end }}

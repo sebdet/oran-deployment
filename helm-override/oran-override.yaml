@@ -1,4 +1,5 @@
 # Copyright © 2017 Amdocs, Bell Canada
+# Mofification Copyright © 2021 AT&T
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,11 @@
 # These overrides will affect all helm charts (ie. applications)
 # that are listed below and are 'enabled'.
 #################################################################
-##### ORAN 
+
+##### ORAN #####
+
+######### NONRTRIC #########
+
 nonrtric: 
   installPms: true 
   installA1controller: true
@@ -28,6 +33,10 @@ nonrtric:
   installRappcatalogueservice: true
   installNonrtricgateway: true
   installKong: true
+  # override default mount path root directory
+  # referenced by persistent volumes and log files
+  persistence:
+    mountPath: /dockerdata-nfs
   volume1: 
     # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
     size: 2Gi 
@@ -56,3 +65,30 @@ policymanagementservice:
       # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
       size: 2Gi 
       storageClassName: pms-storage 
+
+######### RIC_AUX #########
+dashboard:
+  cipher:
+    enc:
+      key: AGLDdG4D04BKm2IxIWEr8o==
+  portalapi:
+    security: false
+    appname: RIC-Dashboard
+    username: Default
+    password: password
+    ecomp_redirect_url: https://portal.api.simpledemo.onap.org:30225/ONAPPORTAL/login.htm
+    ecomp_rest_url: http://portal-app:8989/ONAPPORTAL/auxapi
+    ueb_app_key: uebkey
+  # instances are passed as string and reformatted into YAML
+  ricinstances: |
+    regions:
+      -
+        name: Region PIZ-R4
+        instances:
+          -
+            key: i1
+            name: RIC
+            appUrlPrefix: http://ric-entry
+            caasUrlPrefix: http://caas-ingress-is-REC-only
+            pltUrlPrefix: http://ric-entry
+
