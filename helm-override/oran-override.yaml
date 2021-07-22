@@ -23,10 +23,10 @@ nonrtric:
   installPms: true 
   installA1controller: true
   installA1simulator: true
-  installControlpanel: true 
-  installEnrichmentservice: true 
+  installControlpanel: true
+  installEnrichmentservice: true
   installRappcatalogueservice: true
-  installNonrtricgateway: true 
+  installNonrtricgateway: true
   installKong: true
   volume1: 
     # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
@@ -42,25 +42,6 @@ common:
   ingressClassName: kong 
 enrichmentservice: 
   enrichmentservice: 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: 'nonrtric-enrichment-coordinator-service' 
-      tag: 1.1.0 
-    service: 
-      allowHttp: true 
-      httpName: http 
-      internalPort1: 9082 
-      targetPort1: 8083 
-      httpsName: https 
-      internalPort2: 9083 
-      targetPort2: 8434 
-    liveness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
     persistence: 
       # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same. 
       # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
@@ -70,154 +51,8 @@ enrichmentservice:
 # Need to check the external port Availability 
 policymanagementservice: 
   policymanagementservice: 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: nonrtric-policy-agent 
-      tag: 2.2.0 
-    service: 
-      allowHttp: true 
-      httpName: http 
-      internalPort1: 9080 
-      targetPort1: 8081 
-      httpsName: https 
-      internalPort2: 9081 
-      targetPort2: 8433 
-    liveness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
     persistence: 
       # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same. 
       # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
       size: 2Gi 
       storageClassName: pms-storage 
- 
- 
-# A1 Conttroller may take few more minutes to start. Increase the initialDelaySeconds in liveness to avoid container restart. 
-a1controller: 
-  a1controller: 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: nonrtric-a1-controller 
-      tag: 2.0.1 
-    replicaCount: 1 
-    service: 
-      allowHttp: true 
-      httpName: http 
-      internalPort1: 8282 
-      targetPort1: 8181 
-      httpsName: https 
-      internalPort2: 8383 
-      targetPort2: 8443 
-    liveness: 
-      initialDelaySeconds: 300 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 60 
-      periodSeconds: 10 
- 
-a1simulator: 
-  a1simulator: 
-    name: a1-sim 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: a1-simulator 
-      tag: 2.1.0 
-    service: 
-      allowHttp: true 
-      httpName: http 
-      internalPort1: 8085 
-      targetPort1: 8085 
-      httpsName: https 
-      internalPort2: 8185 
-      targetPort2: 8185 
-    liveness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    oscVersion: 
-      name: a1-sim-osc 
-      replicaCount: 2 
-    stdVersion: 
-      name: a1-sim-std 
-      replicaCount: 2 
-    stdVersion2: 
-      name: a1-sim-std2 
-      replicaCount: 2 
- 
-controlpanel: 
-  controlpanel: 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: nonrtric-controlpanel 
-      tag: 2.2.0 
-    replicaCount: 1 
-    service: 
-      allowHttp: true 
-      httpName: http 
-      internalPort1: 8080 
-      targetPort1: 8080 
-      externalPort1: 30091 
-      httpsName: https 
-      internalPort2: 8081 
-      targetPort2: 8082 
-      externalPort2: 30092 
-    liveness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
- 
-    ingress: 
-      enabled: false 
-    ingress: 
-      enabled: false 
-rappcatalogueservice: 
-  rappcatalogueservice: 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: nonrtric-r-app-catalogue 
-      tag: 1.0.0 
-    service: 
-      allowHttp: true 
-      httpName: http 
-      internalPort1: 9085 
-      targetPort1: 8080 
-      httpsName: https 
-      internalPort2: 9086 
-      targetPort2: 8433 
-    liveness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
- 
-nonrtricgateway: 
-  nonrtricgateway: 
-    imagePullPolicy: IfNotPresent 
-    image: 
-      registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc' 
-      name: nonrtric-gateway 
-      tag: 1.0.0 
-    service: 
-      httpName: http 
-      internalPort1: 9090 
-      targetPort1: 9090 
-      externalPort1: 30093 
-    liveness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10 
-    readiness: 
-      initialDelaySeconds: 20 
-      periodSeconds: 10

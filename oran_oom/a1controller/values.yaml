@@ -33,7 +33,7 @@ a1controller:
     internalPort2: 8383
     targetPort2: 8443
   liveness:
-    initialDelaySeconds: 60
+    initialDelaySeconds: 300
     periodSeconds: 10
   readiness:
     initialDelaySeconds: 60

@@ -109,7 +109,7 @@ nbi:
 policy: 
   enabled: false 
 portal: 
-  enabled: false 
+  enabled: true
 robot: 
   enabled: false 
 sdc: 

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 PARENT_CHART := nonrtric
-COMMON_CHARTS_DIR := nonrtric-common
+COMMON_CHARTS_DIR := nonrtric-common aux-common ric-common
 # FIXME OOM-765
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 OUTPUT_DIR := $(ROOT_DIR)/dist
