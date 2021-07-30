@@ -11,7 +11,7 @@ Requirements:
 Build the project:
 ./scripts/build-oran.sh
 
-Install Onap + NonRTRIC + RIC Aux:
+Install Onap + NonRTRIC:
 cd scripts
 ./install-oran.sh
 Note:
