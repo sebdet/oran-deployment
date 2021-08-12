@@ -1,0 +1,276 @@
+{
+  "ietf-hardware:hardware": {
+    "component": [
+      {
+        "name": "chassis",
+        "alias": "chassis",
+        "class": "iana-hardware:chassis",
+        "state": {
+          "admin-state": "unlocked"
+        }
+      },
+      {
+        "name": "chassis-temperature-exhaust",
+        "alias": "chassis-temperature-exhaust",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "chassis-temperature-inlet",
+        "alias": "chassis-temperature-inlet",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 1
+      },
+      {
+        "name": "chassis-fan0",
+        "alias": "chassis-fan0",
+        "class": "iana-hardware:fan",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 2
+      },
+      {
+        "name": "chassis-fan0-speed",
+        "alias": "chassis-fan0-speed",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis-fan0",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "chassis-fan1",
+        "alias": "chassis-fan1",
+        "class": "iana-hardware:fan",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 3
+      },
+      {
+        "name": "chassis-fan1-speed",
+        "alias": "chassis-fan1-speed",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis-fan1",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "chassis-fan2",
+        "alias": "chassis-fan2",
+        "class": "iana-hardware:fan",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 4
+      },
+      {
+        "name": "chassis-fan2-speed",
+        "alias": "chassis-fan2-speed",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis-fan2",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "chassis-fan3",
+        "alias": "chassis-fan3",
+        "class": "iana-hardware:fan",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 5
+      },
+      {
+        "name": "chassis-fan3-speed",
+        "alias": "chassis-fan3-speed",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis-fan3",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "cpu",
+        "alias": "cpu",
+        "class": "iana-hardware:cpu",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 6
+      },
+      {
+        "name": "cpu-temperature",
+        "alias": "cpu-temperature",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "cpu",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "slot0",
+        "alias": "slot0",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 7
+      },
+      {
+        "name": "slot0-temperature",
+        "alias": "slot0-temperature",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "slot0",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "slot0-logical0",
+        "alias": "Slot0-A",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot0",
+        "parent-rel-pos": 1
+      },
+      {
+        "name": "slot0-logical0-bbu",
+        "alias": "Slot0-A-bbu",
+        "class": "iana-hardware:port",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot0-logical0",
+        "parent-rel-pos": 0,
+        "o-ran-hardware:o-ran-name": "slot0-logical0-bbu"
+      },
+      {
+        "name": "slot0-logical0-bbu-temperature",
+        "alias": "Slot0-A-bbu-temperature",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "slot0-logical0-bbu",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "slot0-logical0-rrh",
+        "alias": "Slot0-A-rrh",
+        "class": "iana-hardware:port",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot0-logical0",
+        "parent-rel-pos": 1,
+        "o-ran-hardware:o-ran-name": "slot0-logical0-rrh"
+      },
+      {
+        "name": "slot0-logical0-rrh-temperature",
+        "alias": "Slot0-A-rrh-temperature",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "slot0-logical0-rrh",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "slot0-logical1",
+        "alias": "Slot0-B",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot0",
+        "parent-rel-pos": 2
+      },
+      {
+        "name": "slot0-logical2",
+        "alias": "Slot0-C",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot0",
+        "parent-rel-pos": 3
+      },
+      {
+        "name": "slot2",
+        "alias": "slot2",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "chassis",
+        "parent-rel-pos": 9
+      },
+      {
+        "name": "slot2-temperature",
+        "alias": "slot2-temperature",
+        "class": "iana-hardware:sensor",
+        "state": {
+          "admin-state": "locked"
+        },
+        "parent": "slot2",
+        "parent-rel-pos": 0
+      },
+      {
+        "name": "slot2-logical0",
+        "alias": "Slot2-C",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot2",
+        "parent-rel-pos": 1
+      },
+      {
+        "name": "slot2-logical1",
+        "alias": "Slot3-A",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot2",
+        "parent-rel-pos": 2
+      },
+      {
+        "name": "slot2-logical2",
+        "alias": "Slot3-B",
+        "class": "iana-hardware:module",
+        "state": {
+          "admin-state": "unlocked"
+        },
+        "parent": "slot2",
+        "parent-rel-pos": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.vnf_name }}
+  labels:
+    vnf-name: {{ .Values.vnf_name }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      vnf-name: {{ .Values.vnf_name }}
+  template:
+    metadata:
+      labels:
+        vnf-name: {{ .Values.vnf_name }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}
+    spec:    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.vnf_name }}-configmap
+          volumeMounts:
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: config.json
+              mountPath: /opt/dev/ntsim-ng/config/config.json
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: ietf-hardware-operational.json
+              mountPath: /opt/dev/deploy/data/ietf-hardware-operational.json
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: ietf-hardware-running.json
+              mountPath: /opt/dev/deploy/data/ietf-hardware-running.json
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: ietf-interfaces-operational.xml
+              mountPath: /opt/dev/deploy/data/ietf-interfaces-operational.xml
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: ietf-interfaces-running.xml
+              mountPath: /opt/dev/deploy/data/ietf-interfaces-running.xml
+
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+      volumes: 
+        - name: {{ .Values.vnf_name }}-config-volume
+          configMap:
+            name: {{ .Values.vnf_name }}-configmap
+            items:
+              - key: config.json
+                path: config.json
+              - key: ietf-hardware-operational.json
+                path: ietf-hardware-operational.json
+              - key: ietf-hardware-running.json
+                path: ietf-hardware-running.json
+              - key: ietf-interfaces-operational.xml
+                path: ietf-interfaces-operational.xml
+              - key: ietf-interfaces-running.xml
+                path: ietf-interfaces-running.xml

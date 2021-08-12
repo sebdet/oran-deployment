@@ -1,0 +1,307 @@
+{
+  "ietf-hardware:hardware": {
+    "component": [
+      {
+        "name": "chassis",
+        "serial-num": "23412",
+        "software-rev": "3.8.1 (2029-10-30 11:47:59)",
+        "mfg-name": "NTS",
+        "model-name": "O1-O-RU-Simulator",
+        "description": "O-RAN O-RU O1 Simulator",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "chassis-temperature-exhaust",
+          "chassis-temperature-inlet",
+          "chassis-fan0",
+          "chassis-fan1",
+          "chassis-fan2",
+          "chassis-fan3",
+          "cpu",
+          "slot0",
+          "slot2"
+        ]
+      },
+      {
+        "name": "chassis-temperature-exhaust",
+        "sensor-data": {
+          "value": 30,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "chassis-temperature-inlet",
+        "sensor-data": {
+          "value": 29,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "chassis-fan0",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "chassis-fan0-speed"
+        ]
+      },
+      {
+        "name": "chassis-fan0-speed",
+        "sensor-data": {
+          "value": 4100,
+          "value-type": "rpm",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "chassis-fan1",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "chassis-fan1-speed"
+        ]
+      },
+      {
+        "name": "chassis-fan1-speed",
+        "sensor-data": {
+          "value": 4100,
+          "value-type": "rpm",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "chassis-fan2",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "chassis-fan2-speed"
+        ]
+      },
+      {
+        "name": "chassis-fan2-speed",
+        "sensor-data": {
+          "value": 4100,
+          "value-type": "rpm",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "chassis-fan3",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "chassis-fan3-speed"
+        ]
+      },
+      {
+        "name": "chassis-fan3-speed",
+        "sensor-data": {
+          "value": 1000,
+          "value-type": "rpm",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "cpu",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "cpu-temperature"
+        ]
+      },
+      {
+        "name": "cpu-temperature",
+        "sensor-data": {
+          "value": 30,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "slot0",
+        "serial-num": "7220530",
+        "firmware-rev": "12.00.42-S (0F7F1001)",
+        "software-rev": "0",
+        "model-name": "385A-SFP-2P-40-FHL-JC3",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "slot0-temperature",
+          "slot0-logical0",
+          "slot0-logical1",
+          "slot0-logical2"
+        ]
+      },
+      {
+        "name": "slot0-temperature",
+        "sensor-data": {
+          "value": 51,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "slot0-logical0",
+        "description": "SLOT0-AZ",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "slot0-logical0-bbu",
+          "slot0-logical0-rrh"
+        ]
+      },
+      {
+        "name": "slot0-logical0-bbu",
+        "serial-num": "AGNN214S",
+        "mfg-name": "ACME GMBH.",
+        "model-name": "ANSHEONXH-E7",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "slot0-logical0-bbu-temperature"
+        ]
+      },
+      {
+        "name": "slot0-logical0-bbu-temperature",
+        "sensor-data": {
+          "value": 37,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "slot0-logical0-rrh",
+        "serial-num": "AGNF714S",
+        "mfg-name": "ACME GMBH.",
+        "model-name": "ANSHEONXH-E7",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "slot0-logical0-rrh-temperature"
+        ]
+      },
+      {
+        "name": "slot0-logical0-rrh-temperature",
+        "sensor-data": {
+          "value": 35,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "slot0-logical1",
+        "description": "SLOT0-B",
+        "state": {
+          "oper-state": "disabled"
+        }
+      },
+      {
+        "name": "slot0-logical2",
+        "description": "SLOT0-C",
+        "state": {
+          "oper-state": "disabled"
+        }
+      },
+      {
+        "name": "slot2",
+        "serial-num": "2522642",
+        "firmware-rev": "12.00.42-S (0F7F1001)",
+        "software-rev": "0",
+        "model-name": "339B-SFP-2P-75-FHL-JC3",
+        "state": {
+          "oper-state": "enabled"
+        },
+        "contains-child": [
+          "slot2-temperature",
+          "slot2-logical0",
+          "slot2-logical1",
+          "slot2-logical2"
+        ]
+      },
+      {
+        "name": "slot2-temperature",
+        "sensor-data": {
+          "value": 49,
+          "value-type": "celsius",
+          "value-timestamp": "2021-03-18T19:51:50.3Z",
+          "oper-status": "ok"
+        },
+        "state": {
+          "oper-state": "enabled"
+        }
+      },
+      {
+        "name": "slot2-logical0",
+        "description": "SLOT2-C",
+        "state": {
+          "oper-state": "disabled"
+        }
+      },
+      {
+        "name": "slot2-logical1",
+        "description": "SLOT3-A",
+        "state": {
+          "oper-state": "disabled"
+        }
+      },
+      {
+        "name": "slot2-logical2",
+        "description": "SLOT3-B",
+        "state": {
+          "oper-state": "disabled"
+        }
+      }
+    ]
+  }
+}

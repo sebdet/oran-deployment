@@ -115,7 +115,7 @@ robot:
 sdc: 
   enabled: false 
 sdnc: 
-  enabled: false 
+  enabled: true
 sniro-emulator:
   enabled: false
 so: 

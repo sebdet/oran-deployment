@@ -1,0 +1,111 @@
+  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    <interface>
+      <name>09a95e08-5b53-4734-815f-a9c12300fc62</name>
+      <description>Simulated interface for O-RU</description>
+      <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
+      <enabled>true</enabled>
+      <link-up-down-trap-enable>disabled</link-up-down-trap-enable>
+      <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+        <enabled>false</enabled>
+        <forwarding>false</forwarding>
+        <mtu>42783</mtu>
+        <address>
+          <ip>6.122.172.49</ip>
+          <prefix-length>14</prefix-length>
+        </address>
+        <address>
+          <ip>206.35.59.57</ip>
+          <netmask>199.41.255.188</netmask>
+        </address>
+        <neighbor>
+          <ip>48.159.72.129</ip>
+          <link-layer-address>42:8f:12:23:03:d3</link-layer-address>
+        </neighbor>
+        <neighbor>
+          <ip>187.230.45.63</ip>
+          <link-layer-address>77:b5:38:45:08:be</link-layer-address>
+        </neighbor>
+        <m-plane-marking xmlns="urn:o-ran:interfaces:1.0">13</m-plane-marking>
+        <diffserv-markings xmlns="urn:o-ran:interfaces:1.0">
+          <u-plane-marking>38</u-plane-marking>
+          <c-plane-marking>16</c-plane-marking>
+          <s-plane-marking>62</s-plane-marking>
+          <other-marking>27</other-marking>
+          <enhanced-uplane-markings>
+            <up-marking-name>X5f0ExbIx4jg5fpd9c0wiOEJbCXzpYxe3M7AkiaRnlZsAgxCsx0LlFmwhk6yavM5iTFu4Idr3cTwtj0NQ0ycFVAO7ymh41meM2IQCNhFZ33km30c4ygJlRqshMJlFYrsS1iuOs1Gv5SJ8SNcr4WENm740IiyGJ0qLaUrCW7Z10A9SombsaQ7oPboptWYdOoQRjhl7hl8hV91bv5vxNCVuOcTh0RmP84Grm1qD</up-marking-name>
+            <enhanced-marking>21</enhanced-marking>
+          </enhanced-uplane-markings>
+          <enhanced-uplane-markings>
+            <up-marking-name>2zF55KBup</up-marking-name>
+            <enhanced-marking>5</enhanced-marking>
+          </enhanced-uplane-markings>
+        </diffserv-markings>
+      </ipv4>
+      <ipv6 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+        <enabled>true</enabled>
+        <forwarding>true</forwarding>
+        <mtu>1163652863</mtu>
+        <address>
+          <ip>ea87:d264:da5e:5b19:4713:7266:f91e:14f7</ip>
+          <prefix-length>124</prefix-length>
+        </address>
+        <address>
+          <ip>2853:6b9:c531:f3c1:6875:f55:17ea:157b</ip>
+          <prefix-length>65</prefix-length>
+        </address>
+        <neighbor>
+          <ip>e6ae:4eeb:25c8:4ce6:9a7:5c2c:4293:f42e</ip>
+          <link-layer-address>65:58:a4:47:f1:91</link-layer-address>
+        </neighbor>
+        <neighbor>
+          <ip>f88d:e8e9:8f68:ff46:ae1a:8329:67bc:bd6f</ip>
+          <link-layer-address>32:d7:a9:c1:37:14</link-layer-address>
+        </neighbor>
+        <dup-addr-detect-transmits>1225514618</dup-addr-detect-transmits>
+        <autoconf>
+          <create-global-addresses>true</create-global-addresses>
+          <create-temporary-addresses>true</create-temporary-addresses>
+          <temporary-valid-lifetime>2335597472</temporary-valid-lifetime>
+          <temporary-preferred-lifetime>922813230</temporary-preferred-lifetime>
+        </autoconf>
+        <m-plane-marking xmlns="urn:o-ran:interfaces:1.0">33</m-plane-marking>
+        <diffserv-markings xmlns="urn:o-ran:interfaces:1.0">
+          <u-plane-marking>29</u-plane-marking>
+          <c-plane-marking>50</c-plane-marking>
+          <s-plane-marking>14</s-plane-marking>
+          <other-marking>61</other-marking>
+          <enhanced-uplane-markings>
+            <up-marking-name>8iROcw05EJqk0qe08RerP</up-marking-name>
+            <enhanced-marking>18</enhanced-marking>
+          </enhanced-uplane-markings>
+          <enhanced-uplane-markings>
+            <up-marking-name>M14steKtoB9s09xEKPYLf4LfWZHDetPSuUkP05bgykIym746WUR3ZCjVuSqIlgAI2Nx2KIiaV0Bh7xnVs7YjB965TwF7E8PGVeAxPSHKKaTJI8w2fnlRwjWqPuxmCe2xsDWhnvT0GMBoV8i2vDTTOIbvcAROOUd9p9qMEcEcYgsLgKODfzw3hAzlaq9Zce8BfqgUCUYt2r6abMNrmcuDMVZWm0Nq7N2m6a8IW73Zy21BOP2aTpGxkxlyp9ZwO</up-marking-name>
+            <enhanced-marking>29</enhanced-marking>
+          </enhanced-uplane-markings>
+        </diffserv-markings>
+      </ipv6>
+      <alias-macs xmlns="urn:o-ran:interfaces:1.0">b2:24:6a:90:68:bb</alias-macs>
+      <alias-macs xmlns="urn:o-ran:interfaces:1.0">ba:33:50:5b:58:f7</alias-macs>
+      <mac-address xmlns="urn:o-ran:interfaces:1.0">2c:2b:1f:8c:3f:a2</mac-address>
+      <port-reference xmlns="urn:o-ran:interfaces:1.0">
+        <port-number>113</port-number>
+      </port-reference>
+      <l2-mtu xmlns="urn:o-ran:interfaces:1.0">60489</l2-mtu>
+      <vlan-tagging xmlns="urn:o-ran:interfaces:1.0">true</vlan-tagging>
+      <class-of-service xmlns="urn:o-ran:interfaces:1.0">
+        <u-plane-marking>3</u-plane-marking>
+        <c-plane-marking>0</c-plane-marking>
+        <m-plane-marking>1</m-plane-marking>
+        <s-plane-marking>6</s-plane-marking>
+        <other-marking>4</other-marking>
+        <enhanced-uplane-markings>
+          <up-marking-name>dtSbiQU8fgixwU6tOQNLIc1PPuz2LFeQ862rPWr44JtAvzVbi</up-marking-name>
+          <enhanced-marking>5</enhanced-marking>
+        </enhanced-uplane-markings>
+        <enhanced-uplane-markings>
+          <up-marking-name>MQHBk8vYNCGOII7pwymAaP2xhPJrxxjcn1NA9bqPN6D</up-marking-name>
+          <enhanced-marking>2</enhanced-marking>
+        </enhanced-uplane-markings>
+      </class-of-service>
+    </interface>
+  </interfaces>
