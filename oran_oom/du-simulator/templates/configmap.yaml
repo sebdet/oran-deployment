@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.vnf_name }}-configmap
+  labels:
+    vnf-name: {{ .Values.vnf_name }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+data:
+{{ tpl (.Files.Glob "resources/config/*.{json,xml}").AsConfig . | indent 2 }}

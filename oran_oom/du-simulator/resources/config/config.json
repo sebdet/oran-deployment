@@ -1,0 +1,136 @@
+{
+    "container-rules": {
+        "excluded-modules": [],
+        "excluded-features": []
+    },
+
+    "supervisor-rules": {
+        "netopeer": {
+            "path": "/usr/local/bin/netopeer2-server",
+            "args": ["-d", "-v2"],
+            "autorestart": true,
+            "stdout": "log/netopeer-stdout.log",
+            "stderr": "log/netopeer-stderr.log"
+        },
+    
+        "ntsim-network-function": {
+            "path": "/opt/dev/ntsim-ng/ntsim-ng",
+            "args": ["-w/opt/dev/ntsim-ng", "-f"],
+            "nomanual": true
+        }
+    },
+
+    "datastore-random-generation-rules" : {
+        "excluded-modules": [
+            "sysrepo",
+            "sysrepo-monitoring",
+            "ietf-yang-library",
+            "ietf-netconf-acm",
+            "ietf-netconf-monitoring",
+            "nc-notifications",
+            "ietf-keystore",
+            "ietf-truststore",
+            "ietf-system",
+            "ietf-netconf-server",
+            "nts-network-function"
+        ],
+        
+        "default-list-instances": 2,
+        "custom-list-instances" : []
+    },
+
+    "datastore-populate-rules": {
+        "random-generation-enabled": true,
+
+        "pre-generated-operational-data": [
+            "/opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml"
+        ],
+        "pre-generated-running-data": [
+            "/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml"
+        ]
+    },
+
+    "fault-rules" : {
+        "yang-notif-template" : "<alarm-notif xmlns=\"urn:o-ran:fm:1.0\"><fault-id>$$uint16_counter$$</fault-id><fault-source>%%object%%</fault-source><affected-objects><name>%%affected-object%%</name></affected-objects><fault-severity>%%fault-severity%%</fault-severity><is-cleared>%%cleared%%</is-cleared><fault-text>%%text%%</fault-text><event-time>%%date-time%%</event-time></alarm-notif>",
+        "choosing-method" : "linear",
+        "faults" : [
+            {
+                "condition" : "O-RU Port Down",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11221']",
+                "severity"  : "CRITICAL",
+                "date-time" : "$$time$$",
+                "specific-problem" : "O-RU Port Down",
+
+                "fault-severity" : "CRITICAL",
+                "affected-object" : "%%object%%",
+                "cleared" : "false",
+                "text" : "O-RU Port Down"
+            },
+
+            {
+                "condition" : "O-RU Port Down",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11221']",
+                "severity"  : "NORMAL",
+                "date-time" : "$$time$$",
+                "specific-problem" : "O-RU Port Down",
+
+                "fault-severity" : "CRITICAL",
+                "affected-object" : "%%object%%",
+                "cleared" : "true",
+                "text" : "O-RU Port Down"
+            },
+
+            {
+                "condition" : "O-RU Port Down",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11222']",
+                "severity"  : "CRITICAL",
+                "date-time" : "$$time$$",
+                "specific-problem" : "O-RU Port Down",
+
+                "fault-severity" : "CRITICAL",
+                "affected-object" : "%%object%%",
+                "cleared" : "false",
+                "text" : "O-RU Port Down"
+            },
+
+            {
+                "condition" : "O-RU Port Down",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11222']",
+                "severity"  : "NORMAL",
+                "date-time" : "$$time$$",
+                "specific-problem" : "O-RU Port Down",
+
+                "fault-severity" : "CRITICAL",
+                "affected-object" : "%%object%%",
+                "cleared" : "true",
+                "text" : "O-RU Port Down"
+            },
+
+            {
+                "condition" : "O-RU Port Down",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11223']",
+                "severity"  : "CRITICAL",
+                "date-time" : "$$time$$",
+                "specific-problem" : "O-RU Port Down",
+
+                "fault-severity" : "CRITICAL",
+                "affected-object" : "%%object%%",
+                "cleared" : "false",
+                "text" : "O-RU Port Down"
+            },
+
+            {
+                "condition" : "O-RU Port Down",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11223']",
+                "severity"  : "NORMAL",
+                "date-time" : "$$time$$",
+                "specific-problem" : "O-RU Port Down",
+
+                "fault-severity" : "CRITICAL",
+                "affected-object" : "%%object%%",
+                "cleared" : "true",
+                "text" : "O-RU Port Down"
+            }
+        ]
+    }
+}
