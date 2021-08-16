@@ -1,0 +1,14 @@
+<network-function xmlns="urn:o-ran-sc:yang:o-ran-sc-du-hello-world">
+    <du-to-ru-connection>
+      <name>highstreet-O-RU-11221</name>
+      <administrative-state>UNLOCKED</administrative-state>
+    </du-to-ru-connection>
+    <du-to-ru-connection>
+      <name>highstreet-O-RU-11222</name>
+      <administrative-state>LOCKED</administrative-state>
+    </du-to-ru-connection>
+    <du-to-ru-connection>
+      <name>highstreet-O-RU-11223</name>
+      <administrative-state>LOCKED</administrative-state>
+    </du-to-ru-connection>
+  </network-function>

@@ -1,0 +1,37 @@
+env:
+  ipv6Enabled: true
+  sshConnections: 0
+  tlsConnections: 1
+  nstNfMountPointAddressingMethod: docker-mapping
+  ntsHostIp: 2a00:7b80:454:2000::2
+  ntsHostBasePort: 50000
+  ntsHostNetconfSshBasePort: 0
+  ntsHostNetconfTlsBasePort: 1000
+  ntsHostTransferFtpBasePort: 2000
+  ntsHostTransferSftpBasePort: 2000
+  sdnControllerProtocol: http
+  sdnControllerIp: 2001:db8:1:50::23
+  sdnControllerPort: 8181
+  sdnControllerCallhomePort: 6666
+  sdnControllerUsername: admin
+  sdnControllerPassword: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+  vesCommonHeaderVersion: 7.2.1
+  vesEndpointProtocol: https
+  vesEndpointIp: 2001:db8:1:50::27
+  vesEndpointPort: 8443
+  vesEndpointAuthMethod: basic-auth
+  vesEndpointUsername: sample1
+  vesEndpointPassword: sample1
+
+image:
+  registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc'
+  name: nts-ng-o-ran-du
+  tag: 1.3.3
+  pullPolicy: IfNotPresent
+replicaCount: 1
+service:
+  port: 830
+  externalPort: 30093
+
+# Names
+vnf_name: du-simulator
