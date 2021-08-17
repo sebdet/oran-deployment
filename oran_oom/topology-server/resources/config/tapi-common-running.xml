@@ -1,0 +1,7 @@
+  <context xmlns="urn:onf:otcc:yang:tapi-common">
+    <uuid>6f69da3a-a243-4058-974e-baf11c357b7a</uuid>
+    <name>
+      <value-name>test</value-name>
+      <value>context</value>
+    </name>
+  </context>

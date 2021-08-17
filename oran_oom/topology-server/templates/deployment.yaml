@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.vnf_name }}
+  labels:
+    vnf-name: {{ .Values.vnf_name }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      vnf-name: {{ .Values.vnf_name }}
+  template:
+    metadata:
+      labels:
+        vnf-name: {{ .Values.vnf_name }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}
+    spec:    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.vnf_name }}-configmapenv
+          volumeMounts:
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: config.json
+              mountPath: /opt/dev/ntsim-ng/config/config.json
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: tapi-common-operational.xml
+              mountPath: /opt/dev/deploy/data/tapi-common-operational.xml
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: tapi-common-running.xml
+              mountPath: /opt/dev/deploy/data/tapi-common-running.xml
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_PTRACE
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+      volumes: 
+        - name: {{ .Values.vnf_name }}-config-volume
+          configMap:
+            name: {{ .Values.vnf_name }}-configmap
+            items:
+              - key: config.json
+                path: config.json
+              - key: tapi-common-operational.xml
+                path: tapi-common-operational.xml
+              - key: tapi-common-running.xml
+                path: tapi-common-running.xml
