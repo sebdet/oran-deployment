@@ -1,5 +1,5 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: "{{ .Values.vnf_name }}-ui"
   labels:
@@ -7,12 +7,11 @@ metadata:
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      nodePort: {{ .Values.service.externalPort }}
-      protocol: TCP
+    - port: {{ .Values.service.ports.port }}
+      nodePort: {{ .Values.service.ports.nodePort }}
   selector:
     vnf-name: {{ .Values.vnf_name }}
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}
-  type: NodePort

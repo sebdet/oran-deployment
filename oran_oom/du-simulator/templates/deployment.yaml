@@ -1,5 +1,5 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: {{ .Values.vnf_name }}
   labels:
@@ -17,81 +17,42 @@ spec:
         vnf-name: {{ .Values.vnf_name }}
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}
-    spec:
+    spec:    
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-          - containerPort: {{ .Values.service.port }}
-            protocol: TCP
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.vnf_name }}-configmapenv
           volumeMounts:
             - name: {{ .Values.vnf_name }}-config-volume
               subPath: config.json
               mountPath: /opt/dev/ntsim-ng/config/config.json
             - name: {{ .Values.vnf_name }}-config-volume
-              subPath: o-ran-sc-du-hello-world-operational.xml
-              mountPath: /opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml
-            - name: {{ .Values.vnf_name }}-config-volume
               subPath: o-ran-sc-du-hello-world-running.xml
               mountPath: /opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml
-          env:
-            - name: IPv6_ENABLED
-              value: {{ .Values.env.ipv6Enabled | quote }}
-            - name: SSH_CONNECTIONS
-              value: "{{ .Values.env.sshConnections }}"
-            - name: TLS_CONNECTIONS
-              value: "{{ .Values.env.tlsConnections }}"
-            - name: NTS_NF_MOUNT_POINT_ADDRESSING_METHOD
-              value: {{ .Values.env.nstNfMountPointAddressingMethod | quote }}
-            - name: NTS_HOST_IP
-              value: {{ .Values.env.ntsHostIp | quote }}
-            - name: NTS_HOST_BASE_PORT
-              value: "{{ .Values.env.ntsHostBasePort }}"
-            - name: NTS_HOST_NETCONF_SSH_BASE_PORT
-              value: "{{ .Values.env.ntsHostNetconfSshBasePort }}"
-            - name: NTS_HOST_NETCONF_TLS_BASE_PORT
-              value: "{{ .Values.env.ntsHostNetconfTlsBasePort }}"
-            - name: NTS_HOST_TRANSFER_FTP_BASE_PORT
-              value: "{{ .Values.env.ntsHostTransferFtpBasePort }}"
-            - name: NTS_HOST_TRANSFER_SFTP_BASE_PORT
-              value: "{{ .Values.env.ntsHostTransferSftpBasePort }}"
-            - name: SDN_CONTROLLER_PROTOCOL
-              value: {{ .Values.env.sdnControllerProtocol | quote }}
-            - name: SDN_CONTROLLER_IP
-              value: {{ .Values.env.sdnControllerIp | quote }}
-            - name: SDN_CONTROLLER_PORT
-              value: "{{ .Values.env.sdnControllerPort }}"
-            - name: SDN_CONTROLLER_CALLHOME_PORT
-              value: "{{ .Values.env.sdnControllerCallhomePort }}"
-            - name: SDN_CONTROLLER_USERNAME
-              value: {{ .Values.env.sdnControllerUsername | quote }}
-            - name: SDN_CONTROLLER_PASSWORD
-              value: {{ .Values.env.sdnControllerPassword | quote }}
-            - name: VES_COMMON_HEADER_VERSION
-              value: {{ .Values.env.vesCommonHeaderVersion | quote }}
-            - name: VES_ENDPOINT_PROTOCOL
-              value: {{ .Values.env.vesEndpointProtocol | quote }}
-            - name: VES_ENDPOINT_IP
-              value: {{ .Values.env.vesEndpointIp | quote }}
-            - name: VES_ENDPOINT_PORT
-              value: "{{ .Values.env.vesEndpointPort }}"
-            - name: VES_ENDPOINT_AUTH_METHOD
-              value: {{ .Values.env.vesEndpointAuthMethod | quote }}
-            - name: VES_ENDPOINT_USERNAME
-              value: {{ .Values.env.vesEndpointUsername | quote }}
-            - name: VES_ENDPOINT_PASSWORD
-              value: {{ .Values.env.vesEndpointPassword | quote }}
-            - name: NTS_NF_STANDALONE_START_FEATURES
-              value: "datastore-populate ves-heartbeat ves-file-ready ves-pnf-registration web-cut-through"
-      volumes:
+            - name: {{ .Values.vnf_name }}-config-volume
+              subPath: o-ran-sc-du-hello-world-operational.xml
+              mountPath: /opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_PTRACE
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+      volumes: 
         - name: {{ .Values.vnf_name }}-config-volume
           configMap:
             name: {{ .Values.vnf_name }}-configmap
             items:
               - key: config.json
                 path: config.json
-              - key: o-ran-sc-du-hello-world-operational.xml
-                path: o-ran-sc-du-hello-world-operational.xml
               - key: o-ran-sc-du-hello-world-running.xml
                 path: o-ran-sc-du-hello-world-running.xml
+              - key: o-ran-sc-du-hello-world-operational.xml
+                path: o-ran-sc-du-hello-world-operational.xml
