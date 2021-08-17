@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.vnf_name }}-configmapenv
+  labels:
+    vnf-name: {{ .Values.vnf_name }}-env
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+data:
+  IPv6_ENABLED: {{ .Values.ntsng.ipV6Enabled | quote }}
+  SSH_CONNECTIONS: {{ .Values.ntsng.sshConnections | quote }}
+  TLS_CONNECTIONS: {{ .Values.ntsng.tlsConnections | quote }}
+  NTS_HOST_IP: {{ .Values.ntsng.ntsHostIp | quote }}
+  NTS_HOST_BASE_PORT: {{ .Values.ntsng.ntsHostBasePort | quote }}
+  NTS_HOST_NETCONF_SSH_BASE_PORT: {{ .Values.ntsng.ntsHostNetconfSshBasePort | quote }}
+  NTS_HOST_NETCONF_TLS_BASE_PORT: {{ .Values.ntsng.ntsHostNetconfTlsBasePort | quote }}
+  NTS_HOST_TRANSFER_FTP_BASE_PORT: {{ .Values.ntsng.ntsHostTransferFtpBasePort | quote }}
+  NTS_HOST_TRANSFER_SFTP_BASE_PORT: {{ .Values.ntsng.ntsHostTransferSftpBasePort | quote }}
+  NTS_NF_MOUNT_POINT_ADDRESSING_METHOD: {{ .Values.ntsng.ntsNfMountPointAddressingMethod | quote }}
+
+  SDN_CONTROLLER_USERNAME: {{ .Values.ntsng.sdnControllerUsername | quote }}
+  SDN_CONTROLLER_PASSWORD: {{ .Values.ntsng.sdnControllerPassword | quote }} 
+  SDN_CONTROLLER_PROTOCOL: {{ .Values.ntsng.sdnControllerProtocol | quote }}
+  SDN_CONTROLLER_CALLHOME_PORT: {{ .Values.ntsng.sdnControllerCallHomePort | quote }}
+  SDN_CONTROLLER_IP: {{ .Values.ntsng.sdnControllerIp | quote }}
+  SDN_CONTROLLER_PORT: {{ .Values.ntsng.sdnControllerPort | quote }}
+
+  VES_COMMON_HEADER_VERSION: {{ .Values.ntsng.vesCommonHeaderVersion | quote }}
+  VES_ENDPOINT_PROTOCOL: {{ .Values.ntsng.vesEndpointProtocol | quote }}
+  VES_ENDPOINT_IP: {{ .Values.ntsng.vesEndpointIp | quote }}
+  VES_ENDPOINT_PORT: {{ .Values.ntsng.vesEndpointPort | quote }}
+  VES_ENDPOINT_AUTH_METHOD: {{ .Values.ntsng.vesEndpointAuthMethod | quote }}
+  VES_ENDPOINT_USERNAME: {{ .Values.ntsng.vesEndpointUsername | quote }}
+  VES_ENDPOINT_PASSWORD: {{ .Values.ntsng.vesEndpointPassword | quote }}
+
+  NTS_NF_STANDALONE_START_FEATURES: {{ .Values.ntsng.ntsNfStandaloneStartFeatures | quote }}

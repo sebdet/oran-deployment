@@ -26,7 +26,7 @@ spec:
           stdin: true
           envFrom:
             - configMapRef:
-                name: {{ .Values.vnf_name }}-configmap
+                name: {{ .Values.vnf_name }}-configmapenv
           volumeMounts:
             - name: {{ .Values.vnf_name }}-config-volume
               subPath: config.json
@@ -43,7 +43,11 @@ spec:
             - name: {{ .Values.vnf_name }}-config-volume
               subPath: ietf-interfaces-running.xml
               mountPath: /opt/dev/deploy/data/ietf-interfaces-running.xml
-
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_PTRACE
           resources:
             limits:
               memory: {{ .Values.resources.limits.memory }}
