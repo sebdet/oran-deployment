@@ -54,83 +54,21 @@
         "yang-notif-template" : "<alarm-notif xmlns=\"urn:o-ran:fm:1.0\"><fault-id>$$uint16_counter$$</fault-id><fault-source>%%object%%</fault-source><affected-objects><name>%%affected-object%%</name></affected-objects><fault-severity>%%fault-severity%%</fault-severity><is-cleared>%%cleared%%</is-cleared><fault-text>%%text%%</fault-text><event-time>%%date-time%%</event-time></alarm-notif>",
         "choosing-method" : "linear",
         "faults" : [
-            {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11221']",
-                "severity"  : "CRITICAL",
+{{ $faultsSize := len .Values.simulatedFaults  }}
+{{ range $i, $fault := .Values.simulatedFaults  }}
+              {
+                "condition" : "{{ $fault.condition  }}",
+                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='{{$fault.name}}']",
+                "severity"  : "{{$fault.severity}}",
                 "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
+                "specific-problem" : "{{$fault.specificProblem}}",
 
-                "fault-severity" : "CRITICAL",
+                "fault-severity" : "{{$fault.severity}}",
                 "affected-object" : "%%object%%",
-                "cleared" : "false",
-                "text" : "O-RU Port Down"
-            },
-
-            {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11221']",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
-
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "%%object%%",
-                "cleared" : "true",
-                "text" : "O-RU Port Down"
-            },
-
-            {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11222']",
-                "severity"  : "CRITICAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
-
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "%%object%%",
-                "cleared" : "false",
-                "text" : "O-RU Port Down"
-            },
-
-            {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11222']",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
-
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "%%object%%",
-                "cleared" : "true",
-                "text" : "O-RU Port Down"
-            },
-
-            {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11223']",
-                "severity"  : "CRITICAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
-
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "%%object%%",
-                "cleared" : "false",
-                "text" : "O-RU Port Down"
-            },
-
-            {
-                "condition" : "O-RU Port Down",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='highstreet-O-RU-11223']",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "O-RU Port Down",
-
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "%%object%%",
-                "cleared" : "true",
-                "text" : "O-RU Port Down"
-            }
+                "cleared" : "{{$fault.cleared}}",
+                "text" : "{{$fault.text}}"
+            }{{ if lt $i $faultsSize }},{{ end }}
+{{ end }}
         ]
     }
 }

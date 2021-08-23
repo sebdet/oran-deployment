@@ -18,6 +18,30 @@ service:
 # Names
 vnf_name: du-simulator
 
+#RU definition
+ruSimulators:
+  - name: O-RU-11221
+    administrativeState: LOCKED
+    operationalState: ENABLED
+    status: disconnected
+
+simulatedFaults:
+  - name: O-RU-11221
+    condition: "O-RU Port Down"
+    severity: CRITICAL
+    specificProblem: "O-RU Port Down"
+    fault-severity: CRITICAL
+    cleared: false
+    text: "O-RU Port Down"
+  - name: O-RU-11221
+    condition: "O-RU Port Down"
+    severity: NORMAL
+    specificProblem: "O-RU Port Down"
+    fault-severity: CRITICAL
+    cleared: true
+    text: "O-RU Port Down"
+
+
 # NTS NG settings
 ntsimNg:
   ipV6Enabled: true
