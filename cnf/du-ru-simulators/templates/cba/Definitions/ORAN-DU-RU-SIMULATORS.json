@@ -1,0 +1,178 @@
+{
+    "tosca_definitions_version": "controller_blueprint_1_0_0",
+    "metadata": {
+        "template_author": "Samuli Silvius <s.silvius@partner.samsung.com>",
+        "author-email": "sebastien.determe@intl.att.com",
+        "user-groups": "ADMIN, OPERATION",
+        "template_name": "ORAN-DU-RU-SIMULATORS",
+        "template_version": "1.0.0",
+        "template_tags": "ORAN, DU, RU",
+        "template_type": "DEFAULT"
+    },
+    "imports": [
+        {
+            "file": "Definitions/data_types.json"
+        },
+        {
+            "file": "Definitions/relationship_types.json"
+        },
+        {
+            "file": "Definitions/artifact_types.json"
+        },
+        {
+            "file": "Definitions/node_types.json"
+        },
+        {
+            "file": "Definitions/policy_types.json"
+        }
+    ],
+    "dsl_definitions": {
+        "vpkg-rest-api": {
+            "type": "basic-auth",
+            "url": "http://",
+            "username": "admin",
+            "password": "admin"
+        }
+    },
+    "topology_template": {
+        "workflows": {
+            "resource-assignment": {
+                "steps": {
+                    "resource-assignment": {
+                        "description": "Resource Assign Workflow",
+                        "target": "resource-assignment",
+                        "activities": [
+                            {
+                                "call_operation": "ResourceResolutionComponent.process"
+                            }
+                        ],
+                        "on_success": [
+                            "profile-upload"
+                        ]
+                    },
+                    "profile-upload": {
+                        "description": "Generate and upload K8s Profile",
+                        "target": "k8s-profile-upload",
+                        "activities": [
+                            {
+                                "call_operation": "ComponentScriptExecutor.process"
+                            }
+                        ]
+                    }
+                },
+                "inputs": {
+                    "template-prefix": {
+                        "required": true,
+                        "type": "list",
+                        "entry_schema": {
+                            "type": "string"
+                        }
+                    },
+                    "resolution-key": {
+                        "required": false,
+                        "type": "string",
+                        "entry_schema": {
+                            "type": ""
+                        }
+                    },
+                    "resource-assignment-properties": {
+                        "description": "Dynamic PropertyDefinition for workflow(resource-assignment).",
+                        "required": true,
+                        "type": "dt-resource-assignment-properties"
+                    }
+                },
+                "outputs": {
+                    "meshed-template": {
+                        "type": "json",
+                        "value": {
+                            "get_attribute": [
+                                "resource-assignment",
+                                "assignment-params"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "node_templates": {
+            "resource-assignment": {
+                "type": "component-resource-resolution",
+                "interfaces": {
+                    "ResourceResolutionComponent": {
+                        "operations": {
+                            "process": {
+                                "inputs": {
+                                    "artifact-prefix-names": {
+                                        "get_input": "template-prefix"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "artifacts": {
+                    "helm_topology_server-template": {
+                        "type": "artifact-template-velocity",
+                        "file": "Templates/topology-server-template.vtl"
+                    },
+                    "helm_topology_server-mapping": {
+                        "type": "artifact-mapping-resource",
+                        "file": "Templates/topology-server-mapping.json"
+                    },
+                    "helm_du_simulator-template": {
+                        "type": "artifact-template-velocity",
+                        "file": "Templates/du-simulator-template.vtl"
+                    },
+                    "helm_du_simulator-mapping": {
+                        "type": "artifact-mapping-resource",
+                        "file": "Templates/du-simulator-mapping.json"
+                    },
+                    "helm_ru_simulator-template": {
+                        "type": "artifact-template-velocity",
+                        "file": "Templates/ru-simulator-template.vtl"
+                    },
+                    "helm_ru_simulator-mapping": {
+                        "type": "artifact-mapping-resource",
+                        "file": "Templates/ru-simulator-mapping.json"
+                    },
+                    "vnf-template": {
+                        "type": "artifact-template-velocity",
+                        "file": "Templates/vnf-template.vtl"
+                    },
+                    "vnf-mapping": {
+                        "type": "artifact-mapping-resource",
+                        "file": "Templates/vnf-mapping.json"
+                    }
+                }
+            },
+            "k8s-profile-upload": {
+                "type": "component-k8s-profile-upload",
+                "interfaces": {
+                    "K8sProfileUploadComponent": {
+                        "operations": {
+                            "process": {
+                                "inputs": {
+                                    "artifact-prefix-names": {
+                                        "get_input": "template-prefix"
+                                    },
+                                    "resource-assignment-map": {
+                                        "get_attribute": [
+                                            "resource-assignment",
+                                            "assignment-map"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "artifacts": {
+                    "topology-server-profile": {
+                        "type": "artifact-k8sprofile-content",
+                        "file": "Templates/k8s-profiles/topology-server-profile.tar.gz"
+                    }
+                }
+            }
+        }
+    }
+}

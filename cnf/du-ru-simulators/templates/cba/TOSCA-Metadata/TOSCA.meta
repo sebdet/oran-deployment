@@ -1,0 +1,8 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Sebastien Determe <sebastien.determe@intl.att.com>
+Entry-Definitions: Definitions/ORAN-DU-RU-SIMULATORS.json
+Template-Name: ORAN-DU-RU-SIMULATORS
+Template-Version: 1.0.0
+Template-Type: DEFAULT
+Template-Tags: ORAN, DU, RU

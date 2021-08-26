@@ -1,0 +1,150 @@
+{
+    "capability-data": [
+        {
+            "capability-name": "generate-name",
+            "key-mapping": [
+                {
+                    "output-key-mapping": [
+                        {
+                            "resource-name": "vf_module_name",
+                            "resource-value": "${vf-module-name}"
+                        }
+                    ],
+                    "payload": [
+                        {
+                            "param-name": "VF_MODULE_TYPE",
+                            "param-value": "vfmt"
+                        },
+                        {
+                            "param-name": "resource-name",
+                            "param-value": "vf_module_name"
+                        },
+                        {
+                            "param-name": "resource-value",
+                            "param-value": "${vf-module-name}"
+                        },
+                        {
+                            "param-name": "external-key",
+                            "param-value": "${vf-module-id}_vf-module-name"
+                        },
+                        {
+                            "param-name": "policy-instance-name",
+                            "param-value": "${vf-naming-policy}"
+                        },
+                        {
+                            "param-name": "naming-type",
+                            "param-value": "VF-MODULE"
+                        },
+                        {
+                            "param-name": "VNF_NAME",
+                            "param-value": "${vnf_name}"
+                        },
+                        {
+                            "param-name": "VF_MODULE_LABEL",
+                            "param-value": "${vf-module-label}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "capability-name": "netbox-ip-assign",
+            "key-mapping": [
+                {
+                    "output-key-mapping": [
+                        {
+                            "resource-name": "vfw_onap_private_ip_0",
+                            "resource-value": "${vfw_onap_private_ip_0}"
+                        }
+                    ],
+                    "payload": [
+                        {
+                            "param-name": "service-instance-id",
+                            "param-value": "${service-instance-id}"
+                        },
+                        {
+                            "param-name": "prefix-id",
+                            "param-value": "${management-prefix-id}"
+                        },
+                        {
+                            "param-name": "vf_module_id",
+                            "param-value": "${vf-module-id}"
+                        },
+                        {
+                            "param-name": "external_key",
+                            "param-value": "${vf-module-id}-vfw_onap_private_ip_0"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "capability-name": "aai-vf-module-put",
+            "key-mapping": [
+                {
+                    "output-key-mapping": [
+                        {
+                            "resource-name": "aai-vf-module-put",
+                            "resource-value": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "capability-name": "unresolved-composite-data",
+            "key-mapping": [
+                {
+                    "output-key-mapping": [
+                        {
+                            "resource-name": "vfw_name_0",
+                            "resource-value": "${k8s-rb-instance-release-name}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "resource-accumulator-resolved-data": [
+        {
+            "param-name": "vnf_name",
+            "param-value": "${vnf_name}"
+        },
+##RB name
+        {
+            "param-name": "vf-module-model-invariant-uuid",
+            "param-value": "${vf-module-model-invariant-uuid}"
+        },
+##RB version
+        {
+            "param-name": "vf-module-model-version",
+            "param-value": "${vf-module-model-version}"
+        },
+##Release name
+        {
+            "param-name": "k8s-rb-instance-release-name",
+            "param-value": "${k8s-rb-instance-release-name}"
+        },
+##Profile name
+        {
+            "param-name": "k8s-rb-profile-name",
+            "param-value": "${k8s-rb-profile-name}"
+        },
+        {
+            "param-name": "k8s-rb-config-template-name",
+            "param-value": "${k8s-rb-config-template-name}"
+        },
+        {
+            "param-name": "k8s-rb-config-template-source",
+            "param-value": "${k8s-rb-config-template-source}"
+        },
+        {
+            "param-name": "k8s-rb-config-name",
+            "param-value": "${k8s-rb-config-name}"
+        },
+        {
+            "param-name": "k8s-rb-config-value-source",
+            "param-value": "${k8s-rb-config-value-source}"
+        }
+    ]
+}

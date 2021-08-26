@@ -1,0 +1,27 @@
+{
+    "name": "ORAN_DU_RU_Simulators",
+    "description": "",
+    "data": [
+        {
+            "file": "ORAN-DU-RU-SIMULATORS_CBA.zip",
+            "type": "CONTROLLER_BLUEPRINT_ARCHIVE"
+        },
+        {
+            "file": "helm_topology_server.tgz",
+            "type": "HELM",
+            "isBase": "true"
+        },
+        {
+            "file": "helm_du_simulator.tgz",
+            "type": "HELM",
+            "isBase": "false"
+        },
+        {
+            "file": "helm_ru_simulator.tgz",
+            "type": "HELM",
+            "isBase": "false"
+        }
+
+
+    ]
+}

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (c) 2016-2018 Huawei Technologies Co., Ltd. and others.  All rights reserved.
+   Modifications Copyright (c) 2020 AT&T Technologies.  All rights reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <profiles>
+    <profile>
+      <id>onap-settings</id>
+      <properties>
+        <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
+        <onap.nexus.rawrepo.baseurl.upload>https://nexus.onap.org/content/sites/raw</onap.nexus.rawrepo.baseurl.upload>
+        <onap.nexus.rawrepo.baseurl.download>https://nexus.onap.org/service/local/repositories/raw/content</onap.nexus.rawrepo.baseurl.download>
+        <onap.nexus.rawrepo.serverid>ecomp-raw</onap.nexus.rawrepo.serverid>
+
+        <!-- properties for Nexus Docker registry -->
+        <onap.nexus.dockerregistry.daily>nexus3.onap.org:10003</onap.nexus.dockerregistry.daily>
+        <onap.nexus.dockerregistry.release>nexus3.onap.org:10002</onap.nexus.dockerregistry.release>
+        <docker.pull.registry>nexus3.onap.org:10001</docker.pull.registry>
+        <docker.push.registry>nexus3.onap.org:10003</docker.push.registry>
+      </properties>
+    </profile>
+    <profile>
+      <id>onap-snapshots</id>
+      <repositories>
+        <repository>
+          <id>onap-snapshots</id>
+          <name>onap-snapshots</name>
+          <url>https://nexus.onap.org/content/repositories/snapshots/</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>onap-snapshots</id>
+          <name>onap-snapshots</name>
+          <url>https://nexus.onap.org/content/repositories/snapshots/</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
+      <id>onap-releases</id>
+      <repositories>
+        <repository>
+          <id>onap-releases</id>
+          <name>onap-releases</name>
+          <url>https://nexus.onap.org/content/repositories/releases/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>onap-releases</id>
+          <name>onap-releases</name>
+          <url>https://nexus.onap.org/content/repositories/releases/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
+      <id>onap-public</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+          <id>onap-public</id>
+          <name>onap-public</name>
+          <url>https://nexus.onap.org/content/repositories/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2/</url>
+        </pluginRepository>
+        <pluginRepository>
+          <id>onap-public</id>
+          <name>onap-public</name>
+          <url>https://nexus.onap.org/content/repositories/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
+      <!-- Configure this profile if you have a local nexus cache -->
+      <id>local-public</id>
+      <repositories>
+        <repository>
+          <id>local-public</id>
+          <name>local-public</name>
+          <url>http://nexus-proxy:8081/nexus/content/repositories/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>local-public</id>
+          <name>local-public</name>
+          <url>http://nexus-proxy:8081/nexus/content/repositories/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>onap-settings</activeProfile>
+    <activeProfile>onap-snapshots</activeProfile>
+    <activeProfile>onap-releases</activeProfile>
+    <activeProfile>onap-public</activeProfile>
+    <!-- <activeProfile>local-public</activeProfile> -->
+  </activeProfiles>
+
+</settings>

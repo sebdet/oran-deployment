@@ -1,0 +1,187 @@
+[
+    {
+        "name": "dcae_collector_ip",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string",
+            "default": "10.0.4.1"
+        },
+        "input-param": false,
+        "dictionary-name": "dcae_collector_ip",
+        "dictionary-source": "default",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "dcae_collector_port",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string",
+            "default": "30235"
+        },
+        "input-param": false,
+        "dictionary-name": "dcae_collector_port",
+        "dictionary-source": "default",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "int_private1_net_cidr",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": true,
+        "dictionary-name": "int_private1_net_cidr",
+        "dictionary-source": "processor-db",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "onap_private_net_cidr",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": true,
+        "dictionary-name": "onap_private_net_cidr",
+        "dictionary-source": "processor-db",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "int_private2_net_cidr",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": true,
+        "dictionary-name": "int_private2_net_cidr",
+        "dictionary-source": "processor-db",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "demo_artifacts_version",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string",
+            "default": "1.5.0"
+        },
+        "input-param": false,
+        "dictionary-name": "demo_artifacts_version",
+        "dictionary-source": "default",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "vnf-id",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": false,
+        "dictionary-name": "vnf-id",
+        "dictionary-source": "input",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "vf-naming-policy",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string",
+            "default": "SDNC_Policy.ONAP_NF_NAMING_TIMESTAMP"
+        },
+        "input-param": false,
+        "dictionary-name": "vf-naming-policy",
+        "dictionary-source": "default",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "aic-cloud-region",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": false,
+        "dictionary-name": "aic-cloud-region",
+        "dictionary-source": "input",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "service-instance-id",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": false,
+        "dictionary-name": "service-instance-id",
+        "dictionary-source": "input",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "private1-prefix-id",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": false,
+        "dictionary-name": "private1-prefix-id",
+        "dictionary-source": "processor-db",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "private2-prefix-id",
+        "property": {
+            "description": "",
+            "required": false,
+            "type": "string"
+        },
+        "input-param": false,
+        "dictionary-name": "private2-prefix-id",
+        "dictionary-source": "processor-db",
+        "dependencies": [],
+        "version": 0
+    },
+    {
+        "name": "k8s-rb-profile-namespace",
+        "property": {
+            "description": "K8s namespace to create helm chart for specified profile",
+            "type": "string",
+            "default": "default"
+        },
+        "input-param": false,
+        "dictionary-name": "k8s-rb-profile-namespace",
+        "dictionary-source": "default",
+        "dependencies": []
+    },
+    {
+        "name": "k8s-rb-profile-k8s-version",
+        "property": {
+            "description": "K8s cluster version to create helm chart for specified RB profile",
+            "type": "string",
+            "required": false,
+            "default": "1.18.9"
+        },
+        "input-param": false,
+        "dictionary-name": "k8s-rb-profile-k8s-version",
+        "dictionary-source": "default",
+        "dependencies": []
+    }
+]
