@@ -43,15 +43,15 @@ class Config:
     NATIVE = True
     SKIP_POST_INSTANTIATION = True
     GLOBAL_CUSTOMER_ID = "customer_cnf"
-    VSPFILE = "vsp/du-ru-simulator.zip"
+    VSPFILE = "vsp/oran-du-ru-simulators.zip"
     if NATIVE:
-        VSPFILE = "vsp/du-ru-simulator.zip"
+        VSPFILE = "vsp/oran-du-ru-simulators.zip"
     PROFILE_NAME = "topology-server-profile"
     PROFILE_SOURCE = PROFILE_NAME
     RELEASE_NAME = "oran-simulator-1"
 
     VENDOR = "vendor_cnf"
-    SERVICENAME = "ORAN_DU_RU_KUD" + "_" + str(SCENARIO)
+    SERVICENAME = "ORAN_DU_RU_SIM_KUD" + "_" + str(SCENARIO)
     VSPNAME = "ORAN_VSP_" + SERVICENAME
     VFNAME = "ORAN_VF_" + SERVICENAME
     SERVICE_INSTANCE_NAME = "INSTANCE_" + SERVICENAME + "_1"
