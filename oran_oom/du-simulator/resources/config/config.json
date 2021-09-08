@@ -63,7 +63,7 @@
                 "date-time" : "$$time$$",
                 "specific-problem" : "{{$fault.specificProblem}}",
 
-                "fault-severity" : "{{$fault.severity}}",
+                "fault-severity" : "{{$fault.faultSeverity}}",
                 "affected-object" : "%%object%%",
                 "cleared" : "{{$fault.cleared}}",
                 "text" : "{{$fault.text}}"

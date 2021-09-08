@@ -54,83 +54,20 @@
         "yang-notif-template" : "<alarm-notif xmlns=\"urn:o-ran:fm:1.0\"><fault-id>$$uint16_counter$$</fault-id><fault-source>%%object%%</fault-source><affected-objects><name>%%affected-object%%</name></affected-objects><fault-severity>%%fault-severity%%</fault-severity><is-cleared>%%cleared%%</is-cleared><fault-text>%%text%%</fault-text><event-time>%%date-time%%</event-time></alarm-notif>",
         "choosing-method" : "linear",
         "faults" : [
+{{ $faultsSize := len .Values.simulatedFaults  }}
+{{ range $i, $fault := .Values.simulatedFaults  }}
             {
-                "condition" : "CPRI Port Down",
-                "object"    : "Slot-0-Port-A",
-                "severity"  : "MAJOR",
+                "condition" : "{{ $fault.condition  }}",
+                "object"    : "{{ $fault.object  }}",
+                "severity"  : "{{ $fault.severity  }}",
                 "date-time" : "$$time$$",
-                "specific-problem" : "CPRI Port Down",
-
-                "fault-severity" : "MAJOR",
+                "specific-problem" : "{{ $fault.specificProblem  }}",
+                "fault-severity" : "{{ $fault.faultSeverity  }}",
                 "affected-object" : "%%object%%",
-                "cleared" : "false",
-                "text" : "CPRI Port Down"
-            },
-
-            {
-                "condition" : "CPRI Port Down",
-                "object"    : "Slot-0-Port-A",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "CPRI Port Down",
-
-                "fault-severity" : "MAJOR",
-                "affected-object" : "%%object%%",
-                "cleared" : "true",
-                "text" : "CPRI Port Down"
-            },
-
-            {
-                "condition" : "CPRI Port Down",
-                "object"    : "Slot-0-Port-C",
-                "severity"  : "MAJOR",
-                "date-time" : "$$time$$",
-                "specific-problem" : "CPRI Port Down",
-
-                "fault-severity" : "MAJOR",
-                "affected-object" : "%%object%%",
-                "cleared" : "false",
-                "text" : "CPRI Port Down"
-            },
-
-            {
-                "condition" : "CPRI Port Down",
-                "object"    : "Slot-0-Port-C",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "CPRI Port Down",
-
-                "fault-severity" : "MAJOR",
-                "affected-object" : "%%object%%",
-                "cleared" : "true",
-                "text" : "CPRI Port Down"
-            },
-
-            {
-                "condition" : "CPRI Port Down",
-                "object"    : "Slot-2-Port-B",
-                "severity"  : "MAJOR",
-                "date-time" : "$$time$$",
-                "specific-problem" : "CPRI Port Down",
-
-                "fault-severity" : "MAJOR",
-                "affected-object" : "%%object%%",
-                "cleared" : "false",
-                "text" : "CPRI Port Down"
-            },
-
-            {
-                "condition" : "CPRI Port Down",
-                "object"    : "Slot-2-Port-B",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "CPRI Port Down",
-
-                "fault-severity" : "MAJOR",
-                "affected-object" : "%%object%%",
-                "cleared" : "true",
-                "text" : "CPRI Port Down"
-            }
+                "cleared" : "{{ $fault.cleared  }}",
+                "text" : "{{ $fault.text  }}"
+            }{{ if lt $i $faultsSize }},{{ end }}
+{{ end }}
         ]
     }
 }
