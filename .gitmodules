@@ -1,3 +1,9 @@
 [submodule "onap_oom"]
 	path = onap_oom
 	url = https://gerrit.onap.org/r/oom
+        branch = origin/honolulu
+[submodule "kud"]
+        path = kud
+        url = https://github.com/onap/multicloud-k8s.git
+        branch = master
+
