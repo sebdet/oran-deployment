@@ -1,0 +1,247 @@
+# Copyright © 2017 Amdocs, Bell Canada
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#################################################################
+# Global configuration overrides.
+#
+# These overrides will affect all helm charts (ie. applications)
+# that are listed below and are 'enabled'.
+#################################################################
+global:
+  # Change to an unused port prefix range to prevent port conflicts
+  # with other instances running within the same k8s cluster
+  repository: nexus3.onap.org:10001 #__docker_proxy__
+  nodePortPrefix: 302
+  nodePortPrefixExt: 304
+  masterPassword: secretpassword
+  addTestingComponents: true
+  cmpv2Enabled: true
+  flavor: unlimited
+  # ONAP Repository
+  # Uncomment the following to enable the use of a single docker
+  # repository but ONLY if your repository mirrors all ONAP
+  # docker images. This includes all images from dockerhub and
+  # any other repository that hosts images for ONAP components.
+  repository: nexus3.onap.org:10001
+
+  # readiness check - temporary repo until images migrated to nexus3
+  readinessRepository: oomk8s
+  # logging agent - temporary repo until images migrated to nexus3
+  loggingRepository: docker.elastic.co
+
+  # image pull policy
+  pullPolicy: IfNotPresent
+
+  # override default mount path root directory
+  # referenced by persistent volumes and log files
+  persistence:
+    mountPath: /dockerdata-nfs
+
+  # flag to enable debugging - application support required
+  debugEnabled: false
+
+#################################################################
+# Enable/disable and configure helm charts (ie. applications)
+# to customize the ONAP deployment.
+#################################################################
+aaf:
+  enabled: true
+  aaf-service:
+    readiness:
+      initialDelaySeconds: 150
+aai:
+  enabled: true
+  flavorOverride: unlimited
+  global:
+    flavorOverride: unlimited
+    cassandra:
+      replicas: 3
+  aai-cassandra:
+    flavorOverride: unlimited
+    replicaCount: 3
+  aai-babel:
+    flavorOverride: unlimited
+  aai-data-router:
+    flavorOverride: unlimited
+  aai-elasticsearch:
+    flavorOverride: unlimited
+  aai-graphadmin:
+    flavorOverride: unlimited
+  aai-modelloader:
+    flavorOverride: unlimited
+  aai-resources:
+    flavorOverride: unlimited
+  aai-schema-service:
+    flavorOverride: unlimited
+  aai-search-data:
+    flavorOverride: unlimited
+  aai-sparky-be:
+    flavorOverride: unlimited
+    readiness:
+      initialDelaySeconds: 150
+      periodSeconds: 20
+      timeoutSeconds: 10
+  aai-traversal:
+    flavorOverride: unlimited  
+appc:
+  enabled: false
+cassandra:
+  enabled: true
+  replicaCount: 3
+  config:
+    cluster_domain: cluster.local
+    heap:
+      max: 1G
+      min: 256M
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    # necessary to disable liveness probe when setting breakpoints
+    # in debugger so K8s doesn't restart unresponsive container
+    enabled: true
+
+  readiness:
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+cds:
+  enabled: true
+cli:
+  enabled: false
+consul:
+  enabled: false
+contrib:
+  enabled: true
+  awx:
+    enabled: false
+  netbox:
+    enabled: true
+dcaegen2:
+  enabled: false
+  dcae-cloudify-manager:
+    readiness:
+      periodSeconds: 120
+      timeoutSeconds: 20
+    liveness:
+      timeoutSeconds: 10
+dmaap:
+  enabled: true
+esr:
+  enabled: false
+log:
+  enabled: false
+  log-logstash:
+    replicaCount: 1
+sniro-emulator:
+  enabled: false
+oof:
+  enabled: false
+mariadb-galera:
+  enabled: true
+msb:
+  enabled: true
+multicloud:
+  enabled: true
+nbi:
+  enabled: false
+platform:
+  enabled: true
+policy:
+  enabled: true
+pomba:
+  enabled: false
+portal:
+  enabled: true
+robot:
+  enabled: true
+  flavor: small
+  appcUsername: "appc@appc.onap.org"
+  appcPassword: "demo123456!"
+  openStackKeyStoneUrl: "http://10.12.25.2:5000"
+  openStackKeystoneAPIVersion: "v3"
+  openStackPublicNetId: "5771462c-9582-421c-b2dc-ee6a04ec9bde"
+  openStackTenantId: "c9ef9a6345b440b7a96d906a0f48c6b1"
+  openStackUserName: "christophe_closset"
+  openStackUserDomain: "default"
+  openStackProjectName: "CLAMP"
+  ubuntu14Image: "trusty-server-cloudimg-amd64-disk1"
+  ubuntu16Image: "xenial-server-cloudimg-amd64-disk1"
+  openStackPrivateNetCidr: "10.0.0.0/16"
+  openStackPrivateNetId: "fd05c1ab-3f43-4f6f-8a8c-76aee04ef293"
+  openStackPrivateSubnetId: "fd05c1ab-3f43-4f6f-8a8c-76aee04ef293"
+  openStackSecurityGroup: "f05e9cbf-d40f-4d1f-9f91-d673ba591a3a"
+  openStackOamNetworkCidrPrefix: "10.0"
+  dcaeCollectorIp: "10.12.6.1"
+  vnfPubKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKXDgoo3+WOqcUG8/5uUbk81+yczgwC4Y8ywTmuQqbNxlY1oQ0YxdMUqUnhitSXs5S/yRuAVOYHwGg2mCs20oAINrP+mxBI544AMIb9itPjCtgqtE2EWo6MmnFGbHB4Sx3XioE7F4VPsh7japsIwzOjbrQe+Mua1TGQ5d4nfEOQaaglXLLPFfuc7WbhbJbK6Q7rHqZfRcOwAMXgDoBqlyqKeiKwnumddo2RyNT8ljYmvB6buz7KnMinzo7qB0uktVT05FH9Rg0CTWH5norlG5qXgP2aukL0gk1ph8iAt7uYLf1ktp+LJI2gaF6L0/qli9EmVCSLr1uJ38Q8CBflhkh"
+  demoArtifactsVersion: "1.4.0"
+  demoArtifactsRepoUrl: "https://nexus.onap.org/content/repositories/releases"
+  scriptVersion: "1.4.0"
+  nfsIpAddress: "10.12.6.1"
+  config:
+    openStackEncryptedPasswordHere: "e10c86aa13e692020233d18f0ef6d527"
+    openStackSoEncryptedPassword: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
+sdc:
+  enabled: true
+  config:
+    environment:
+      vnfRepoPort: 8703
+  sdc-be:
+    config:
+      javaOptions: "-Xmx1g -Xms512m"
+    liveness:
+      periodSeconds: 300
+      timeoutSeconds: 180
+    readiness:
+      periodSeconds: 300
+      timeoutSeconds: 240
+  sdc-fe:
+    resources:
+      small:
+        limits:
+          cpu: 1
+          memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 500Mi
+
+sdnc:
+  enabled: true
+
+  replicaCount: 1
+
+  mysql:
+    replicaCount: 1
+so:
+  enabled: true
+  so-catalog-db-adapter:
+    config:
+      openStackUserName: "christophe_closset"
+      openStackKeyStoneUrl: "http://10.12.25.2:5000/v3"
+      openStackEncryptedPasswordHere: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
+      openStackKeystoneVersion: "KEYSTONE_V3"
+uui:
+  enabled: false
+vfc:
+  enabled: false
+vid:
+  enabled: true
+vnfsdk:
+  enabled: false
+
+
