@@ -51,7 +51,7 @@ class Config:
     RELEASE_NAME = "oran-simulator-1"
 
     VENDOR = "vendor_cnf"
-    SERVICENAME = "ORAN_DU_RU_SIM_KUD" + "_" + str(SCENARIO)
+    SERVICENAME = "ORAN2_DU_RU_SIM_KUD" + "_" + str(SCENARIO)
     VSPNAME = "ORAN_VSP_" + SERVICENAME
     VFNAME = "ORAN_VF_" + SERVICENAME
     SERVICE_INSTANCE_NAME = "INSTANCE_" + SERVICENAME + "_1"
