@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oru-app-configmap
+  labels:
+    name: oru-app
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+data:
+{{ tpl (.Files.Glob "resources/config/*.{json,xml,txt}").AsConfig . | indent 2 }}

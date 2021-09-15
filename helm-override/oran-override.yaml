@@ -33,6 +33,7 @@ nonrtric:
   installRappcatalogueservice: true
   installNonrtricgateway: true
   installKong: true
+  installORUApp: true
   # override default mount path root directory
   # referenced by persistent volumes and log files
   persistence:

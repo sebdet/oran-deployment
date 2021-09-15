@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oru-app
+  labels:
+    name: oru-app
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: oru-app
+  template:
+    metadata:
+      labels:
+        name: oru-app
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}
+    spec:    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: oru-app-configmapenv
+          volumeMounts:
+            - name: oru-app-config-volume
+              subPath: o-ru-to-o-du-map.txt
+              mountPath: /usr/src/app/o-ru-to-o-du-map.txt
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_PTRACE
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+      volumes: 
+        - name: oru-app-config-volume
+          configMap:
+            name: oru-app-configmap
+            items:
+              - key: o-ru-to-o-du-map.txt
+                path: o-ru-to-o-du-map.txt
