@@ -15,8 +15,8 @@ service:
     port: 830
     nodePort: 30830
 
-# Names
-vnf_name: ru-simulator
+# Names (must be lowercase)
+vnf_name: o-ru-11221
 
 # NTS NG settings
 ntsimNg:

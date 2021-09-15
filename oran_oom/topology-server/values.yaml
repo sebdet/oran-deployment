@@ -19,7 +19,7 @@ service:
 vnf_name: topology-server
 
 simulatedFaults:
-  - name: O-RU-11221
+  - name: o-ru-11221
     condition: "CPRI Port Down"
     severity: MAJOR
     object: "Slot-0-Port-A"
@@ -27,7 +27,7 @@ simulatedFaults:
     faultSeverity: MAJOR
     cleared: false
     text: "CPRI Port Down"
-  - name: O-RU-11221
+  - name: o-ru-11221
     condition: "CPRI Port Down"
     severity: NORMAL
     object: "Slot-0-Port-A"
@@ -35,7 +35,7 @@ simulatedFaults:
     faultSeverity: MAJOR
     cleared: true
     text: "CPRI Port Down"
-  - name: O-RU-11221
+  - name: o-ru-11221
     condition: "CPRI Port Down"
     severity: MAJOR
     object: "Slot-0-Port-C"
@@ -43,7 +43,7 @@ simulatedFaults:
     faultSeverity: MAJOR
     cleared: false
     text: "CPRI Port Down"
-  - name: O-RU-11221
+  - name: o-ru-11221
     condition: "CPRI Port Down"
     severity: NORMAL
     object: "Slot-0-Port-C"
@@ -51,7 +51,7 @@ simulatedFaults:
     faultSeverity: MAJOR
     cleared: true
     text: "CPRI Port Down"
-  - name: O-RU-11221
+  - name: o-ru-11221
     condition: "CPRI Port Down"
     severity: MAJOR
     object: "Slot-2-Port-B"
@@ -59,7 +59,7 @@ simulatedFaults:
     faultSeverity: MAJOR
     cleared: false
     text: "CPRI Port Down"
-  - name: O-RU-11221
+  - name: o-ru-11221
     condition: "CPRI Port Down"
     severity: NORMAL
     object: "Slot-2-Port-B"
@@ -69,38 +69,22 @@ simulatedFaults:
     text: "CPRI Port Down"
 
 nodes:
-  - name: highstreet-O-DU-1122
+  - name: o-du-1122
     uuid: ac089635-7a85-4197-9310-9b14f476a4a9
     nodeEdgePointUuid: 539f24cb-a5e9-454f-b05d-6307be419afe
     interfaceName: "O-DU-interface-1"
     interfaceDescription: "Simulated interface for O-DU"
-  - name: highstreet-O-RU-11221
+  - name: o-ru-11221
     uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa1
     nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede22
     interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc62"
     interfaceDescription: "Simulated interface for O-RU"
-  - name: highstreet-O-RU-11222
-    uuid: 69a8fdf0-2bdd-44a2-9bc4-8813640fa02c
-    nodeEdgePointUuid: 124488fc-05d0-421b-8a16-4eaf86cbc89b
-    interfaceName: "0d242150-33a6-4e7c-9988-ae3b01e8a7ea"
-    interfaceDescription: "Simulated interface for O-RU"
-  - name: highstreet-O-RU-11223
-    uuid: c8499a83-211e-4cef-be30-a1cc2208bbb6
-    nodeEdgePointUuid: 5f01a4c2-9067-4b05-a1a5-7d8998f4f11f
-    interfaceName: "d3ea2f17-a841-4e71-9ef9-9549159aabe7"
-    interfaceDescription: "Simulated interface for O-RU"
 
 topologyUuid: 7adfee73-44be-4813-a0dc-89f657f0a436
 links:
-  - duNode: highstreet-O-DU-1122
-    ruNode: highstreet-O-RU-11221
+  - duNode: o-du-1122
+    ruNode: o-ru-11221
     uuid: ac78b69f-22df-46fd-ae76-cc989bc30abc
-  - duNode: highstreet-O-DU-1122
-    ruNode: highstreet-O-RU-11222
-    uuid: ac78b69f-22df-46fd-ae76-cc989bc30ae9
-  - duNode: highstreet-O-DU-1122
-    ruNode: highstreet-O-RU-11223
-    uuid: bc98b69f-22df-46fd-ae76-cc989bc30ae9
 
 # NTS NG settings
 ntsimNg:
