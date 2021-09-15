@@ -67,7 +67,7 @@
                 "affected-object" : "%%object%%",
                 "cleared" : "{{$fault.cleared}}",
                 "text" : "{{$fault.text}}"
-            }{{ if lt $i $faultsSize }},{{ end }}
+            }{{ if lt (add1 $i) $faultsSize }},{{ end }}
 {{ end }}
         ]
     }
