@@ -107,7 +107,25 @@ multicloud:
 nbi: 
   enabled: false 
 policy: 
-  enabled: false 
+  enabled: true
+  policy-api:
+    enabled: true
+  policy-pap:
+    enabled: true
+  policy-xacml-pdp:
+    enabled: true
+  policy-apex-pdp:
+    enabled: true
+  policy-drools-pdp:
+    enabled: true
+  policy-distribution:
+    enabled: true
+  policy-clamp-be:
+    enabled: false
+  policy-clamp-fe:
+    enabled: false
+  policy-nexus:
+    enabled: false
 portal: 
   enabled: true
 robot: 
@@ -115,7 +133,7 @@ robot:
 sdc: 
   enabled: false 
 sdnc: 
-  enabled: true
+  enabled: false
   replicaCount: 1
   mysql:
     replicaCount: 1
