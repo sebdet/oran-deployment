@@ -30,13 +30,15 @@ spec:
     - name: {{ index .Values.policymanagementservice.service.httpName }}
       port: {{ .Values.policymanagementservice.service.internalPort1 }}
       targetPort: {{ .Values.policymanagementservice.service.targetPort1 }}
+      nodePort: {{ .Values.policymanagementservice.service.nodePort1 }}
       protocol: TCP
     {{- end }}
     - name: {{ index .Values.policymanagementservice.service.httpsName }}
       port: {{ .Values.policymanagementservice.service.internalPort2 }}
       targetPort: {{ .Values.policymanagementservice.service.targetPort2 }}
+      nodePort: {{ .Values.policymanagementservice.service.nodePort2 }}
       protocol: TCP
   selector:
     app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.policymanagementservice" . }}
     release: {{ .Release.Name }}
-  type: ClusterIP
+  type: {{ .Values.policymanagementservice.service.type }}

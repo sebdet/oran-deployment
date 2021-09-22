@@ -28,11 +28,11 @@ controlpanel:
   service:
     allowHttp: true
     httpName: http
-    internalPort1: 8080
+    internalPort1: 8182
     targetPort1: 8080
     externalPort1: 30091
     httpsName: https
-    internalPort2: 8081
+    internalPort2: 8082
     targetPort2: 8082
     externalPort2: 30092
   liveness:
