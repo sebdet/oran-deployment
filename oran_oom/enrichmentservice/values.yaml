@@ -27,10 +27,10 @@ enrichmentservice:
   service:
     allowHttp: true
     httpName: http
-    internalPort1: 9082
+    internalPort1: 8083
     targetPort1: 8083
     httpsName: https
-    internalPort2: 9083
+    internalPort2: 8434
     targetPort2: 8434
   liveness:
     initialDelaySeconds: 20
