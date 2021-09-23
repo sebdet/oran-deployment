@@ -1,0 +1,47 @@
+# Copyright © 2021 AT&T
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#################################################################
+# Global configuration overrides.
+#
+# These overrides will affect all helm charts (ie. applications)
+# that are listed below and are 'enabled'.
+#################################################################
+
+##### ORAN Simulators #####
+
+
+ntsimNg: &ntsimConfig
+  sdnControllerIp: 10.152.183.211
+  sdnControllerPort: 8282 
+  sdnControllerProtocol: http
+  sdnControllerUsername: admin
+  sdnControllerPassword: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+  sdnControllerCallHomePort: 6666
+
+  vesEndpointProtocol: https
+  vesEndpointIp: 10.152.183.254
+  vesEndpointPort: 8443
+  vesEndpointUsername: sample1
+  vesEndpointPassword: sample1
+
+ru-simulator: 
+  ntsimNg: *ntsimConfig
+
+du-simulator:
+  ntsimNg: *ntsimConfig
+
+topology-server:
+  ntsimNg: *ntsimConfig
+
