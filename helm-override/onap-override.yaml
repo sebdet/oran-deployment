@@ -26,7 +26,7 @@ global:
   nodePortPrefixExt: 304
   masterPassword: secretpassword
   addTestingComponents: true
-  cmpv2Enabled: true
+  cmpv2Enabled: false
   flavor: unlimited
   # ONAP Repository
   # Uncomment the following to enable the use of a single docker
@@ -79,13 +79,13 @@ contrib:
   netbox:
     enabled: false
 consul: 
-  enabled: false 
+  enabled: true
 cps: 
   enabled: false 
 dcaegen2: 
-  enabled: false 
+  enabled: true
 dcaegen2-services: 
-  enabled: false 
+  enabled: true
 dcaemod: 
   enabled: false 
 holmes: 
@@ -107,33 +107,15 @@ multicloud:
 nbi: 
   enabled: false 
 policy: 
-  enabled: true
-  policy-api:
-    enabled: true
-  policy-pap:
-    enabled: true
-  policy-xacml-pdp:
-    enabled: true
-  policy-apex-pdp:
-    enabled: true
-  policy-drools-pdp:
-    enabled: true
-  policy-distribution:
-    enabled: true
-  policy-clamp-be:
-    enabled: false
-  policy-clamp-fe:
-    enabled: false
-  policy-nexus:
-    enabled: false
+  enabled: false
 portal: 
   enabled: true
 robot: 
   enabled: false 
 sdc: 
-  enabled: false 
-sdnc: 
   enabled: false
+sdnc: 
+  enabled: true
   replicaCount: 1
   mysql:
     replicaCount: 1
@@ -153,6 +135,4 @@ modeling:
   enabled: false 
 platform: 
   enabled: true
-a1policymanagement: 
-  enabled: false 
 
