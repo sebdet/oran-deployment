@@ -1,6 +1,5 @@
 #!/bin/bash
-kubectl delete namespace onap
-kubectl delete namespace nonrtric
-kubectl delete namespace simulators
-kubectl delete pv --all
-sudo rm -rf /dockerdata-nfs
+./sub-scripts/uninstall-onap.sh
+./sub-scripts/uninstall-nonrtric.sh
+./sub-scripts/uninstall-simulators.sh
+./sub-scripts/clean-up.sh
