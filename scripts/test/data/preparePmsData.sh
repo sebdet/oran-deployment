@@ -86,7 +86,7 @@ curlString="curl -skw %{http_code} $httpx://$a1_sim_STD_v2_url/policytype?id=2 -
 res=$($curlString)
 echo "$res"
 expect="Policy type 2 is OK.201"
-expect2="Policy type 2 is OK.200"
+expect2="The policy type already exists and instances exists400"
 checkRes
 echo -e "\n"
 
@@ -118,6 +118,7 @@ curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Conten
 res=$($curlString)
 echo "$res"
 expect="201"
+expect2="200"
 checkRes
 echo -e "\n"
 
@@ -125,7 +126,7 @@ echo "policy numbers from ric1:"
 curlString="curl -skw %{http_code} $httpx://$a1_sim_OSC_url/counter/num_instances"
 res=$($curlString)
 echo "$res"
-expect="1200"
+expect="7200"
 checkRes
 echo -e "\n"
 
@@ -134,6 +135,7 @@ curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Conten
 res=$($curlString)
 echo "$res"
 expect="201"
+expect2="200"
 checkRes
 echo -e "\n"
 
