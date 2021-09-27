@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: topology-configmapenv
+  labels:
+    name: topology-env
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+data:
+  AUTH_ENABLED: {{ .Values.conf.authEnabled | quote }}
+  AUTH_HOST_URL: {{ .Values.conf.authHostUrl | quote }}  
+  PROVIDERS: {{ .Values.conf.providers | quote }}
+  LOAD_PACKAGES: {{ .Values.conf.loadPackages | quote }}
+
