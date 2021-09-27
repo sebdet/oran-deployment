@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: topology
+  labels:
+    name: topology
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: topology
+  template:
+    metadata:
+      labels:
+        name: topology
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}
+    spec:    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: topology-configmapenv
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_PTRACE
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
