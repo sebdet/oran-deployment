@@ -23,15 +23,15 @@
 
 
 ntsimNg: &ntsimConfig
-  sdnControllerIp: 10.152.183.211
-  sdnControllerPort: 8282 
-  sdnControllerProtocol: http
+  sdnControllerIp: 192.168.1.46
+  sdnControllerPort: 30267
+  sdnControllerProtocol: https
   sdnControllerUsername: admin
   sdnControllerPassword: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
-  sdnControllerCallHomePort: 6666
+  sdnControllerCallHomePort: 30266
 
   vesEndpointProtocol: https
-  vesEndpointIp: 10.152.183.254
+  vesEndpointIp: 10.152.183.92
   vesEndpointPort: 8443
   vesEndpointUsername: sample1
   vesEndpointPassword: sample1

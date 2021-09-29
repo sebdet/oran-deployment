@@ -127,7 +127,7 @@ policy:
   policy-nexus:
     enabled: false
 portal: 
-  enabled: true
+  enabled: false
 robot: 
   enabled: false 
 sdc: 
