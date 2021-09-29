@@ -36,7 +36,7 @@ password = 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U'
 
 # REST to set event settings
 def configEventSettings(nfName, nfType):
-  file = os.path.dirname(os.path.abspath(__file__)) + '/' + 'event-settings-'+nfType+'.json'
+  file = os.path.dirname(os.path.abspath(__file__)) + '/simulators-data/' + 'event-settings-'+nfType+'.json'
   print ("File name:" + file)
   with open(file) as json_file:
     body = json.load(json_file)
