@@ -25,7 +25,7 @@ import json
 import requests
 import subprocess
 
-dockerFilter = subprocess.check_output("kubectl get pods -n simulators -o name | awk -F \"/\" '{print $2}'", shell=True)
+dockerFilter = subprocess.check_output("kubectl get services -n simulators -o name | awk -F \"/\" '{print $2}'", shell=True)
 containers = dockerFilter.splitlines()
 
 mapping = dict({"ntsim-ng-o-ru": "o-ru", "ntsim-ng-o-du": "o-du"}) 
