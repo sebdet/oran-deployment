@@ -22,7 +22,7 @@ simulators:
 conf:
   mrHost: http://message-router.onap
   mrPort: 3904
-  sdnrHost: http://sdnc-oam.onap
-  sdnrPort: 8282
+  sdnrHost: https://sdnc.onap
+  sdnrPort: 8443
   verbose: on
  

@@ -1,7 +1,7 @@
 # Static Defaults
 replicaCount: 1
 image:
-  repository: 'docker.io/hightec/'
+  repository: 'docker.io/hightec'
   name: smo-topology-api-v2
   tag: 2.0.2-SNAPSHOT-20210315T160448Z
   pullPolicy: IfNotPresent
@@ -16,7 +16,7 @@ service:
     nodePort: 32001
 
 conf:
-  authEnabled: true 
+  authEnabled: false
   authHostUrl: http://noidea:80
   providers: 5GBerlin,winlab
   loadPackages: com.highstreet

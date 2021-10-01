@@ -25,6 +25,7 @@ nonrtric:
   installRappcatalogueservice: true
   installNonrtricgateway: true
   installORUApp: true
+  installTopology: true
   volume1:
     size: 1Gi
     storageClassName: volume1

@@ -59,3 +59,7 @@ dependencies:
     repository: "@local"
     condition: nonrtric.installORUApp
 
+  - name: topology
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installTopology

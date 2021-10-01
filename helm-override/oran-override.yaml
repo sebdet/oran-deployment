@@ -34,6 +34,7 @@ nonrtric:
   installNonrtricgateway: true
   installKong: true
   installORUApp: true
+  installTopology: true
   # override default mount path root directory
   # referenced by persistent volumes and log files
   persistence:
