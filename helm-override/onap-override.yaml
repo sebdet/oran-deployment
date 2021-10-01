@@ -197,7 +197,19 @@ sdnc:
       topologyserver:
         enabled: true
         topologyserverUrl: http://topology.nonrtric:3001
-        
+  config:
+    sdnr:
+      enabled: true
+      # mode: web - SDNC contains device manager only plus dedicated webserver service for ODLUX (default),
+      # mode: dm - SDNC contains sdnr device manager + ODLUX components
+      mode: dm
+      # sdnronly: true starts sdnc container with odl and sdnrwt features only
+      sdnronly: false
+      sdnrdbTrustAllCerts: true
+      mountpointRegistrarEnabled: true
+      mountpointStateProviderEnabled: true
+      netconfCallHome:
+        enabled: true
 sniro-emulator:
   enabled: false
 so: 

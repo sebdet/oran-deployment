@@ -18,6 +18,7 @@ spec:
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}
     spec:    
+      hostname: "{{ .Values.vnf_name }}"
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
