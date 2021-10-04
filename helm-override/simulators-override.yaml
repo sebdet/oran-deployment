@@ -39,6 +39,9 @@ x-ntsimNg: &ntsimConfig
 ru-simulator: 
   ntsimNg:
     <<: *ntsimConfig
+    sshConnections: 0
+    tlsConnections: 1
+    ipV6Enabled: true
 
 du-simulator:
   ntsimNg:
@@ -50,5 +53,6 @@ du-simulator:
 topology-server:
   ntsimNg:  
     <<: *ntsimConfig
+    ipV6Enabled: true
     sshConnections: 1
     tlsConnections: 0
