@@ -22,7 +22,7 @@
 ##### ORAN Simulators #####
 
 
-ntsimNg: &ntsimConfig
+x-ntsimNg: &ntsimConfig
   sdnControllerIp: 192.168.1.46
   sdnControllerPort: 30267
   sdnControllerProtocol: https
@@ -37,11 +37,18 @@ ntsimNg: &ntsimConfig
   vesEndpointPassword: sample1
 
 ru-simulator: 
-  ntsimNg: *ntsimConfig
+  ntsimNg:
+    <<: *ntsimConfig
 
 du-simulator:
-  ntsimNg: *ntsimConfig
+  ntsimNg:
+    <<: *ntsimConfig
+    ipV6Enabled: false
+    sshConnections: 1
+    tlsConnections: 0
 
 topology-server:
-  ntsimNg: *ntsimConfig
-
+  ntsimNg:  
+    <<: *ntsimConfig
+    sshConnections: 1
+    tlsConnections: 0
