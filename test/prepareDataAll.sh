@@ -1,59 +1,46 @@
 #!/bin/bash
+set +x
+
+if ! [ -x "$(command -v jq)" ]; then
+  echo 'Error: jq is not installed. Try to install it with APT-GET, YUM or APK' >&2
+  echo 'e.g:    sudo apt-get update && apt-get -y install jq'
+
+  exit 1
+fi
+
 
 dmaap_port=3904
-ecs_port=9082
+ecs_port=8083
 a1_sim_port=8085
-policy_agent_port=9080
+policy_agent_port=8081
 sdnc_port=8282
 
 # get ip of dmaap
-echo "Dmaap IP:"
-command="kubectl describe pods onap-message-router-0 -n onap | grep IP: | sed -n '2p' | awk  '{print \$2}'"
-dmaap_host=$(eval $command)
-echo $dmaap_host
+dmaap_url=`kubectl get services message-router -n onap |grep message-router | awk '{print $3}'`:$dmaap_port
+echo "Dmaap Address:" $dmaap_url
 
 # get ip of enrichment service
-echo "ECS IP:"
-command="kubectl describe service enrichmentservice -n nonrtric | grep IP | sed -n '2p' | awk  '{print \$2}'"
-ecs_host=$(eval $command)
-echo $ecs_host
+ecs_url=`kubectl get services enrichmentservice -n nonrtric | grep enrichmentservice | awk '{print $3}'`:$ecs_port
+echo "Enrichment Service Address:" $ecs_url
 
 # get ip of A1 simulators
-echo "OSC IP:"
-command="kubectl describe pods a1-sim-osc-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print \$2}'"
-a1_osc_host=$(eval $command)
-echo $a1_osc_host
+a1_osc_url=`kubectl describe pods a1-sim-osc-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print $2}'`:$a1_sim_port
+echo "A1 SIM OSC Address 0:" $a1_osc_url
 
-echo "STD IP:"
-command="kubectl describe pods a1-sim-std-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print \$2}'"
-a1_std_host=$(eval $command)
-echo $a1_std_host
+a1_std_url=`kubectl describe pods a1-sim-std-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print $2}'`:$a1_sim_port
+echo "A1 SIM STD Address 0:" $a1_std_url
 
-echo "STD2 IP:"
-command="kubectl describe pods a1-sim-std2-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print \$2}'"
-a1_std2_host=$(eval $command)
-echo $a1_std2_host
+a1_std2_url=`kubectl describe pods a1-sim-std2-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print $2}'`:$a1_sim_port
+echo "A1 SIM STD Address 2:" $a1_std2_url
 
-echo "Policy Agent IP:"
-command="kubectl describe service policymanagementservice -n nonrtric | grep IP | sed -n '2p' | awk  '{print \$2}'"
-policy_agent_host=$(eval $command)
-echo $policy_agent_host
+policy_agent_url=`kubectl get service policymanagementservice -n nonrtric | grep policymanagementservice | awk  '{print $3}'`:$policy_agent_port
+echo "Policy Agent IP:" $policy_agent_url
 
-echo "A1 Controller IP:"
-command="kubectl describe service a1controller -n nonrtric | grep IP | sed -n '2p' | awk  '{print \$2}'"
-sdnc_host=$(eval $command)
-echo $sdnc_host
+sdnc_url=`kubectl get service a1controller -n nonrtric | grep a1controller  | awk  '{print $3}'`:$sdnc_port
+echo "A1 Controller IP:" $sdnc_url
 
-dmaap_url=$dmaap_host:$dmaap_port
-a1_osc_url=$a1_osc_host:$a1_sim_port
-a1_std_url=$a1_std_host:$a1_sim_port
-a1_std2_url=$a1_std2_host:$a1_sim_port
-policy_agent_url=$policy_agent_host:$policy_agent_port
-sdnc_url=$sdnc_host:$sdnc_port
-esc_url=$ecs_host:$ecs_port
-
-./health_check.sh $esc_url $a1_osc_url $a1_std_url $a1_std2_url $policy_agent_url $sdnc_url
+./health_check.sh $ecs_url $a1_osc_url $a1_std_url $a1_std2_url $policy_agent_url $sdnc_url
 cd ./data
 ./prepareDmaapMsg.sh $dmaap_url $a1_osc_url $a1_std_url $a1_std2_url $policy_agent_url
 ./preparePmsData.sh $a1_osc_url $a1_std2_url $policy_agent_url
-./prepareEcsData.sh $esc_url
+./prepareEcsData.sh $ecs_url
