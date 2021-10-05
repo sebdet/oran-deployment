@@ -27,10 +27,11 @@ import subprocess
 
 dockerFilter = subprocess.check_output("kubectl get services -n simulators -o name | awk -F \"/\" '{print $2}'", shell=True)
 containers = dockerFilter.splitlines()
+dockerSdnc = subprocess.check_output("kubectl get services sdnc-web-service -n onap | grep sdnc-web-service |  awk '{print $3}'", shell=True)
 
 mapping = dict({"ntsim-ng-o-ru": "o-ru", "ntsim-ng-o-du": "o-du"}) 
 # base = 'https://sdnc-web:8453'
-base = 'https://127.0.0.1:30205'
+base = 'https://'+ dockerSdnc.decode("utf-8").strip() +':8443'
 username = 'admin'
 password = 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U'
 
