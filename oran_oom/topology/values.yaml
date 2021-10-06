@@ -5,9 +5,6 @@ image:
   name: smo-topology-api-v2
   tag: 2.0.2-SNAPSHOT-20210315T160448Z
   pullPolicy: IfNotPresent
-resources:
-  limits:
-    memory: 2Gi
 
 service:
   type: NodePort

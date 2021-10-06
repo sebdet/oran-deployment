@@ -43,9 +43,6 @@ spec:
               add:
                 - SYS_ADMIN
                 - SYS_PTRACE
-          resources:
-            limits:
-              memory: {{ .Values.resources.limits.memory }}
       volumes: 
         - name: {{ .Values.vnf_name }}-config-volume
           configMap:

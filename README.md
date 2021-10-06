@@ -16,7 +16,7 @@ Linux Foundation projects can be integrated into one deployment.
             https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
 
 	- KubeSpray using ONAP multicloud KUD installation (This is required for ONAP CNF deployment) by executing: 
-            "scripts/0-setup-node.sh"   
+            "0-setup-node.sh"   
             Additonal info on the KUD: https://git.onap.org/multicloud/k8s/tree/kud
 
 	- Use an existing K8S installation (Cloud, etc ...). 
@@ -38,20 +38,20 @@ Linux Foundation projects can be integrated into one deployment.
 * Build ONAP/ORAN charts: execute "./scripts/1-build-all-charts.sh"
 * Choose which installation should be deployed:
 	- ORAN "nonrtric" par only: 
-		"./scripts/2-install-nonrtric-only.sh"
+		"2-install-nonrtric-only.sh"
 
 	- ONAP CNF + ORAN "nonrtric" (This must still be documented properly): 
-		"./scripts/2-install-oran-cnf.sh"
+		"2-install-oran-cnf.sh"
 
 	- ONAP + ORAN "nonrtric" (RECOMMENDED ONE):  
-		"./scripts/2-install-oran.sh"
+		"2-install-oran.sh"
 
 * Install the PNF simulators:
 	- If all pods in "onap" and "nonrtric" namespaces are well running:
 		"kubectl get pods -n onap && kubectl get pods -n nonrtric"
 
 	- Execute the install script:
-		"./scripts/2-install-simulators.sh"
+		"2-install-simulators.sh"
 
 	- Check the simulators status 
 		"kubectl get pods -n simulators"
