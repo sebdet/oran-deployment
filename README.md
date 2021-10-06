@@ -40,10 +40,10 @@ Linux Foundation projects can be integrated into one deployment.
 	- ORAN "nonrtric" par only: 
 		"./scripts/2-install-nonrtric-only.sh"
 
-	- ONAP CNF/ORAN "nonrtric"/CNF simulators (This must still be documented properly): 
-		"./scripts/2-install-oran-and-simulators-cnf.sh"
+	- ONAP CNF + ORAN "nonrtric" (This must still be documented properly): 
+		"./scripts/2-install-oran-cnf.sh"
 
-	- ONAP/ORAN "nonrtric" (RECOMMENDED ONE):  
+	- ONAP + ORAN "nonrtric" (RECOMMENDED ONE):  
 		"./scripts/2-install-oran.sh"
 
 * Install the PNF simulators:
