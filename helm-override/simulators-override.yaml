@@ -46,7 +46,7 @@ ru-simulator:
 du-simulator:
   ntsimNg:
     <<: *ntsimConfig
-    ipV6Enabled: false
+    ipV6Enabled: true
     sshConnections: 1
     tlsConnections: 0
 

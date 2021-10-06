@@ -56,69 +56,69 @@ global:
 # to customize the ONAP deployment.
 #################################################################
 
-#cassandra:
-#  enabled: true
-#  replicaCount: 3
-#  config:
-#    cluster_domain: cluster.local
-#    heap:
-#      max: 1G
-#      min: 256M
-#  liveness:
-#    initialDelaySeconds: 60
-#    periodSeconds: 20
-#    timeoutSeconds: 10
-#    successThreshold: 1
-#    failureThreshold: 3
+cassandra:
+  enabled: false
+  replicaCount: 3
+  config:
+    cluster_domain: cluster.local
+    heap:
+      max: 1G
+      min: 256M
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
     # necessary to disable liveness probe when setting breakpoints
     # in debugger so K8s doesn't restart unresponsive container
-#    enabled: true
+    enabled: true
 
-#  readiness:
-#    initialDelaySeconds: 120
-#    periodSeconds: 20
-#    timeoutSeconds: 10
-#    successThreshold: 1
-#    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
 
 mariadb-galera: 
   enabled: true
 aaf: 
   enabled: true 
-#aai:
-#  enabled: true
-#  flavorOverride: unlimited
-#  global:
-#    flavorOverride: unlimited
-#    cassandra:
-#      replicas: 3
-#  aai-cassandra:
-#    flavorOverride: unlimited
-#    replicaCount: 3
-#  aai-babel:
-#    flavorOverride: unlimited
-#  aai-data-router:
-#    flavorOverride: unlimited
-#  aai-elasticsearch:
-#    flavorOverride: unlimited
-#  aai-graphadmin:
-#    flavorOverride: unlimited
-#  aai-modelloader:
-#    flavorOverride: unlimited
-#  aai-resources:
-#    flavorOverride: unlimited
-#  aai-schema-service:
-#    flavorOverride: unlimited
-#  aai-search-data:
-#    flavorOverride: unlimited
-#  aai-sparky-be:
-#    flavorOverride: unlimited
-#    readiness:
-#      initialDelaySeconds: 150
-#      periodSeconds: 20
-#      timeoutSeconds: 10
-#  aai-traversal:
-#    flavorOverride: unlimited
+aai:
+  enabled: false
+  flavorOverride: unlimited
+  global:
+    flavorOverride: unlimited
+    cassandra:
+      replicas: 3
+  aai-cassandra:
+    flavorOverride: unlimited
+    replicaCount: 3
+  aai-babel:
+    flavorOverride: unlimited
+  aai-data-router:
+    flavorOverride: unlimited
+  aai-elasticsearch:
+    flavorOverride: unlimited
+  aai-graphadmin:
+    flavorOverride: unlimited
+  aai-modelloader:
+    flavorOverride: unlimited
+  aai-resources:
+    flavorOverride: unlimited
+  aai-schema-service:
+    flavorOverride: unlimited
+  aai-search-data:
+    flavorOverride: unlimited
+  aai-sparky-be:
+    flavorOverride: unlimited
+    readiness:
+      initialDelaySeconds: 150
+      periodSeconds: 20
+      timeoutSeconds: 10
+  aai-traversal:
+    flavorOverride: unlimited
 appc: 
   enabled: false 
 cds: 
@@ -139,8 +139,69 @@ cps:
   enabled: false 
 dcaegen2: 
   enabled: true
+  dcae-bootstrap:
+    enabled: true
+  dcae-cloudify-manager:
+    enabled: true
+  dcae-config-binding-service:
+    enabled: true
+  dcae-dashboard:
+    enabled: false
+  dcae-deployment-handler:
+    enabled: true
+  dcae-healthcheck:
+    enabled: true
+  dcae-inventory-api:
+    enabled: true
+  dcae-policy-handler:
+    enabled: true
+  dcae-servicechange-handler:
+    enabled: false
+  dcae-ves-openapi-manager:
+    enabled: false
+
 dcaegen2-services: 
   enabled: true
+  dcae-bbs-eventprocessor-ms:
+    enabled: false
+  dcae-datafile-collector:
+    enabled: false
+  dcae-datalake-admin-ui:
+    enabled: false
+  dcae-datalake-des:
+    enabled: false
+  dcae-datalake-feeder:
+    enabled: false
+  dcae-heartbeat:
+    enabled: false
+  dcae-hv-ves-collector:
+    enabled: false
+  dcae-kpi-ms:
+    enabled: false
+  dcae-ms-healthcheck:
+    enabled: false
+  dcae-pm-mapper:
+    enabled: false
+  dcae-pmsh:
+    enabled: false
+  dcae-prh:
+    enabled: false
+  dcae-restconf-collector:
+    enabled: false
+  dcae-slice-analysis-ms:
+    enabled: false
+  dcae-snmptrap-collector:
+    enabled: false
+  dcae-son-handler:
+    enabled: false
+  dcae-tcagen2:
+    enabled: false
+  dcae-ves-collector:
+    enabled: true
+  dcae-ves-mapper:
+    enabled: false
+
+
 dcaemod: 
   enabled: false 
 holmes: 
@@ -192,6 +253,14 @@ sdnc:
   replicaCount: 1
   mysql:
     replicaCount: 1
+  ueb-listener:
+    enabled: false
+  sdnc-ansible-server:
+    enabled: false
+  dgbuilder:
+    enabled: false
+  cds:
+    enabled: false
   sdnc-web:
     config:
       topologyserver:
