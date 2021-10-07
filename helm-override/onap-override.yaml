@@ -140,7 +140,7 @@ cps:
 dcaegen2: 
   enabled: true
   dcae-bootstrap:
-    enabled: true
+    enabled: false
   dcae-cloudify-manager:
     enabled: true
   dcae-config-binding-service:
@@ -148,13 +148,13 @@ dcaegen2:
   dcae-dashboard:
     enabled: false
   dcae-deployment-handler:
-    enabled: true
+    enabled: false
   dcae-healthcheck:
     enabled: true
   dcae-inventory-api:
-    enabled: true
+    enabled: false
   dcae-policy-handler:
-    enabled: true
+    enabled: false
   dcae-servicechange-handler:
     enabled: false
   dcae-ves-openapi-manager:
