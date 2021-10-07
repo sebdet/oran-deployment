@@ -41,18 +41,18 @@ ru-simulator:
     <<: *ntsimConfig
     sshConnections: 0
     tlsConnections: 1
-    ipV6Enabled: true
+    ipV6Enabled: false
 
 du-simulator:
   ntsimNg:
     <<: *ntsimConfig
-    ipV6Enabled: true
+    ipV6Enabled: false
     sshConnections: 1
     tlsConnections: 0
 
 topology-server:
   ntsimNg:  
     <<: *ntsimConfig
-    ipV6Enabled: true
+    ipV6Enabled: false
     sshConnections: 1
     tlsConnections: 0

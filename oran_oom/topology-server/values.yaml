@@ -88,7 +88,6 @@ ntsimNg:
   ipV6Enabled: true
   sshConnections: 1
   tlsConnections: 0
-  ntsHostIp: 2a00:7b80:454:2000::2
   ntsHostBasePort: 50000
   ntsHostNetconfSshBasePort: 0
   ntsHostNetconfTlsBasePort: 1000

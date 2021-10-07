@@ -10,7 +10,7 @@ data:
   IPv6_ENABLED: {{ .Values.ntsimNg.ipV6Enabled | quote }}
   SSH_CONNECTIONS: {{ .Values.ntsimNg.sshConnections | quote }}
   TLS_CONNECTIONS: {{ .Values.ntsimNg.tlsConnections | quote }}
-  NTS_HOST_IP: {{ .Values.ntsimNg.ntsHostIp | quote }}
+  NTS_HOST_IP: {{ .Values.vnf_name }}.{{ .Release.Namespace }}
   NTS_HOST_BASE_PORT: {{ .Values.ntsimNg.ntsHostBasePort | quote }}
   NTS_HOST_NETCONF_SSH_BASE_PORT: {{ .Values.ntsimNg.ntsHostNetconfSshBasePort | quote }}
   NTS_HOST_NETCONF_TLS_BASE_PORT: {{ .Values.ntsimNg.ntsHostNetconfTlsBasePort | quote }}
