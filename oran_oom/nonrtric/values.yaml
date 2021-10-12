@@ -27,6 +27,7 @@ nonrtric:
   installORUApp: true
   installTopology: true
   installKong: true
+  installDmaapadapterservice: true
   volume1:
     size: 1Gi
     storageClassName: volume1

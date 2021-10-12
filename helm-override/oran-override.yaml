@@ -35,6 +35,7 @@ nonrtric:
   installKong: true
   installORUApp: true
   installTopology: true
+  installDmaapadapterservice: true
   # override default mount path root directory
   # referenced by persistent volumes and log files
   persistence:

@@ -1,5 +1,5 @@
 ################################################################################
-#   Copyright (c) 2020 Nordix Foundation.                                      #
+#   Copyright (c) 2021 Nordix Foundation.                                      #
 #                                                                              #
 #   Licensed under the Apache License, Version 2.0 (the "License");            #
 #   you may not use this file except in compliance with the License.           #
@@ -14,35 +14,7 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-# Default values for Policy Management Service.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-policymanagementservice:
-  imagePullPolicy: IfNotPresent
-  image:
-    registry: "nexus3.o-ran-sc.org:10002/o-ran-sc"
-    name: nonrtric-policy-agent
-    tag: 2.2.1
-  service:
-    type: NodePort
-    allowHttp: true
-    httpName: http
-    internalPort1: 8081
-    targetPort1: 8081
-    nodePort1: 30094
-    httpsName: https
-    internalPort2: 8433
-    targetPort2: 8433
-    nodePort2: 30095
-  liveness:
-    initialDelaySeconds: 20
-    periodSeconds: 10
-  readiness:
-    initialDelaySeconds: 20
-    periodSeconds: 10
-  persistence:
-    size: 2Gi
-    storageClassName: standard
-  ingress:
-    enabled: false
+dependencies:
+  - name: nonrtric-common
+    version: ^2.0.0
+    repository: "@local"

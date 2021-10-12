@@ -1,5 +1,5 @@
 ################################################################################
-#   Copyright (c) 2020 Nordix Foundation.                                      #
+#   Copyright (c) 2021 Nordix Foundation.                                      #
 #                                                                              #
 #   Licensed under the Apache License, Version 2.0 (the "License");            #
 #   you may not use this file except in compliance with the License.           #
@@ -17,26 +17,26 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ include "common.name.policymanagementservice" . }}
+  name: {{ include "common.name.dmaapadapterservice" . }}
   namespace: {{ include "common.namespace.nonrtric" . }}
   labels:
-    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.policymanagementservice" . }}
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.dmaapadapterservice" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   ports:
-    {{if eq .Values.policymanagementservice.service.allowHttp true -}}
-    - name: {{ index .Values.policymanagementservice.service.httpName }}
-      port: {{ .Values.policymanagementservice.service.internalPort1 }}
-      targetPort: {{ .Values.policymanagementservice.service.targetPort1 }}
+    {{if eq .Values.dmaapadapterservice.service.allowHttp true -}}
+    - name: {{ index .Values.dmaapadapterservice.service.httpName }}
+      port: {{ .Values.dmaapadapterservice.service.internalPort1 }}
+      targetPort: {{ .Values.dmaapadapterservice.service.targetPort1 }}
       protocol: TCP
     {{- end }}
-    - name: {{ index .Values.policymanagementservice.service.httpsName }}
-      port: {{ .Values.policymanagementservice.service.internalPort2 }}
-      targetPort: {{ .Values.policymanagementservice.service.targetPort2 }}
+    - name: {{ index .Values.dmaapadapterservice.service.httpsName }}
+      port: {{ .Values.dmaapadapterservice.service.internalPort2 }}
+      targetPort: {{ .Values.dmaapadapterservice.service.targetPort2 }}
       protocol: TCP
   selector:
-    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.policymanagementservice" . }}
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.dmaapadapterservice" . }}
     release: {{ .Release.Name }}
   type: ClusterIP

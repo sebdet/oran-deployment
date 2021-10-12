@@ -68,3 +68,8 @@ dependencies:
     version: ~2.4.0
     repository: https://charts.konghq.com
     condition: nonrtric.installKong
+
+  - name: dmaapadapterservice
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installDmaapadapterservice

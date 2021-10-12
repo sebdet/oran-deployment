@@ -21,9 +21,9 @@
 enrichmentservice:
   imagePullPolicy: IfNotPresent
   image:
-    registry: "nexus3.o-ran-sc.org:10002/o-ran-sc"
+    registry: "nexus3.o-ran-sc.org:10004/o-ran-sc"
     name: "nonrtric-enrichment-coordinator-service"
-    tag: 1.1.0
+    tag: 1.2.0
   service:
     allowHttp: true
     httpName: http
