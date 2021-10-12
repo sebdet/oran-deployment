@@ -25,7 +25,7 @@ import json
 import requests
 import subprocess
 
-dockerFilter = subprocess.check_output("kubectl get services -n simulators -o name | awk -F \"/\" '{print $2}'", shell=True)
+dockerFilter = subprocess.check_output("kubectl get services -n network -o name | awk -F \"/\" '{print $2}'", shell=True)
 containers = dockerFilter.splitlines()
 dockerSdnc = subprocess.check_output("kubectl get services sdnc-web-service -n onap | grep sdnc-web-service |  awk '{print $3}'", shell=True)
 

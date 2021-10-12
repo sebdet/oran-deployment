@@ -235,11 +235,19 @@ policy:
   policy-drools-pdp:
     enabled: true
   policy-distribution:
-    enabled: true
+    enabled: false
   policy-clamp-be:
     enabled: false
   policy-clamp-fe:
     enabled: false
+  policy-clamp-cl-runtime:
+    enabled: false
+  policy-clamp-cl-k8s-ppnt:
+    enabled: false
+  policy-gui:
+  enabled: false
+
+
   policy-nexus:
     enabled: false
 portal: 

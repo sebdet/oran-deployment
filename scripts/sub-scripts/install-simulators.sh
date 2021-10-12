@@ -1,4 +1,4 @@
 #!/bin/bash
-kubectl create namespace simulators
+kubectl create namespace network
 echo '### Installing ORAN SIMULATORS part ###'
-helm install --debug oran-simulator local/ru-du-simulators --namespace simulators -f $1
+helm install --debug oran-simulator local/ru-du-simulators --namespace network -f $1

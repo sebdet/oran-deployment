@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl delete namespace simulators
+kubectl delete namespace network
