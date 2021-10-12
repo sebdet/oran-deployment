@@ -245,9 +245,7 @@ policy:
   policy-clamp-cl-k8s-ppnt:
     enabled: false
   policy-gui:
-  enabled: false
-
-
+    enabled: false
   policy-nexus:
     enabled: false
 portal: 

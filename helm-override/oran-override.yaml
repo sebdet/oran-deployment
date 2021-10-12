@@ -68,6 +68,12 @@ policymanagementservice:
       size: 2Gi 
       storageClassName: pms-storage 
 
+kong:
+  ingressController:
+    installCRDs: false 
+  admin:
+    enabled: true
+
 ######### RIC_AUX #########
 dashboard:
   cipher:

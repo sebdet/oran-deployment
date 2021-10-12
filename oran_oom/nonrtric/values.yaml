@@ -26,9 +26,15 @@ nonrtric:
   installNonrtricgateway: true
   installORUApp: true
   installTopology: true
+  installKong: true
   volume1:
     size: 1Gi
     storageClassName: volume1
   volume2:
     size: 1Gi
     storageClassName: volume2
+kong:
+  ingressController:
+    installCRDs: false 
+  admin:
+    enabled: true

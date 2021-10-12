@@ -63,3 +63,8 @@ dependencies:
     version: ~1.0.0
     repository: "@local"
     condition: nonrtric.installTopology
+
+  - name: kong
+    version: ~2.4.0
+    repository: https://charts.konghq.com
+    condition: nonrtric.installKong
