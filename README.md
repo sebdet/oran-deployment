@@ -1,11 +1,16 @@
-#Summary
+# ORAN SMO Package
 
-This project investigates how different helm charts from different Linux Foundation projects can be integrated into one deployment.
-The ONAP and ORAN project helm charts are built and then configured to be deployed together to create the ORAN SMO.
+This project investigates how different helm charts from different Linux Foundation projects can be integrated into one common deployment, in terms of installation but also in terms of configuration.
+The ONAP and ORAN project helm charts are built and then configured by using "helm override" so that it represents a valid ORAN SMO installation.
+It contains also provisioning scripts that can be used to bootstrap the platform and eecute some usecases, network simulators, a1 simulators, cnf network simulators, etc ...
+
+Note: 
+The CNF part is still a "work in progress" so not well documented, it's a DU/RU/topology server deployment done by ONAP SO instantiation.
+It has been created out of the ONAP vfirewall usecase.
 
 ## Download:
 Use git clone to get it on your server (github ssh key config is required):
-	"git clone --recursive git@github.com:gmngueko/oran-deployment.git"
+	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
   
   Note: The current repository has multiple sub git submodules, therefore the --recursive flag is absolutely REQUIRED
   
