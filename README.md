@@ -1,13 +1,82 @@
 # ORAN SMO Package
 
 This project investigates how different helm charts from different Linux Foundation projects can be integrated into one common deployment, in terms of installation but also in terms of configuration.
-The ONAP and ORAN project helm charts are built and then configured by using "helm override" so that it represents a valid ORAN SMO installation.
-It contains also provisioning scripts that can be used to bootstrap the platform and eecute some usecases, network simulators, a1 simulators, cnf network simulators, etc ...
+<p>The ONAP and ORAN project helm charts are built and then configured by using "helm override" so that it represents a valid ORAN SMO installation.
+It contains also provisioning scripts that can be used to bootstrap the platform and eecute some usecases, network simulators, a1 simulators, cnf network simulators, etc ...</p>
 
 <strong>Note:</strong>
 The CNF part is still a "work in progress" so not well documented, it's a DU/RU/topology server deployment done by ONAP SO instantiation.
 It has been created out of the ONAP vfirewall usecase.
 
+## Structure
+```
+.
+├── cnf				<-- CNF packages that can be deployed by ONAP (Still Work In Progress, so not yet well documented)
+│   └── du-ru-simulators		<--- The CNF package containing DU/RU/Topology server simulators
+├── helm-override		<-- The Configuration of the different HELM charts used in SMO package
+│   ├── onap-override-cnf.yaml  	<--- A medium ONAP config ready for CNF deployment
+│   ├── onap-override.yaml 		<--- A minimal ONAP config for SMO package
+│   ├── oran-override.yaml		<--- A minimal ORAN config for SMO package
+│   └── simulators-override.yaml	<--- A standard config that must be adapted to deploy network simulators
+├── LICENSE
+├── multicloud-k8s		<-- Git SUBMODULE required for KUD installation
+├── onap_oom			<-- Git SUBMODULE required for ONAP installation
+├── oran_oom			<-- ORAN Charts
+│   ├── a1controller
+│   ├── a1simulator
+│   ├── aux-common
+│   ├── controlpanel
+│   ├── dist
+│   ├── dmaapadapterservice
+│   ├── du-simulator
+│   ├── enrichmentservice
+│   ├── Makefile		<-- ORAN Makefile to build all ORAN Charts
+│   ├── nonrtric
+│   ├── nonrtric-common
+│   ├── nonrtricgateway
+│   ├── oru-app
+│   ├── policymanagementservice
+│   ├── rappcatalogueservice
+│   ├── ric-common
+│   ├── ru-du-simulators
+│   ├── ru-simulator
+│   ├── topology
+│   └── topology-server
+├── README.md
+├── scripts			<-- All installation scripts (USER ENTRY POINT)
+│   ├── layer-0				<--- Scripts to setup Node
+│   │   ├── 0-setup-charts-museum.sh		<--- Setup ChartMuseum
+│   │   └── 0-setup-kud-node.sh			<--- Setup K8S node with ONAP Multicloud KUD installation
+│   │   └── 0-setup-microk8s-node.sh		<--- Setup K8S node with MicroK8S nstallation
+│   ├── layer-1				<--- Scripts to prepare for the SMO installation
+│   │   └── 1-build-all-charts.sh		<--- Build all HELM charts and upload them to ChartMuseum
+│   ├── layer-2				<--- Scripts to install SMO package
+│   │   ├── 2-install-nonrtric-only.sh		<--- Install SMO NONRTRIC k8s namespace only
+│   │   ├── 2-install-oran-cnf.sh		<--- Install SMO full with ONAP CNF features
+│   │   ├── 2-install-oran.sh			<--- Install SMO minimal 
+│   │   └── 2-install-simulators.sh		<--- Install Network simulator (RU/DU/Topology Server)
+│   ├── sub-scripts			<--- Sub-Scripts used by the main layer-0, layer-1, layer-2
+│   │   ├── clean-up.sh
+│   │   ├── install-nonrtric.sh
+│   │   ├── install-onap.sh
+│   │   ├── install-simulators.sh
+│   │   ├── uninstall-nonrtric.sh
+│   │   ├── uninstall-onap.sh
+│   │   └── uninstall-simulators.sh
+│   └── uninstall-all.sh		<--- Uninstall ALL SMO K8S namespaces and cleanup K8S
+└── test			<-- Scripts to test the SMO installation
+    ├── config-simulators.sh		<--- Enable the fault reporting of the network simulators by SDNC
+    ├── data			
+    ├── health_check.sh		
+    ├── pms_a1sim_sdnc.sh
+    ├── pms_a1sim.sh
+    ├── prepareDataAll.sh
+    ├── prepare_data.sh
+    ├── README.md
+    ├── run_in_k8s
+    └── simulators-data
+
+```
 ## Download:
 Use git clone to get it on your server (github ssh key config is required):
 
@@ -36,9 +105,9 @@ Use git clone to get it on your server (github ssh key config is required):
 	- Install chartmuseum manually on port 18080 (https://chartmuseum.com/#Instructions, https://github.com/helm/chartmuseum)
     
 ## Configuration:
-	In the ./helm-override/ folder the helm config that are used by the installation. 
-	Different flavors are preconfigured, and should NOT be changed EXCEPT for the simulators (due to DNS limitations in the simulators)
-	in ./helm-override/simulators-override.yaml, the "sdnControllerIp" and "vesEndpointIp" must be set to the server external IP.
+In the ./helm-override/ folder the helm config that are used by the SMO installation. 
+<p>Different flavors are preconfigured, and should NOT be changed EXCEPT for the simulators (due to current DNS limitations in the simulators)
+in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</strong> and <strong>"vesEndpointIp"</strong> must be set to the server external IP</p>
 
 ## Installation:
 * Build ONAP/ORAN charts: execute "./scripts/1-build-all-charts.sh"
