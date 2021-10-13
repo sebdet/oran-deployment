@@ -1,6 +1,6 @@
 # ORAN SMO Package
 
-This project investigates how different helm charts from different Linux Foundation projects can be integrated into one common deployment, in terms of installation but also in terms of configuration.
+This project uses different helm charts from different Linux Foundation projects and integrate them into a unique SMO deployment.
 <p>The ONAP and ORAN project helm charts are built and then configured by using "helm override" so that it represents a valid ORAN SMO installation.
 It contains also provisioning scripts that can be used to bootstrap the platform and eecute some usecases, network simulators, a1 simulators, cnf network simulators, etc ...</p>
 
