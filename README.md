@@ -9,15 +9,17 @@ The CNF part is still a "work in progress" so not well documented, it's a DU/RU/
 It has been created out of the ONAP vfirewall usecase.
 
 ## Structure
+The user entry point is located in the <strong>scripts</strong> folder
+
 ```
 .
-├── cnf				<-- CNF packages that can be deployed by ONAP (Still Work In Progress, so not yet well documented)
+├── cnf				<-- CNF packages that can be deployed by ONAP (Work In Progress, so not yet well documented)
 │   └── du-ru-simulators		<--- The CNF package containing DU/RU/Topology server simulators
 ├── helm-override		<-- The Configuration of the different HELM charts used in SMO package
 │   ├── onap-override-cnf.yaml  	<--- A medium ONAP config ready for CNF deployment
 │   ├── onap-override.yaml 		<--- A minimal ONAP config for SMO package
 │   ├── oran-override.yaml		<--- A minimal ORAN config for SMO package
-│   └── simulators-override.yaml	<--- A standard config that must be adapted to deploy network simulators
+│   └── simulators-override.yaml	<--- A standard config that must be changed to deploy network simulators
 ├── LICENSE
 ├── multicloud-k8s		<-- Git SUBMODULE required for KUD installation
 ├── onap_oom			<-- Git SUBMODULE required for ONAP installation
@@ -64,18 +66,16 @@ It has been created out of the ONAP vfirewall usecase.
 │   │   ├── uninstall-onap.sh
 │   │   └── uninstall-simulators.sh
 │   └── uninstall-all.sh		<--- Uninstall ALL SMO K8S namespaces and cleanup K8S
-└── test			<-- Scripts to test the SMO installation
-    ├── config-simulators.sh		<--- Enable the fault reporting of the network simulators by SDNC
-    ├── data			
-    ├── health_check.sh		
+└── test			<-- Scripts to test the SMO installation (Work In Progress, so not yet well documented)
+    ├── data
+    ├── enable-network-sim-fault-reporting.sh	<--- Enable the fault reporting of the network simulators by SDNC
+    ├── health_check.sh
     ├── pms_a1sim_sdnc.sh
     ├── pms_a1sim.sh
-    ├── prepareDataAll.sh
     ├── prepare_data.sh
-    ├── README.md
     ├── run_in_k8s
-    └── simulators-data
-
+    ├── simulators-data
+    └── validate-a1.sh				<--- Test nonrtric A1 interface
 ```
 ## Download:
 Use git clone to get it on your server (github ssh key config is required):
