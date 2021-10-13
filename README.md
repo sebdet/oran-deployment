@@ -92,7 +92,7 @@ Use git clone to get it on your server (github ssh key config is required):
 
 	- KubeSpray using ONAP multicloud KUD (https://git.onap.org/multicloud/k8s/tree/kud) installation by executing(this is required for ONAP CNF deployments): 
             
-	    ```cd scripts && ./0-setup-node.sh```
+	    ```cd scripts/layer-0 && ./0-setup-kud-node.sh```
     
 
 	- Use an existing K8S installation (Cloud, etc ...).
@@ -101,7 +101,7 @@ Use git clone to get it on your server (github ssh key config is required):
 * ChartMuseum to store the HELM charts on the server, multiple options are available:
 	- Execute the install script:
 
-		```cd scripts && 0-setup-charts-museum.sh```
+		```cd scripts/layer-0 && 0-setup-charts-museum.sh```
 	- Install chartmuseum manually on port 18080 (https://chartmuseum.com/#Instructions, https://github.com/helm/chartmuseum)
     
 ## Configuration:
@@ -110,26 +110,35 @@ In the ./helm-override/ folder the helm config that are used by the SMO installa
 in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</strong> and <strong>"vesEndpointIp"</strong> must be set to the server external IP</p>
 
 ## Installation:
-* Build ONAP/ORAN charts: execute "./scripts/1-build-all-charts.sh"
-* Choose which installation should be deployed:
+* Build ONAP/ORAN charts 
+
+	```cd scripts/layer-1 && ./1-build-all-charts.sh```
+
+* Choose the installation:
 	- ORAN "nonrtric" par only: 
-		"2-install-nonrtric-only.sh"
+	
+		```cd scripts/layer-2 && ./2-install-nonrtric-only.sh```
 
 	- ONAP CNF + ORAN "nonrtric" (This must still be documented properly): 
-		"2-install-oran-cnf.sh"
+ 	
+		```cd scripts/layer-2 && ./2-install-oran-cnf.sh```
 
 	- ONAP + ORAN "nonrtric" (RECOMMENDED ONE):  
-		"2-install-oran.sh"
+	
+		```cd scripts/layer-2 && 2-install-oran.sh```
 
-* Install the PNF simulators:
-	- If all pods in "onap" and "nonrtric" namespaces are well running:
-		"kubectl get pods -n onap && kubectl get pods -n nonrtric"
+* Install the network simulators (DU/RU/Topo):
+	- When all pods in "onap" and "nonrtric" namespaces are well up & running:
+		
+		```kubectl get pods -n onap && kubectl get pods -n nonrtric```
 
 	- Execute the install script:
-		"2-install-simulators.sh"
+		
+		```cd scripts/layer-2 && 2-install-simulators.sh```
 
-	- Check the simulators status 
-		"kubectl get pods -n simulators"
+	- Check the simulators status:
+
+		```kubectl get pods -n simulators```
 	
 ## Platform access points:
 * SDNR WEB: 
@@ -139,4 +148,6 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
   More to come ...
 
 ## Uninstallation:
-* Execute ./uninstall-all.sh 
+* Execute 
+	
+	```cd scripts && ./uninstall-all.sh```
