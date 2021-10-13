@@ -23,5 +23,14 @@
 # 
 ###
 
-./sub-scripts/install-onap.sh ../helm-override/onap-override-cnf.yaml
-./sub-scripts/install-nonrtric.sh ../helm-override/oran-override.yaml
+if [[ $# -eq 0 ]] ; then
+    echo 'Usage:  2-install-simulators.sh <host-ip>'
+    echo 'Example: 2-install-simulators.sh 192.168.1.46'
+    exit 1
+fi
+echo "Starting Network Simulators namespace ..."
+echo "Onap IP is: "+$1
+../sub-scripts/install-simulators.sh ../../helm-override/simulators-override.yaml $1
+
+kubectl get pods -n network
+kubectl get namespaces

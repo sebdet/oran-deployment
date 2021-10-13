@@ -23,13 +23,11 @@
 # 
 ###
 
-echo '### Installing some TOOLS  ###'
-apt-get update -y
-apt-get upgrade -y
-apt-get install -y python3-pip python3.8 maven
-update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-pip install pipenv
+echo "Starting ONAP CNF & NONRTRIC namespaces..."
 
-echo '### Installing the K8S cluster using MULTICLOUD KUD INSTALL ###'
-../multicloud-k8s/kud/hosting_providers/baremetal/aio.sh
+../sub-scripts/install-onap.sh ../../helm-override/onap-override-cnf.yaml
+../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml
 
+kubectl get pods -n onap
+kubectl get pods -n nonrtric
+kubectl get namespaces

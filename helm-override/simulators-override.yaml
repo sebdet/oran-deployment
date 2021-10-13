@@ -23,9 +23,10 @@
 
 ##### ORAN Simulators #####
 
+x-onapHost: &onapHost 192.168.1.47
 
 x-ntsimNg: &ntsimConfig
-  sdnControllerIp: 192.168.1.46
+  sdnControllerIp: *onapHost
   sdnControllerPort: 30267
   sdnControllerProtocol: https
   sdnControllerUsername: admin
@@ -33,7 +34,7 @@ x-ntsimNg: &ntsimConfig
   sdnControllerCallHomePort: 30266
 
   vesEndpointProtocol: https
-  vesEndpointIp: 192.168.1.46
+  vesEndpointIp: *onapHost
   vesEndpointPort: 30417
   vesEndpointUsername: sample1
   vesEndpointPassword: sample1

@@ -23,6 +23,12 @@
 # 
 ###
 
+if [[ $# -eq 0 ]] ; then
+    echo 'Usage:  install-simulators.sh <helm-override-file-path><host-ip>'
+    echo 'Example: install-simulators.sh ../Helm-override/simulators.yaml 192.168.1.46'
+    exit 1
+fi
+
 kubectl create namespace network
 echo '### Installing ORAN SIMULATORS part ###'
-helm install --debug oran-simulator local/ru-du-simulators --namespace network -f $1
+helm install --debug oran-simulator local/ru-du-simulators --namespace network -f $1 --set ru-simulator.ntsimNg.sdnControllerIp=$2 --set ru-simulator.ntsimNg.vesEndpointIp=$2 --set du-simulator.ntsimNg.sdnControllerIp=$2 --set du-simulator.ntsimNg.vesEndpointIp=$2 --set topology-server.ntsimNg.sdnControllerIp=$2 --set topology-server.ntsimNg.vesEndpointIp=$2

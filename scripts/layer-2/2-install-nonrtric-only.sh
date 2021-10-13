@@ -23,13 +23,9 @@
 # 
 ###
 
-helm plugin install ../onap_oom/kubernetes/helm/plugins/undeploy/
-helm plugin install ../onap_oom/kubernetes/helm/plugins/deploy/
-helm plugin install https://github.com/chartmuseum/helm-push.git
+echo "Starting NONRTRIC namespace..."
 
-helm repo add local http://localhost:18080
+../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml
 
-echo '### Building ONAP part###'
-(cd ../onap_oom/kubernetes && make all -e SKIP_LINT=TRUE)
-echo  '### Building ORAN part ###'
-(cd ../oran_oom && make all)
+kubectl get pods -n nonrtric
+kubectl get namespaces

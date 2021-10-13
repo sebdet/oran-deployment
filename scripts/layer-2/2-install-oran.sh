@@ -23,4 +23,10 @@
 # 
 ###
 
-./sub-scripts/install-simulators.sh ../helm-override/simulators-override.yaml
+echo "Starting ONAP & NONRTRIC namespaces ..."
+../sub-scripts/install-onap.sh ../../helm-override/onap-override.yaml
+../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml
+
+kubectl get pods -n onap
+kubectl get pods -n nonrtric
+kubectl get namespaces
