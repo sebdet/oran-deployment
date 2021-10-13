@@ -134,11 +134,11 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 
 	- Execute the install script:
 		
-		```cd scripts/layer-2 && 2-install-simulators.sh```
+		```cd scripts/layer-2 && 2-install-simulators.sh <K8S_EXTERNAL_IP>```
 
 	- Check the simulators status:
 
-		```kubectl get pods -n simulators```
+		```kubectl get pods -n network```
 	
 ## Platform access points:
 * SDNR WEB: 
