@@ -1,4 +1,6 @@
 # Copyright © 2017 Amdocs, Bell Canada
+# 
+# Modifications Copyright © 2021 AT&T
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -133,13 +135,71 @@ contrib:
   netbox:
     enabled: true
 dcaegen2:
-  enabled: false
+  enabled: true
+  dcae-bootstrap:
+    enabled: false
   dcae-cloudify-manager:
-    readiness:
-      periodSeconds: 120
-      timeoutSeconds: 20
-    liveness:
-      timeoutSeconds: 10
+    enabled: true
+  dcae-config-binding-service:
+    enabled: true
+  dcae-dashboard:
+    enabled: false
+  dcae-deployment-handler:
+    enabled: false
+  dcae-healthcheck:
+    enabled: true
+  dcae-inventory-api:
+    enabled: false
+  dcae-policy-handler:
+    enabled: false
+  dcae-servicechange-handler:
+    enabled: false
+  dcae-ves-openapi-manager:
+    enabled: false
+dcaegen2-services:
+  enabled: true
+  dcae-bbs-eventprocessor-ms:
+    enabled: false
+  dcae-datafile-collector:
+    enabled: false
+  dcae-datalake-admin-ui:
+    enabled: false
+  dcae-datalake-des:
+    enabled: false
+  dcae-datalake-feeder:
+    enabled: false
+  dcae-heartbeat:
+    enabled: false
+  dcae-hv-ves-collector:
+    enabled: false
+  dcae-kpi-ms:
+    enabled: false
+  dcae-ms-healthcheck:
+    enabled: false
+  dcae-pm-mapper:
+    enabled: false
+  dcae-pmsh:
+    enabled: false
+  dcae-prh:
+    enabled: false
+  dcae-restconf-collector:
+    enabled: false
+  dcae-slice-analysis-ms:
+    enabled: false
+  dcae-snmptrap-collector:
+    enabled: false
+  dcae-son-handler:
+    enabled: false
+  dcae-tcagen2:
+    enabled: false
+  dcae-ves-collector:
+    enabled: true
+  dcae-ves-mapper:
+    enabled: false
+dcaemod:
+  enabled: false
+holmes:
+  enabled: false
 dmaap:
   enabled: true
 esr:
@@ -148,28 +208,54 @@ log:
   enabled: false
   log-logstash:
     replicaCount: 1
-sniro-emulator:
-  enabled: false
 oof:
   enabled: false
 mariadb-galera:
   enabled: true
+modeling:
+  enabled: false
 msb:
-  enabled: true
+  enabled: false
 multicloud:
   enabled: true
 nbi:
+  enabled: false
+oof:
   enabled: false
 platform:
   enabled: true
 policy:
   enabled: true
+  policy-api:
+    enabled: true
+  policy-pap:
+    enabled: true
+  policy-xacml-pdp:
+    enabled: true
+  policy-apex-pdp:
+    enabled: true
+  policy-drools-pdp:
+    enabled: true
+  policy-distribution:
+    enabled: false
+  policy-clamp-be:
+    enabled: false
+  policy-clamp-fe:
+    enabled: false
+  policy-clamp-cl-runtime:
+    enabled: false
+  policy-clamp-cl-k8s-ppnt:
+    enabled: false
+  policy-gui:
+    enabled: false
+  policy-nexus:
+    enabled: false
 pomba:
   enabled: false
 portal:
   enabled: true
 robot:
-  enabled: true
+  enabled: false
   flavor: small
   appcUsername: "appc@appc.onap.org"
   appcPassword: "demo123456!"
@@ -177,9 +263,9 @@ robot:
   openStackKeystoneAPIVersion: "v3"
   openStackPublicNetId: "5771462c-9582-421c-b2dc-ee6a04ec9bde"
   openStackTenantId: "c9ef9a6345b440b7a96d906a0f48c6b1"
-  openStackUserName: "christophe_closset"
+  openStackUserName: "user_name"
   openStackUserDomain: "default"
-  openStackProjectName: "CLAMP"
+  openStackProjectName: "TEST"
   ubuntu14Image: "trusty-server-cloudimg-amd64-disk1"
   ubuntu16Image: "xenial-server-cloudimg-amd64-disk1"
   openStackPrivateNetCidr: "10.0.0.0/16"
@@ -198,9 +284,6 @@ robot:
     openStackSoEncryptedPassword: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
 sdc:
   enabled: true
-  config:
-    environment:
-      vnfRepoPort: 8703
   sdc-be:
     config:
       javaOptions: "-Xmx1g -Xms512m"
@@ -222,16 +305,42 @@ sdc:
 
 sdnc:
   enabled: true
-
-  replicaCount: 1
-
-  mysql:
-    replicaCount: 1
+   replicaCount: 1
+   mysql:
+     replicaCount: 1
+   ueb-listener:
+     enabled: false
+   sdnc-ansible-server:
+     enabled: false
+   dgbuilder:
+     enabled: false
+   cds:
+     enabled: false
+   sdnc-web:
+     config:
+       topologyserver:
+         enabled: true
+         topologyserverUrl: http://topology.nonrtric:3001
+   config:
+     sdnr:
+       enabled: true
+       # mode: web - SDNC contains device manager only plus dedicated webserver service for ODLUX (default),
+       # mode: dm - SDNC contains sdnr device manager + ODLUX components
+       mode: dm
+       # sdnronly: true starts sdnc container with odl and sdnrwt features only
+       sdnronly: false
+       sdnrdbTrustAllCerts: true
+       mountpointRegistrarEnabled: true
+       mountpointStateProviderEnabled: true
+       netconfCallHome:
+         enabled: true
+sniro-emulator:
+  enabled: false
 so:
   enabled: true
   so-catalog-db-adapter:
     config:
-      openStackUserName: "christophe_closset"
+      openStackUserName: "the username"
       openStackKeyStoneUrl: "http://10.12.25.2:5000/v3"
       openStackEncryptedPasswordHere: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
       openStackKeystoneVersion: "KEYSTONE_V3"
@@ -240,7 +349,7 @@ uui:
 vfc:
   enabled: false
 vid:
-  enabled: true
+  enabled: false
 vnfsdk:
   enabled: false
 

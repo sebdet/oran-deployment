@@ -1,15 +1,15 @@
-# o-ran-onap-based-smo-deployment
+#Summary
 
-This project investigates how different helm charts from different 
-Linux Foundation projects can be integrated into one deployment.
+This project investigates how different helm charts from different Linux Foundation projects can be integrated into one deployment.
+The ONAP and ORAN project helm charts are built and then configured to be deployed together to create the ORAN SMO.
 
-1. Download:
-* Use git clone to get it on your server (github ssh key config is required):
+## Download:
+Use git clone to get it on your server (github ssh key config is required):
 	"git clone --recursive git@github.com:gmngueko/oran-deployment.git"
   
   Note: The current repository has multiple sub git submodules, therefore the --recursive flag is absolutely REQUIRED
   
-2. Requirements:
+## Requirements:
 * K8S node setup with Helm 3 and Kubectl (tested with K8S v1.21.5). 
   FOR K8S installation, different options are available:
 	- MicroK8S, this current can help for microk8s steup: 
@@ -29,12 +29,12 @@ Linux Foundation projects can be integrated into one deployment.
 	- Execute the install script:
             "0-setup-charts-museum.sh"
 
-3. Configuration:
+## Configuration:
 	In the ./helm-override/ folder the helm config that are used by the installation. 
 	Different flavors are preconfigured, and should NOT be changed EXCEPT for the simulators (due to DNS limitations in the simulators)
 	in ./helm-override/simulators-override.yaml, the "sdnControllerIp" and "vesEndpointIp" must be set to the server external IP.
 
-4. Installation:
+## Installation:
 * Build ONAP/ORAN charts: execute "./scripts/1-build-all-charts.sh"
 * Choose which installation should be deployed:
 	- ORAN "nonrtric" par only: 
@@ -56,12 +56,12 @@ Linux Foundation projects can be integrated into one deployment.
 	- Check the simulators status 
 		"kubectl get pods -n simulators"
 	
-5. Platform access points:
+## Platform access points:
 * SDNR WEB: 
 	https://<K8SServerIP>:30205/odlux/index.html
 * NONRTRIC Dashboard: 
 	http://<K8SServerIP>:30091/
   More to come ...
 
-6. Uninstallation:
+## Uninstallation:
 * Execute ./uninstall-all.sh 
