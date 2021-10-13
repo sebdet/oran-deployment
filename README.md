@@ -10,26 +10,27 @@ It has been created out of the ONAP vfirewall usecase.
 
 ## Download:
 Use git clone to get it on your server (github ssh key config is required):
-	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
-  
-  Note: The current repository has multiple sub git submodules, therefore the --recursive flag is absolutely REQUIRED
+
+```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
+
+
+<strong>Note:</strong> The current repository has multiple sub git submodules, therefore the <strong>--recursive</strong> flag is absolutely <strong>REQUIRED</strong>
   
 ## Requirements:
-* K8S node setup with Helm 3 and Kubectl (tested with K8S v1.21.5). 
-  FOR K8S installation, different options are available:
-	- MicroK8S, this current can help for microk8s steup: 
-            https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
+* K8S node setup with Helm 3 and Kubectl properly configured (tested with <strong>K8S v1.21.5</strong> and <strong>HELM v3.5.4</strong>).
+  FOR K8S installation, multiple options are available:
+	- MicroK8S standalone deployment, this current wiki can help to setup it (<strong>Section 1, 2 and 3</strong>)
+	[MicroK8S for ONAP](https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup)
 
 	- KubeSpray using ONAP multicloud KUD installation (This is required for ONAP CNF deployment) by executing: 
             "0-setup-node.sh"   
-            Additonal info on the KUD: https://git.onap.org/multicloud/k8s/tree/kud
+            [KUD info](https://git.onap.org/multicloud/k8s/tree/kud)
 
-	- Use an existing K8S installation (Cloud, etc ...). 
+	- Use an existing K8S installation (Cloud, etc ...).
+	- ....
 
-* ChartMuseum to store the helm charts on the server, different options are available:
-	- Install chartmuseum manually on port 18080 
-                https://chartmuseum.com/#Instructions
-		https://github.com/helm/chartmuseum
+* ChartMuseum to store the HELM charts on the server, multiple options are available:
+	- Install chartmuseum manually on port 18080 (https://chartmuseum.com/#Instructions, https://github.com/helm/chartmuseum)
     
 	- Execute the install script:
             "0-setup-charts-museum.sh"
