@@ -115,6 +115,9 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 	```cd scripts/layer-1 && ./1-build-all-charts.sh```
 
 * Choose the installation:
+	- ONAP + ORAN "nonrtric" <strong>(RECOMMENDED ONE)</strong>:  
+	
+		```cd scripts/layer-2 && 2-install-oran.sh```
 	- ORAN "nonrtric" par only: 
 	
 		```cd scripts/layer-2 && ./2-install-nonrtric-only.sh```
@@ -123,9 +126,7 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
  	
 		```cd scripts/layer-2 && ./2-install-oran-cnf.sh```
 
-	- ONAP + ORAN "nonrtric" (RECOMMENDED ONE):  
-	
-		```cd scripts/layer-2 && 2-install-oran.sh```
+
 
 * Install the network simulators (DU/RU/Topo):
 	- When all pods in "onap" and "nonrtric" namespaces are well up & running:
