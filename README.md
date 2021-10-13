@@ -4,7 +4,7 @@ This project investigates how different helm charts from different Linux Foundat
 The ONAP and ORAN project helm charts are built and then configured by using "helm override" so that it represents a valid ORAN SMO installation.
 It contains also provisioning scripts that can be used to bootstrap the platform and eecute some usecases, network simulators, a1 simulators, cnf network simulators, etc ...
 
-Note: 
+<strong>Note:</strong>
 The CNF part is still a "work in progress" so not well documented, it's a DU/RU/topology server deployment done by ONAP SO instantiation.
 It has been created out of the ONAP vfirewall usecase.
 
@@ -19,22 +19,22 @@ Use git clone to get it on your server (github ssh key config is required):
 ## Requirements:
 * K8S node setup with Helm 3 and Kubectl properly configured (tested with <strong>K8S v1.21.5</strong> and <strong>HELM v3.5.4</strong>).
   FOR K8S installation, multiple options are available:
-	- MicroK8S standalone deployment, this current wiki can help to setup it (<strong>Section 1, 2 and 3</strong>)
-	[MicroK8S for ONAP](https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup)
+	- MicroK8S standalone deployment, this current wiki can help to setup it (<strong>Section 1, 2 and 3</strong>): https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
 
-	- KubeSpray using ONAP multicloud KUD installation (This is required for ONAP CNF deployment) by executing: 
-            "0-setup-node.sh"   
-            [KUD info](https://git.onap.org/multicloud/k8s/tree/kud)
+	- KubeSpray using ONAP multicloud KUD (https://git.onap.org/multicloud/k8s/tree/kud) installation by executing(this is required for ONAP CNF deployments): 
+            
+	    ```cd scripts && ./0-setup-node.sh```
+    
 
 	- Use an existing K8S installation (Cloud, etc ...).
 	- ....
 
 * ChartMuseum to store the HELM charts on the server, multiple options are available:
+	- Execute the install script:
+
+		```cd scripts && 0-setup-charts-museum.sh```
 	- Install chartmuseum manually on port 18080 (https://chartmuseum.com/#Instructions, https://github.com/helm/chartmuseum)
     
-	- Execute the install script:
-            "0-setup-charts-museum.sh"
-
 ## Configuration:
 	In the ./helm-override/ folder the helm config that are used by the installation. 
 	Different flavors are preconfigured, and should NOT be changed EXCEPT for the simulators (due to DNS limitations in the simulators)
