@@ -23,23 +23,33 @@
 # 
 ###
 
+## Microk8S part
 snap remove microk8s
 snap install microk8s --classic --channel=1.22/stable
 sudo snap install kubectl --classic --channel=1.22/stable
+
+## Firewall
 ufw allow in on cni0 && sudo ufw allow out on cni0
 ufw default allow routed
+
+## Enable required features for K8S
 microk8s enable dns storage
+
+## Helm part
 wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz
-tar xvfz helm-v3.5.4-linux-amd64.tar.gz
+mv helm-v3.5.4-linux-amd64.tar.gz /tmp/helm-v3.5.4-linux-amd64.tar.gz
+cd /tmp/
+tar xvfz /tmp/helm-v3.5.4-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 
+## Setup kubectl
 cd
 mkdir .kube
 cd .kube
 sudo microk8s.config > config
 chmod 700 config
 
-#Check
+#Check the install
 echo "Checking Kubernetes ..."
 kubectl version
 echo "Checking HELM ..."
