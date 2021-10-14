@@ -8,6 +8,29 @@ This project uses different helm charts from different Linux Foundation projects
 The CNF part is still a "work in progress" so not well documented, it's a DU/RU/topology server deployment done by ONAP SO instantiation.
 It has been created out of the ONAP vfirewall usecase.
 
+## Quick Installation
+* Setup a VM with 16GB Memory, 6VCPU, 60GB of diskspace. 
+* Install an ubuntu live server 20.04 LTS (https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso)
+* Execute the following commands:
+
+	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
+	
+	```cd scripts/layer-0 && ./0-setup-microk8s.sh```
+	
+	```cd scripts/layer-0 && ./0-setup-charts-museum.sh```
+	
+	```cd scripts/layer-1 && ./1-build-all-charts.sh```
+	
+	```cd scripts/layer-2 && ./2-install-oran.sh```
+	
+	Verify pods:
+
+	```kubectl get pods -n onap && kubectl get pods -n nonrtric```
+	
+	When all pods in "onap" and "nonrtric" namespaces are well up & running:
+	
+	```cd scripts/layer-2 && ./2-install-simulators.sh <K8S_NODE_IP>```
+
 ## Structure
 The user entry point is located in the <strong>scripts</strong> folder
 
@@ -88,7 +111,11 @@ Use git clone to get it on your server (github ssh key config is required):
 ## Requirements:
 * K8S node setup with Helm 3 and Kubectl properly configured (tested with <strong>K8S v1.21.5</strong> and <strong>HELM v3.5.4</strong>).
   FOR K8S installation, multiple options are available:
-	- MicroK8S standalone deployment, this current wiki can help to setup it (<strong>Section 1, 2 and 3</strong>): https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
+	- MicroK8S standalone deployment:
+
+		```cd scripts/layer-0 && ./0-setup-microk8s-node.sh```
+
+		OR this wiki can help to setup it (<strong>Section 1, 2 and 3</strong>): https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
 
 	- KubeSpray using ONAP multicloud KUD (https://git.onap.org/multicloud/k8s/tree/kud) installation by executing(this is required for ONAP CNF deployments): 
             
