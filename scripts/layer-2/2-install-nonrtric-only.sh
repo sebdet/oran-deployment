@@ -23,6 +23,10 @@
 # 
 ###
 
+SCRIPT=$(readlink -f "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+cd $SCRIPT_PATH
+
 echo "Starting NONRTRIC namespace..."
 
 ../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml

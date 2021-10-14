@@ -23,6 +23,10 @@
 # 
 ###
 
+SCRIPT=$(readlink -f "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+cd $SCRIPT_PATH
+
 if [[ $# -eq 0 ]] ; then
     echo 'Usage:  2-install-simulators.sh <host-ip>'
     echo 'Example: 2-install-simulators.sh 192.168.1.46'

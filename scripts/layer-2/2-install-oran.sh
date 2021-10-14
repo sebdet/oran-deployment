@@ -23,6 +23,10 @@
 # 
 ###
 
+SCRIPT=$(readlink -f "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+cd $SCRIPT_PATH
+
 echo "Starting ONAP & NONRTRIC namespaces ..."
 ../sub-scripts/install-onap.sh ../../helm-override/onap-override.yaml
 ../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml
