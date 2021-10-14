@@ -231,11 +231,11 @@ policy:
   policy-pap:
     enabled: true
   policy-xacml-pdp:
-    enabled: true
+    enabled: false
   policy-apex-pdp:
     enabled: true
   policy-drools-pdp:
-    enabled: true
+    enabled: false
   policy-distribution:
     enabled: false
   policy-clamp-be:
