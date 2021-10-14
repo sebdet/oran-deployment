@@ -23,15 +23,24 @@
 # 
 ###
 
-apt-get install make -y
+snap remove microk8s
+snap install microk8s --classic --channel=1.22/stable
+sudo snap install kubectl --classic --channel=1.22/stable
+ufw allow in on cni0 && sudo ufw allow out on cni0
+ufw default allow routed
+microk8s enable dns storage
+wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz
+tar xvfz helm-v3.5.4-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/local/bin/helm
 
-helm plugin install ../onap_oom/kubernetes/helm/plugins/undeploy/
-helm plugin install ../onap_oom/kubernetes/helm/plugins/deploy/
-helm plugin install --version v0.9.0 https://github.com/chartmuseum/helm-push.git
+cd
+mkdir .kube
+cd .kube
+sudo microk8s.config > config
+chmod 700 config
 
-helm repo add local http://localhost:18080
-
-echo '### Building ONAP part###'
-(cd ../../onap_oom/kubernetes && make all -e SKIP_LINT=TRUE)
-echo  '### Building ORAN part ###'
-(cd ../../oran_oom && make all)
+#Check
+echo "Checking Kubernetes ..."
+kubectl version
+echo "Checking HELM ..."
+helm version 
