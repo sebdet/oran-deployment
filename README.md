@@ -91,6 +91,7 @@ The user entry point is located in the <strong>scripts</strong> folder
 │   └── uninstall-all.sh		<--- Uninstall ALL SMO K8S namespaces and cleanup K8S
 └── test			<-- Scripts to test the SMO installation (Work In Progress, so not yet well documented)
     ├── data
+    ├──	apex-policy-test.sh			<--- Test apex policy
     ├── enable-network-sim-fault-reporting.sh	<--- Enable the fault reporting of the network simulators by SDNC
     ├── health_check.sh
     ├── pms_a1sim_sdnc.sh
