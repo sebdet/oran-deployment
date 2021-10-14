@@ -14,22 +14,26 @@ It has been created out of the ONAP vfirewall usecase.
 * Execute the following commands:
 
 	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
-	
-	```cd scripts/layer-0 && ./0-setup-microk8s.sh```
-	
-	```cd scripts/layer-0 && ./0-setup-charts-museum.sh```
-	
-	```cd scripts/layer-1 && ./1-build-all-charts.sh```
-	
-	```cd scripts/layer-2 && ./2-install-oran.sh```
-	
+
+	```cd oran-deployment/scripts/layer-0```
+
+	```./0-setup-microk8s.sh && ./0-setup-charts-museum.sh```
+
+	```cd ../layer-1```
+
+	```./1-build-all-charts.sh```
+
+	```cd ../layer-2```
+
+	```./2-install-oran.sh```
+
 	Verify pods:
 
 	```kubectl get pods -n onap && kubectl get pods -n nonrtric```
 	
 	When all pods in "onap" and "nonrtric" namespaces are well up & running:
 	
-	```cd scripts/layer-2 && ./2-install-simulators.sh <K8S_NODE_IP>```
+	```./2-install-simulators.sh <K8S_NODE_IP>```
 
 ## Structure
 The user entry point is located in the <strong>scripts</strong> folder
