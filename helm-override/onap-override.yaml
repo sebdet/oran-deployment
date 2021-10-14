@@ -313,7 +313,6 @@ sniro-emulator:
   enabled: false
 so: 
   enabled: false 
-  enabled: true
   so-catalog-db-adapter:
     config:
       openStackUserName: "the username"
