@@ -15,17 +15,13 @@ It has been created out of the ONAP vfirewall usecase.
 
 	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
 
-	```cd oran-deployment/scripts/layer-0```
+	```./oran-deployment/scripts/layer-0/0-setup-microk8s.sh```
 
-	```./0-setup-microk8s.sh && ./0-setup-charts-museum.sh```
+	```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
 
-	```cd ../layer-1```
+	```./oran-deployment/scripts/layer-1/1-build-all-charts.sh```
 
-	```./1-build-all-charts.sh```
-
-	```cd ../layer-2```
-
-	```./2-install-oran.sh```
+	```./oran-deployment/scripts/layer-2/2-install-oran.sh```
 
 	Verify pods:
 
@@ -33,7 +29,7 @@ It has been created out of the ONAP vfirewall usecase.
 	
 	When all pods in "onap" and "nonrtric" namespaces are well up & running:
 	
-	```./2-install-simulators.sh <K8S_NODE_IP>```
+	```./oran-deployment/scripts/layer-2/2-install-simulators.sh <K8S_NODE_IP>```
 
 ## Structure
 The user entry point is located in the <strong>scripts</strong> folder
@@ -118,13 +114,13 @@ Use git clone to get it on your server (github ssh key config is required):
   FOR K8S installation, multiple options are available:
 	- MicroK8S standalone deployment:
 
-		```cd scripts/layer-0 && ./0-setup-microk8s-node.sh```
+		```./oran-deployment/scripts/layer-0/0-setup-microk8s-node.sh```
 
 		OR this wiki can help to setup it (<strong>Section 1, 2 and 3</strong>): https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
 
 	- KubeSpray using ONAP multicloud KUD (https://git.onap.org/multicloud/k8s/tree/kud) installation by executing(this is required for ONAP CNF deployments): 
             
-	    ```cd scripts/layer-0 && ./0-setup-kud-node.sh```
+	    ```./oran-deployment/scripts/layer-0/0-setup-kud-node.sh```
     
 
 	- Use an existing K8S installation (Cloud, etc ...).
@@ -133,7 +129,7 @@ Use git clone to get it on your server (github ssh key config is required):
 * ChartMuseum to store the HELM charts on the server, multiple options are available:
 	- Execute the install script:
 
-		```cd scripts/layer-0 && 0-setup-charts-museum.sh```
+		```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
 	- Install chartmuseum manually on port 18080 (https://chartmuseum.com/#Instructions, https://github.com/helm/chartmuseum)
     
 ## Configuration:
@@ -144,19 +140,19 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 ## Installation:
 * Build ONAP/ORAN charts 
 
-	```cd scripts/layer-1 && ./1-build-all-charts.sh```
+	```./oran-deployment/scripts/layer-1/1-build-all-charts.sh```
 
 * Choose the installation:
 	- ONAP + ORAN "nonrtric" <strong>(RECOMMENDED ONE)</strong>:  
 	
-		```cd scripts/layer-2 && 2-install-oran.sh```
+		```./oran-deployment/scripts/layer-2/2-install-oran.sh```
 	- ORAN "nonrtric" par only: 
 	
-		```cd scripts/layer-2 && ./2-install-nonrtric-only.sh```
+		```./oran-deployment/scripts/layer-2/2-install-nonrtric-only.sh```
 
 	- ONAP CNF + ORAN "nonrtric" (This must still be documented properly): 
  	
-		```cd scripts/layer-2 && ./2-install-oran-cnf.sh```
+		```./oran-deployment/scripts/layer-2/2-install-oran-cnf.sh```
 
 
 
@@ -167,7 +163,7 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 
 	- Execute the install script:
 		
-		```cd scripts/layer-2 && 2-install-simulators.sh <K8S_EXTERNAL_IP>```
+		```./oran-deployment/scripts/layer-2/2-install-simulators.sh <K8S_EXTERNAL_IP>```
 
 	- Check the simulators status:
 
@@ -183,4 +179,4 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 ## Uninstallation:
 * Execute 
 	
-	```cd scripts && ./uninstall-all.sh```
+	```./oran-deployment/scripts/uninstall-all.sh```
