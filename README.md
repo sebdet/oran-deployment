@@ -11,7 +11,7 @@ It has been created out of the ONAP vfirewall usecase.
 ## Quick Installation
 * Setup a VM with 16GB Memory, 6VCPU, 60GB of diskspace. 
 * Install an ubuntu live server 20.04 LTS (https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso)
-* Execute the following commands:
+* Execute the following commands being logged as root:
 
 	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
 
