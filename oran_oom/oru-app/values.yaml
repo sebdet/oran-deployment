@@ -13,8 +13,8 @@ service:
     nodePort: 30835
 
 simulators:
-  - simRu: o-ru-11221.simulators
-    simDu: o-du-1122.simulators
+  - simRu: o-ru-11221
+    simDu: o-du-1122
 
 conf:
   mrHost: http://message-router.onap
