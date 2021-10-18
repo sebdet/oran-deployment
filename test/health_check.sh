@@ -24,7 +24,7 @@ checkStatus(){
         res=$($1)
         echo "$res"
         expect=$2
-        if [ "$res" == "$expect" ]; then
+        if [[ $res == *"$expect"* ]]; then
             echo -e "$3 is alive!\n"
             break;
         else
@@ -51,7 +51,7 @@ checkStatus "curl -vskw %{http_code} http://$policy_agent_url/status" "hunky dor
 
 # check ECS status
 echo "check Enrichment service status:"
-checkStatus "curl -vskw %{http_code} http://$enrichment_service_url/status" '{"status":"hunky dory","no_of_producers":0,"no_of_types":0,"no_of_jobs":0}200' "ECS"
+checkStatus "curl -vskw %{http_code} http://$enrichment_service_url/status" '{"status":"hunky dory"' "ECS"
 
 if [ "$a1_controller_url" != "false" ]; then
   # check SDNC status

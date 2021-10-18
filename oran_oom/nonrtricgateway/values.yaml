@@ -35,3 +35,4 @@ nonrtricgateway:
   readiness:
     initialDelaySeconds: 20
     periodSeconds: 10
+a1PolicyLink: https://a1policymanagement.onap:8433

@@ -119,6 +119,8 @@ echo "Verify policy deployed:"
 checkPolicyDeployment
 echo -e "\n"
 
+echo "Wait for a while for Apex engine to be ready"
+sleep 60
 
 echo "Check O-du/O-ru status"
 res=$(curl -sk -H "Authorization: Basic YWRtaW46S3A4Yko0U1hzek0wV1hsaGFrM2VIbGNzZTJnQXc4NHZhb0dHbUp2VXkyVQ==" -X GET "http://$sdnc_url/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-du-1122/yang-ext:mount/o-ran-sc-du-hello-world:network-function/du-to-ru-connection=o-ru-11221")
@@ -130,7 +132,7 @@ curl -sk -X POST -H accept:application/json -H Content-Type:application/json "ht
 echo -e "\n"
 
 echo "Wait for a while and check O-du/O-ru status again"
-sleep 10
+sleep 5
 res=$(curl -sk -H "Authorization: Basic YWRtaW46S3A4Yko0U1hzek0wV1hsaGFrM2VIbGNzZTJnQXc4NHZhb0dHbUp2VXkyVQ==" -X GET "http://$sdnc_url/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-du-1122/yang-ext:mount/o-ran-sc-du-hello-world:network-function/du-to-ru-connection=o-ru-11221")
 expected="{\"o-ran-sc-du-hello-world:du-to-ru-connection\":[{\"name\":\"o-ru-11221\",\"operational-state\":\"ENABLED\",\"administrative-state\":\"UNLOCKED\",\"status\":\"disconnected\"}]}"
 checkStatus $res $expected "O-ru has status UNLOCKED"

@@ -57,7 +57,45 @@ global:
 # Enable/disable and configure helm charts (ie. applications)
 # to customize the ONAP deployment.
 #################################################################
-
+a1policymanagement:
+  enabled: true
+  rics:
+    - name: ric1
+      link: http://a1-sim-osc-0.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric2
+      link: http://a1-sim-osc-1.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric3
+      link: http://a1-sim-std-0.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric4
+      link: http://a1-sim-std-1.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric5
+      link: http://a1-sim-std2-0.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric6
+      link: http://a1-sim-std2-1.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
 aaf: 
   enabled: true 
   aaf-service:
@@ -313,9 +351,9 @@ sdnc:
   ueb-listener:
     enabled: false
   sdnc-ansible-server:
-    enabled: false
+    enabled: true
   dgbuilder:
-    enabled: false
+    enabled: true
   cds:
     enabled: false
   sdnc-web:

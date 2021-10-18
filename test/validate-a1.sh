@@ -57,10 +57,10 @@ echo "A1 SIM STD Address 0:" $a1_std_url
 a1_std2_url=`kubectl describe pods a1-sim-std2-0 -n nonrtric | grep IP: | sed -n '2p' | awk  '{print $2}'`:$a1_sim_port
 echo "A1 SIM STD Address 2:" $a1_std2_url
 
-policy_agent_url=`kubectl get service policymanagementservice -n nonrtric | grep policymanagementservice | awk  '{print $3}'`:$policy_agent_port
+policy_agent_url=`kubectl get service -n onap | grep 'a1policymanagement ' | awk  '{print $3}'`:$policy_agent_port
 echo "Policy Agent IP:" $policy_agent_url
 
-sdnc_url=`kubectl get service a1controller -n nonrtric | grep a1controller  | awk  '{print $3}'`:$sdnc_port
+sdnc_url=`kubectl get service -n onap | grep sdnc-oam  | awk  '{print $3}'`:$sdnc_port
 echo "A1 Controller IP:" $sdnc_url
 
 ./health_check.sh $ecs_url $a1_osc_url $a1_std_url $a1_std2_url $policy_agent_url $sdnc_url

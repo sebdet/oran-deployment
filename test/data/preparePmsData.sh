@@ -40,7 +40,7 @@ echo "using protocol: "$httpx
 echo -e "\n"
 
 checkRes (){
-  if [ "$res" != "$expect" ]; then
+  if [[ $res != *"$expect"* ]]; then
       if [ "$res" != "$expect2" ]; then
          echo "$res is not expected! exit!"
          exit 1;
@@ -76,7 +76,7 @@ echo "create policy type 1 to ric1:"
 curlString="curl -X PUT -skw %{http_code} $httpx://$a1_sim_OSC_url/policytype?id=1 -H Content-Type:application/json --data-binary @${SHELL_FOLDER}/testdata/OSC/policy_type.json"
 res=$($curlString)
 echo "$res"
-expect="Policy type 1 is OK.201"
+expect="Policy type 1 is OK"
 expect2="The policy type already exists and instances exists400"
 checkRes
 echo -e "\n"
@@ -85,7 +85,7 @@ echo "create policy type 2 to ric2:"
 curlString="curl -skw %{http_code} $httpx://$a1_sim_STD_v2_url/policytype?id=2 -X PUT -H Accept:application/json -H Content-Type:application/json -H X-Requested-With:XMLHttpRequest --data-binary @${SHELL_FOLDER}/testdata/v2/policy_type.json"
 res=$($curlString)
 echo "$res"
-expect="Policy type 2 is OK.201"
+expect="Policy type 2 is OK"
 expect2="The policy type already exists and instances exists400"
 checkRes
 echo -e "\n"
@@ -122,6 +122,7 @@ expect2="200"
 checkRes
 echo -e "\n"
 
+sleep 5
 echo "policy numbers from ric1:"
 curlString="curl -skw %{http_code} $httpx://$a1_sim_OSC_url/counter/num_instances"
 res=$($curlString)

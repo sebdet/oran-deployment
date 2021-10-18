@@ -27,7 +27,7 @@ spring:
         wiretap: true
       routes:
       - id: A1-Policy
-        uri: https://policymanagementservice:8433
+        uri: {{ .Values.a1PolicyLink }}
         predicates:
         - Path=/a1-policy/**
       - id: A1-EI
