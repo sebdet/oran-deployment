@@ -23,7 +23,7 @@
 
 ##### ORAN Simulators #####
 
-x-onapHost: &onapHost 192.168.1.47
+x-onapHost: &onapHost 192.168.1.42
 
 x-ntsimNg: &ntsimConfig
   sdnControllerIp: *onapHost
