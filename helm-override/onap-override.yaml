@@ -351,9 +351,9 @@ sdnc:
   ueb-listener:
     enabled: false
   sdnc-ansible-server:
-    enabled: true
+    enabled: false
   dgbuilder:
-    enabled: true
+    enabled: false
   cds:
     enabled: false
   sdnc-web:
