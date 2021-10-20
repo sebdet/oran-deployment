@@ -9,7 +9,7 @@ The CNF part is still a "work in progress" so not well documented, it's a DU/RU/
 It has been created out of the ONAP vfirewall usecase.
 
 ## Quick Installation
-* Setup a VM with 16GB Memory, 6VCPU, 60GB of diskspace. 
+* Setup a VM with 20GB Memory, 6VCPU, 60GB of diskspace. 
 * Install an ubuntu live server 20.04 LTS (https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso)
 * Execute the following commands being logged as root:
 
