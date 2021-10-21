@@ -91,15 +91,11 @@ The user entry point is located in the <strong>scripts</strong> folder
 │   └── uninstall-all.sh		<--- Uninstall ALL SMO K8S namespaces and cleanup K8S
 └── test			<-- Scripts to test the SMO installation (Work In Progress, so not yet well documented)
     ├── data
-    ├──	apex-policy-test.sh			<--- Test apex policy
+    ├──	apex-policy-test.sh			<--- Test apex policy (https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325, it requires simulators to be up)
     ├── enable-network-sim-fault-reporting.sh	<--- Enable the fault reporting of the network simulators by SDNC
     ├── health_check.sh
-    ├── pms_a1sim_sdnc.sh
-    ├── pms_a1sim.sh
-    ├── prepare_data.sh
-    ├── run_in_k8s
     ├── simulators-data
-    └── validate-a1.sh				<--- Test nonrtric A1 interface
+    └── validate-a1.sh				<--- Test nonrtric A1 interface (https://wiki.o-ran-sc.org/display/RICNR/Testing+End+to+End+call+in+release+D)
 ```
 ## Download:
 Use git clone to get it on your server (github ssh key config is required):
