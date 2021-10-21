@@ -24,6 +24,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           stdin: true
+          env:
+            - name: CURL_CA_BUNDLE
+              value: ''
           envFrom:
             - configMapRef:
                 name: oru-app-configmapenv
