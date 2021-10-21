@@ -27,13 +27,13 @@ api_port=6969
 dmaap_port=3904
 sdnc_port=8282
 
-pap_url=`kubectl describe service policy-pap -n onap | grep IP | sed -n '2p' | awk  '{print $2}'`:$pap_port
+pap_url=`kubectl get services policy-pap -n onap |grep policy-pap | awk '{print $3}'`:$pap_port
 echo "Policy pap url: $pap_url"
 
-api_url=`kubectl describe service policy-api -n onap | grep IP | sed -n '2p' | awk  '{print $2}'`:$api_port
+api_url=`kubectl get services policy-api -n onap |grep policy-api | awk '{print $3}'`:$api_port
 echo "Policy api url: $api_url"
 
-dmaap_url=`kubectl describe pods onap-message-router-0 -n onap | grep IP: | sed -n '2p' | awk  '{print $2}'`:$dmaap_port
+dmaap_url=`kubectl get services message-router -n onap |grep message-router | awk '{print $3}'`:$dmaap_port
 echo "Dmaap url: $dmaap_url"
 
 sdnc_url=`kubectl get services -n onap | grep sdnc-oam | awk  '{print $3}'`:$sdnc_port
