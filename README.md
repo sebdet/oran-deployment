@@ -113,8 +113,6 @@ Use git clone to get it on your server (github ssh key config is required):
   FOR K8S installation, multiple options are available:
 	- MicroK8S standalone deployment:
 
-                ```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
-
 		```./oran-deployment/scripts/layer-0/0-setup-microk8s.sh```
 
 		OR this wiki can help to setup it (<strong>Section 1, 2 and 3</strong>): https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
@@ -129,8 +127,10 @@ Use git clone to get it on your server (github ssh key config is required):
 
 * ChartMuseum to store the HELM charts on the server, multiple options are available:
 	- Execute the install script:
-
 		```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
+		
+		```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
+
 	- Install chartmuseum manually on port 18080 (https://chartmuseum.com/#Instructions, https://github.com/helm/chartmuseum)
     
 ## Configuration:
