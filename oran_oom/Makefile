@@ -46,7 +46,7 @@ HELM_CHARTS := $(filter-out $(EXCLUDES), $(sort $(patsubst %/.,%,$(wildcard */.)
 
 .PHONY: $(EXCLUDES) $(HELM_CHARTS) check-for-staging-images
 
-all: print_helm_bin $(COMMON_CHARTS_DIR) $(SUBMODS) $(HELM_CHARTS) helm-repo-update plugins
+all: print_helm_bin $(COMMON_CHARTS_DIR) $(SUBMODS) $(HELM_CHARTS) helm-repo-update
 
 $(COMMON_CHARTS):
 	@echo "\n[$@]"

@@ -29,13 +29,5 @@ cd $SCRIPT_PATH
 
 apt-get install make -y
 
-helm plugin install ../../onap_oom/kubernetes/helm/plugins/undeploy/
-helm plugin install ../../onap_oom/kubernetes/helm/plugins/deploy/
-helm plugin install --version v0.9.0 https://github.com/chartmuseum/helm-push.git
-
-helm repo add local http://localhost:18080
-
-echo '### Building ONAP part###'
-(cd ../../onap_oom/kubernetes && make all -e SKIP_LINT=TRUE)
-echo  '### Building ORAN part ###'
-(cd ../../oran_oom && make all)
+../sub-scripts/build-onap.sh
+../sub-scripts/build-oran.sh

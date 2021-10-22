@@ -23,15 +23,9 @@
 # 
 ###
 
-#Helm package
-wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz
-mv helm-v3.5.4-linux-amd64.tar.gz /tmp/helm-v3.5.4-linux-amd64.tar.gz
-cd /tmp/
-tar xvfz /tmp/helm-v3.5.4-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/helm
+SCRIPT=$(readlink -f "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+cd $SCRIPT_PATH
 
-echo "Checking HELM ..."
-helm version 
-
-helm plugin install --version v0.9.0 https://github.com/chartmuseum/helm-push.git
-helm repo add local http://localhost:18080
+echo  '### Building ORAN part ###'
+(cd ../../oran_oom && make all)
