@@ -127,6 +127,7 @@ Use git clone to get it on your server (github ssh key config is required):
 
 * ChartMuseum to store the HELM charts on the server, multiple options are available:
 	- Execute the install script:
+
 		```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
 		
 		```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
