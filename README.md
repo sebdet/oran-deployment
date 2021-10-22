@@ -17,10 +17,10 @@ It has been created out of the ONAP vfirewall usecase.
 
 	```./oran-deployment/scripts/layer-0/0-setup-microk8s.sh```
 
-        ```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
-
 	```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
-
+	
+	```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
+	
 	```./oran-deployment/scripts/layer-1/1-build-all-charts.sh```
 
 	```./oran-deployment/scripts/layer-2/2-install-oran.sh```
