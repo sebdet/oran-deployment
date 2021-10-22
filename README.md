@@ -17,6 +17,8 @@ It has been created out of the ONAP vfirewall usecase.
 
 	```./oran-deployment/scripts/layer-0/0-setup-microk8s.sh```
 
+        ```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
+
 	```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
 
 	```./oran-deployment/scripts/layer-1/1-build-all-charts.sh```
@@ -72,7 +74,8 @@ The user entry point is located in the <strong>scripts</strong> folder
 │   ├── layer-0				<--- Scripts to setup Node
 │   │   ├── 0-setup-charts-museum.sh		<--- Setup ChartMuseum
 │   │   └── 0-setup-kud-node.sh			<--- Setup K8S node with ONAP Multicloud KUD installation
-│   │   └── 0-setup-microk8s-node.sh		<--- Setup K8S node with MicroK8S nstallation
+│   │   └── 0-setup-microk8s.sh		<--- Setup K8S node with MicroK8S installation
+│   │   └── 0-setup-helm3.sh			<--- Setup HELM3
 │   ├── layer-1				<--- Scripts to prepare for the SMO installation
 │   │   └── 1-build-all-charts.sh		<--- Build all HELM charts and upload them to ChartMuseum
 │   ├── layer-2				<--- Scripts to install SMO package
@@ -110,7 +113,9 @@ Use git clone to get it on your server (github ssh key config is required):
   FOR K8S installation, multiple options are available:
 	- MicroK8S standalone deployment:
 
-		```./oran-deployment/scripts/layer-0/0-setup-microk8s-node.sh```
+                ```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
+
+		```./oran-deployment/scripts/layer-0/0-setup-microk8s.sh```
 
 		OR this wiki can help to setup it (<strong>Section 1, 2 and 3</strong>): https://wiki.onap.org/display/DW/Deploy+OOM+and+SDC+%28or+ONAP%29+on+a+single+VM+with+microk8s+-+Honolulu+Setup
 
@@ -147,7 +152,7 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 		```./oran-deployment/scripts/layer-2/2-install-nonrtric-only.sh```
 
 	- ONAP CNF + ORAN "nonrtric" (This must still be documented properly): 
- 	
+
 		```./oran-deployment/scripts/layer-2/2-install-oran-cnf.sh```
 
 
