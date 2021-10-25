@@ -27,7 +27,5 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
-apt-get install make -y
-
 ../sub-scripts/build-onap.sh
 ../sub-scripts/build-oran.sh
