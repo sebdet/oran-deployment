@@ -27,5 +27,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
+apt-get install make -y
+
 echo  '### Building ORAN part ###'
 (cd ../../oran_oom && make all)

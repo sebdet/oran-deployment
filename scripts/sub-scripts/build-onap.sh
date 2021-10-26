@@ -27,6 +27,8 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
+apt-get install make -y
+
 helm plugin install ../../onap_oom/kubernetes/helm/plugins/undeploy/
 helm plugin install ../../onap_oom/kubernetes/helm/plugins/deploy/
 

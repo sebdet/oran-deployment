@@ -29,4 +29,5 @@ mv chartmuseum-v0.13.1-linux-amd64.tar.gz /tmp
 cd /tmp
 tar xvfz chartmuseum-v0.13.1-linux-amd64.tar.gz
 mv /tmp/linux-amd64/chartmuseum /usr/local/bin/chartmuseum
+
 chartmuseum --port=18080 --storage="local" --storage-local-rootdir="./chartstorage" &
