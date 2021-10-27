@@ -40,6 +40,20 @@ sdnc_url=`kubectl get services -n onap | grep sdnc-oam | awk  '{print $3}'`:$sdn
 echo "SDNC url: $sdnc_url"
 echo -e "\n"
 
+verifyApexPolicyStatus(){
+    for i in {1..60}; do
+        curl  -s -o /dev/null -X POST -H accept:application/json -H Content-Type:application/json "http://$dmaap_url/events/unauthenticated.SEC_FAULT_OUTPUT/" -d @./data/LinkFailureEvent.json
+        sleep 3
+        res=`kubectl logs onap-policy-apex-pdp-0 -n onap | grep "Task Selection Execution: 'LinkMonitorPolicy:0.0.1:NULL:LinkFailureOrClearedState'" | wc -l`
+        if [[ $res != 0 ]]; then
+            echo -e "LinkFailureEvent sent to Dmaap\n"
+            break;
+        else
+            sleep 2
+        fi
+    done
+}
+
 checkStatus(){
         echo "res:$1"
         if [ "$1" == "$2" ]; then
@@ -119,18 +133,16 @@ echo "Verify policy deployed:"
 checkPolicyDeployment
 echo -e "\n"
 
-echo "Wait for a while for Apex engine to be ready"
-sleep 60
-
 echo "Check O-du/O-ru status"
 res=$(curl -sk -H "Authorization: Basic YWRtaW46S3A4Yko0U1hzek0wV1hsaGFrM2VIbGNzZTJnQXc4NHZhb0dHbUp2VXkyVQ==" -X GET "http://$sdnc_url/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-du-1122/yang-ext:mount/o-ran-sc-du-hello-world:network-function/du-to-ru-connection=o-ru-11221")
 expected="{\"o-ran-sc-du-hello-world:du-to-ru-connection\":[{\"name\":\"o-ru-11221\",\"operational-state\":\"ENABLED\",\"administrative-state\":\"LOCKED\",\"status\":\"disconnected\"}]}"
 checkStatus $res $expected "O-ru has status LOCKED"
 
-echo "Send the LinkFailureEvent to DMaaP Message Router:"
-curl -sk -X POST -H accept:application/json -H Content-Type:application/json "http://$dmaap_url/events/unauthenticated.SEC_FAULT_OUTPUT/" -d @./data/LinkFailureEvent.json
 echo -e "\n"
+echo "Wait for a while for Apex engine to be ready before sending Dmaap event"
+verifyApexPolicyStatus
 
+echo -e "\n"
 echo "Wait for a while and check O-du/O-ru status again"
 sleep 5
 res=$(curl -sk -H "Authorization: Basic YWRtaW46S3A4Yko0U1hzek0wV1hsaGFrM2VIbGNzZTJnQXc4NHZhb0dHbUp2VXkyVQ==" -X GET "http://$sdnc_url/rests/data/network-topology:network-topology/topology=topology-netconf/node=o-du-1122/yang-ext:mount/o-ran-sc-du-hello-world:network-function/du-to-ru-connection=o-ru-11221")

@@ -40,7 +40,7 @@ echo -e "\n"
 
 # Create EiType
 echo "Create EiType:"
-curl -X PUT -skw %{http_code} $httpx://$ecs_url/data-producer/v1/info-types/type1 -H accept:application/json -H Content-Type:application/json --data-binary @testdata/ECS/EiType.json
+curl -X PUT -skw %{http_code} $httpx://$ecs_url/data-producer/v1/info-types/type1 -H accept:application/json -H Content-Type:application/json --data-binary @../data/ECS/EiType.json
 echo -e "\n"
 
 # Get EiTypes
@@ -55,7 +55,7 @@ echo -e "\n"
 
 # Create EiProducer
 echo "Create EiProducer:"
-curl -X PUT -skw %{http_code} $httpx://$ecs_url/data-producer/v1/info-producers/1 -H Content-Type:application/json --data-binary @testdata/ECS/EiProducer.json
+curl -X PUT -skw %{http_code} $httpx://$ecs_url/data-producer/v1/info-producers/1 -H Content-Type:application/json --data-binary @../data/ECS/EiProducer.json
 echo -e "\n"
 
 # Get EiProducers
@@ -75,7 +75,7 @@ echo -e "\n"
 
 # Create EiJob
 echo "Create EiJob Of A Certain Type type1:"
-curl -X PUT -skw %{http_code} $httpx://$ecs_url/A1-EI/v1/eijobs/job1 -H Content-Type:application/json --data-binary @testdata/ECS/EiJob.json
+curl -X PUT -skw %{http_code} $httpx://$ecs_url/A1-EI/v1/eijobs/job1 -H Content-Type:application/json --data-binary @../data/ECS/EiJob.json
 echo -e "\n"
 
 # Get EiJobs

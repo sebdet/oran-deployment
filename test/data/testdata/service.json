@@ -1,5 +1,0 @@
-{
-    "callbackUrl": "https://callback-receiver:8091/callbacks/1",
-    "keepAliveIntervalSeconds": "3600",
-    "serviceName": "service1"
-}

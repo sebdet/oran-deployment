@@ -63,8 +63,8 @@ echo "Policy Agent IP:" $policy_agent_url
 sdnc_url=`kubectl get service -n onap | grep sdnc-oam  | awk  '{print $3}'`:$sdnc_port
 echo "A1 Controller IP:" $sdnc_url
 
+cd ./subscripts
 ./health_check.sh $ecs_url $a1_osc_url $a1_std_url $a1_std2_url $policy_agent_url $sdnc_url
-cd ./data
 ./prepareDmaapMsg.sh $dmaap_url $a1_osc_url $a1_std_url $a1_std2_url $policy_agent_url
 ./preparePmsData.sh $a1_osc_url $a1_std2_url $policy_agent_url
 ./prepareEcsData.sh $ecs_url

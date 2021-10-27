@@ -73,7 +73,7 @@ checkRes
 echo -e "\n"
 
 echo "create policy type 1 to ric1:"
-curlString="curl -X PUT -skw %{http_code} $httpx://$a1_sim_OSC_url/policytype?id=1 -H Content-Type:application/json --data-binary @${SHELL_FOLDER}/testdata/OSC/policy_type.json"
+curlString="curl -X PUT -skw %{http_code} $httpx://$a1_sim_OSC_url/policytype?id=1 -H Content-Type:application/json --data-binary @${SHELL_FOLDER}/../data/OSC/policy_type.json"
 res=$($curlString)
 echo "$res"
 expect="Policy type 1 is OK"
@@ -82,7 +82,7 @@ checkRes
 echo -e "\n"
 
 echo "create policy type 2 to ric2:"
-curlString="curl -skw %{http_code} $httpx://$a1_sim_STD_v2_url/policytype?id=2 -X PUT -H Accept:application/json -H Content-Type:application/json -H X-Requested-With:XMLHttpRequest --data-binary @${SHELL_FOLDER}/testdata/v2/policy_type.json"
+curlString="curl -skw %{http_code} $httpx://$a1_sim_STD_v2_url/policytype?id=2 -X PUT -H Accept:application/json -H Content-Type:application/json -H X-Requested-With:XMLHttpRequest --data-binary @${SHELL_FOLDER}/../data/v2/policy_type.json"
 res=$($curlString)
 echo "$res"
 expect="Policy type 2 is OK"
@@ -105,7 +105,7 @@ for i in {1..60}; do
 done
 
 echo "create service ric-registration to policy agent:"
-curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Content-Type:application/json "$httpx://$policy_agent_url/a1-policy/v2/services" --data-binary @${SHELL_FOLDER}/testdata/v2/service.json"
+curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Content-Type:application/json "$httpx://$policy_agent_url/a1-policy/v2/services" --data-binary @${SHELL_FOLDER}/../data/v2/service.json"
 res=$($curlString)
 echo "$res"
 expect="201"
@@ -114,7 +114,7 @@ checkRes
 echo -e "\n"
 
 echo "create policy aa8feaa88d944d919ef0e83f2172a5000 to ric1 with type 1 and service controlpanel via policy agent:"
-curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Content-Type:application/json "$httpx://$policy_agent_url/a1-policy/v2/policies" --data-binary @${SHELL_FOLDER}/testdata/v2/policy_osc.json"
+curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Content-Type:application/json "$httpx://$policy_agent_url/a1-policy/v2/policies" --data-binary @${SHELL_FOLDER}/../data/v2/policy_osc.json"
 res=$($curlString)
 echo "$res"
 expect="201"
@@ -132,7 +132,7 @@ checkRes
 echo -e "\n"
 
 echo "create policy aa8feaa88d944d919ef0e83f2172a5100 to ric2 with type 2 and service controlpanel via policy agent:"
-curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Content-Type:application/json "$httpx://$policy_agent_url/a1-policy/v2/policies" --data-binary @${SHELL_FOLDER}/testdata/v2/policy_std_v2.json"
+curlString="curl -k -X PUT -sw %{http_code} -H accept:application/json -H Content-Type:application/json "$httpx://$policy_agent_url/a1-policy/v2/policies" --data-binary @${SHELL_FOLDER}/../data/v2/policy_std_v2.json"
 res=$($curlString)
 echo "$res"
 expect="201"
