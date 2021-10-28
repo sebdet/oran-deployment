@@ -320,7 +320,7 @@ portal:
 robot: 
   enabled: false 
 sdc: 
-  enabled: false
+  enabled: true
   sdc-be:
     config:
       javaOptions: "-Xmx1g -Xms512m"

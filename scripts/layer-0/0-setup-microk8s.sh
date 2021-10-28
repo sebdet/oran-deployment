@@ -27,6 +27,7 @@
 sudo swapoff -a
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 snap remove microk8s
+snap remove kubectl
 snap install microk8s --classic --channel=1.22/stable
 sudo snap install kubectl --classic --channel=1.22/stable
 
