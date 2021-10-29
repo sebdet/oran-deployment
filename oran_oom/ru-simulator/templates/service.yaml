@@ -1,17 +1,22 @@
+{{ $releaseName := .Release.Name }}
+{{ $chartName := .Chart.Name }}
+{{ range $i, $ru := .Values.rus }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.vnf_name }}"
+  name: "{{ $ru.name }}"
   labels:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    sim-name: {{ $ru.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ $.Values.service.type }}
   ports:
-    - port: {{ .Values.service.ports.port }}
-      nodePort: {{ .Values.service.ports.nodePort }}
+    - port: {{ $.Values.service.ports.port }}
   selector:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    sim-name: {{ $ru.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
+
+{{ end }}

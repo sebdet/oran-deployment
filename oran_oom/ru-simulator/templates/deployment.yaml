@@ -1,47 +1,49 @@
+{{- range $i, $ru := .Values.rus }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.vnf_name }}
+  name: {{ $ru.name }}
   labels:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    simulo-name: {{ $ru.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      vnf-name: {{ .Values.vnf_name }}
+      simulo-name: {{ $ru.name }}
   template:
     metadata:
       labels:
-        vnf-name: {{ .Values.vnf_name }}
-        release: {{ .Release.Name }}
-        chart: {{ .Chart.Name }}
+        simulo-name: {{ $ru.name }}
+        release: {{ $.Release.Name }}
+        chart: {{ $.Chart.Name }}
     spec:
-      hostname: "{{ .Values.vnf_name }}"
+      hostname: "{{ $ru.name }}"
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ $.Chart.Name }}
+          image: "{{ $.Values.image.repository }}/{{ $.Values.image.name}}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
           tty: true
           stdin: true
           envFrom:
             - configMapRef:
-                name: {{ .Values.vnf_name }}-configmapenv
+                name: {{ $ru.name }}-configmapenv
           volumeMounts:
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $ru.name }}-config-volume
               subPath: config.json
               mountPath: /opt/dev/ntsim-ng/config/config.json
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $ru.name }}-config-volume
               subPath: ietf-hardware-operational.json
               mountPath: /opt/dev/deploy/data/ietf-hardware-operational.json
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $ru.name }}-config-volume
               subPath: ietf-hardware-running.json
               mountPath: /opt/dev/deploy/data/ietf-hardware-running.json
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $ru.name }}-config-volume
               subPath: ietf-interfaces-operational.xml
               mountPath: /opt/dev/deploy/data/ietf-interfaces-operational.xml
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $ru.name }}-config-volume
               subPath: ietf-interfaces-running.xml
               mountPath: /opt/dev/deploy/data/ietf-interfaces-running.xml
           securityContext:
@@ -49,10 +51,10 @@ spec:
               add:
                 - SYS_ADMIN
                 - SYS_PTRACE
-      volumes: 
-        - name: {{ .Values.vnf_name }}-config-volume
+      volumes:
+        - name: {{ $ru.name }}-config-volume
           configMap:
-            name: {{ .Values.vnf_name }}-configmap
+            name: {{ $ru.name }}-configmap
             items:
               - key: config.json
                 path: config.json
@@ -64,3 +66,6 @@ spec:
                 path: ietf-interfaces-operational.xml
               - key: ietf-interfaces-running.xml
                 path: ietf-interfaces-running.xml
+
+
+{{- end }}

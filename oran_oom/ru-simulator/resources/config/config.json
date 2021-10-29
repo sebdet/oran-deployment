@@ -12,7 +12,7 @@
             "stdout": "log/netopeer-stdout.log",
             "stderr": "log/netopeer-stderr.log"
         },
-    
+
         "ntsim-network-function": {
             "path": "/opt/dev/ntsim-ng/ntsim-ng",
             "args": ["-w/opt/dev/ntsim-ng", "-f"],
@@ -45,7 +45,7 @@
             "o-ran-shared-cell",
             "nts-network-function"
         ],
-        
+
         "default-list-instances": 2,
         "custom-list-instances" : [
             {"/ietf-interfaces:interfaces/interface": 4}
@@ -76,61 +76,22 @@
         "yang-notif-template" : "<alarm-notif xmlns=\"urn:o-ran:fm:1.0\"><fault-id>%%fault-id%%</fault-id><fault-source>%%object%%</fault-source><affected-objects><name>%%affected-object%%</name></affected-objects><fault-severity>%%fault-severity%%</fault-severity><is-cleared>%%cleared%%</is-cleared><fault-text>%%text%%</fault-text><event-time>%%date-time%%</event-time></alarm-notif>",
         "choosing-method" : "linear",
         "faults" : [
+{{ $faultsSize := (len .ru.simulatedFaults) }}
+{{ range $i, $fault := .ru.simulatedFaults }}
             {
-                "condition" : "Interface Fault",
-                "object"    : "09a95e08-5b53-4734-815f-a9c12300fc62",
-                "severity"  : "CRITICAL",
+                "condition" : "{{ $fault.condition }}",
+                "object"    : "{{ $fault.object }}",
+                "severity"  : "{{ $fault.severity }}",
                 "date-time" : "$$time$$",
-                "specific-problem" : "Interface Fault",
-                
-                "fault-id": "30",
-                "fault-severity" : "CRITICAL",
+                "specific-problem" : "{{ $fault.specificProblem }}",
+
+                "fault-id": "{{ $fault.faultId }}",
+                "fault-severity" : "{{ $fault.faultSeverity }}",
                 "affected-object" : "$$hostname$$",
-                "cleared" : "false",
-                "text" : "Interface Fault"
-            },
-
-            {
-                "condition" : "Interface Fault",
-                "object"    : "09a95e08-5b53-4734-815f-a9c12300fc62",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "Interface Fault",
-
-                "fault-id": "30",
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "$$hostname$$",
-                "cleared" : "true",
-                "text" : "Interface Fault"
-            },
-
-            {
-                "condition" : "C/U-plane logical Connection faulty",
-                "object"    : "09a95e08-5b53-4734-815f-a9c12300fc62",
-                "severity"  : "CRITICAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "C/U-plane logical Connection faulty",
-
-                "fault-id": "28",
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "$$hostname$$",
-                "cleared" : "false",
-                "text" : "C/U-plane logical Connection faulty"
-            },
-
-            {
-                "condition" : "C/U-plane logical Connection faulty",
-                "object"    : "09a95e08-5b53-4734-815f-a9c12300fc62",
-                "severity"  : "NORMAL",
-                "date-time" : "$$time$$",
-                "specific-problem" : "C/U-plane logical Connection faulty",
-
-                "fault-id": "28",
-                "fault-severity" : "CRITICAL",
-                "affected-object" : "$$hostname$$",
-                "cleared" : "true",
-                "text" : "C/U-plane logical Connection faulty"
-            }
+                "cleared" : "{{ $fault.cleared }}",
+                "text" : "{{ $fault.text }}"
+            }{{ if lt (add1 $i) $faultsSize }},{{ end }}
+{{ end }}
         ]
     }
 }
