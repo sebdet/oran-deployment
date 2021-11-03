@@ -5,18 +5,18 @@ kind: Deployment
 metadata:
   name: {{ $ru.name }}
   labels:
-    simulo-name: {{ $ru.name }}
+    sim-name: {{ $ru.name }}
     release: {{ $.Release.Name }}
     chart: {{ $.Chart.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      simulo-name: {{ $ru.name }}
+      sim-name: {{ $ru.name }}
   template:
     metadata:
       labels:
-        simulo-name: {{ $ru.name }}
+        sim-name: {{ $ru.name }}
         release: {{ $.Release.Name }}
         chart: {{ $.Chart.Name }}
     spec:

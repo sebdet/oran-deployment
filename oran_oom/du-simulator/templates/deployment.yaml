@@ -1,41 +1,43 @@
+{{- range $i, $du := .Values.dus }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.vnf_name }}
+  name: {{ $du.name }}
   labels:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    sim-name: {{ $du.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      vnf-name: {{ .Values.vnf_name }}
+      sim-name: {{ $du.name }}
   template:
     metadata:
       labels:
-        vnf-name: {{ .Values.vnf_name }}
-        release: {{ .Release.Name }}
-        chart: {{ .Chart.Name }}
+        sim-name: {{ $du.name }}
+        release: {{ $.Release.Name }}
+        chart: {{ $.Chart.Name }}
     spec:    
-      hostname: "{{ .Values.vnf_name }}"
+      hostname: "{{ $du.name }}"
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ $.Chart.Name }}
+          image: "{{ $.Values.image.repository }}/{{ $.Values.image.name}}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
           tty: true
           stdin: true
           envFrom:
             - configMapRef:
-                name: {{ .Values.vnf_name }}-configmapenv
+                name: {{ $du.name }}-configmapenv
           volumeMounts:
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $du.name }}-config-volume
               subPath: config.json
               mountPath: /opt/dev/ntsim-ng/config/config.json
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $du.name }}-config-volume
               subPath: o-ran-sc-du-hello-world-running.xml
               mountPath: /opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml
-            - name: {{ .Values.vnf_name }}-config-volume
+            - name: {{ $du.name }}-config-volume
               subPath: o-ran-sc-du-hello-world-operational.xml
               mountPath: /opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml
           securityContext:
@@ -44,9 +46,9 @@ spec:
                 - SYS_ADMIN
                 - SYS_PTRACE
       volumes: 
-        - name: {{ .Values.vnf_name }}-config-volume
+        - name: {{ $du.name }}-config-volume
           configMap:
-            name: {{ .Values.vnf_name }}-configmap
+            name: {{ $du.name }}-configmap
             items:
               - key: config.json
                 path: config.json
@@ -54,3 +56,5 @@ spec:
                 path: o-ran-sc-du-hello-world-running.xml
               - key: o-ran-sc-du-hello-world-operational.xml
                 path: o-ran-sc-du-hello-world-operational.xml
+
+{{- end }}

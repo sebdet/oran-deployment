@@ -1,5 +1,3 @@
-{{ $releaseName := .Release.Name }}
-{{ $chartName := .Chart.Name }}
 {{ range $i, $ru := .Values.rus }}
 ---
 apiVersion: v1

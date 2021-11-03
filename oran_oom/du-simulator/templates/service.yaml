@@ -1,17 +1,20 @@
+{{ range $i, $du := .Values.dus }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.vnf_name }}"
+  name: "{{ $du.name }}"
   labels:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    sim-name: {{ $du.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ $.Values.service.type }}
   ports:
-    - port: {{ .Values.service.ports.port }}
-      nodePort: {{ .Values.service.ports.nodePort }}
+    - port: {{ $.Values.service.ports.port }}
   selector:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    sim-name: {{ $du.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
+
+{{- end }}

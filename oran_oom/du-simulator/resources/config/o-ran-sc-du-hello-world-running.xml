@@ -1,9 +1,9 @@
 <network-function xmlns="urn:o-ran-sc:yang:o-ran-sc-du-hello-world">
-{{ range $ruSim := .Values.ruSimulators }}
+{{ range $ru := .du.rus }}
 
     <du-to-ru-connection>
-      <name>{{ $ruSim.name }}</name>
-      <administrative-state>{{ $ruSim.administrativeState }}</administrative-state>
+      <name>{{ $ru.name }}</name>
+      <administrative-state>{{ $ru.administrativeState }}</administrative-state>
     </du-to-ru-connection>
 {{ end }}
 

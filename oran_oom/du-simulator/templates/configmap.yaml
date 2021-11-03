@@ -1,10 +1,15 @@
+{{ $currentScope := .}}
+{{- range $i, $du := .Values.dus }}
+  {{- $_ := set $ "du" $du }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.vnf_name }}-configmap
+  name: {{ $du.name }}-configmap
   labels:
-    vnf-name: {{ .Values.vnf_name }}
-    release: {{ .Release.Name }}
-    chart: {{ .Chart.Name }}
+    sim-name: {{ $du.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
 data:
-{{ tpl (.Files.Glob "resources/config/*.{json,xml}").AsConfig . | indent 2 }}
+{{ tpl ($.Files.Glob "resources/config/*.{json,xml}").AsConfig $ | indent 2 }}
+{{- end }}

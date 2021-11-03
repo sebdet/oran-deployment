@@ -7,7 +7,7 @@ kind: ConfigMap
 metadata:
   name: {{ $ru.name }}-configmap
   labels:
-    vnf-name: {{ $ru.name }}
+    sim-name: {{ $ru.name }}
     release: {{ $.Release.Name }}
     chart: {{ $.Chart.Name }}
 data:

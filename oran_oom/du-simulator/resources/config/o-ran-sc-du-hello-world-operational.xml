@@ -1,11 +1,10 @@
 <network-function xmlns="urn:o-ran-sc:yang:o-ran-sc-du-hello-world">
-{{ range $ruSim := .Values.ruSimulators }}
-
+{{ range $i, $ru := .du.rus }}
     <du-to-ru-connection>
-      <name>{{ $ruSim.name }}</name>
-      <administrative-state>{{ $ruSim.administrativeState }}</administrative-state>
-      <operational-state>{{ $ruSim.operationalState }}</operational-state>
-      <status>{{ $ruSim.status }}</status>
+      <name>{{ $ru.name }}</name>
+      <administrative-state>{{ $ru.administrativeState }}</administrative-state>
+      <operational-state>{{ $ru.operationalState }}</operational-state>
+      <status>{{ $ru.status }}</status>
     </du-to-ru-connection>
 {{ end }}
   </network-function>
