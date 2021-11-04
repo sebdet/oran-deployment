@@ -23,28 +23,25 @@
 
 ##### ORAN Simulators #####
 
-x-onapHost: &onapHost 192.168.1.42
+ru-du-simulators:
+  topologyServer: true
+  ruSimulator: true
+  duSimulator: true
+
 
 x-ntsimNg: &ntsimConfig
-  sdnControllerIp: *onapHost
-  sdnControllerPort: 30267
-  sdnControllerProtocol: https
   sdnControllerUsername: admin
   sdnControllerPassword: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
-  sdnControllerCallHomePort: 30266
 
-  vesEndpointProtocol: https
-  vesEndpointIp: *onapHost
-  vesEndpointPort: 30417
   vesEndpointUsername: sample1
   vesEndpointPassword: sample1
 
 ru-simulator: 
   ntsimNg:
     <<: *ntsimConfig
+    ipV6Enabled: false
     sshConnections: 0
     tlsConnections: 1
-    ipV6Enabled: false
 
 du-simulator:
   ntsimNg:
@@ -57,5 +54,5 @@ topology-server:
   ntsimNg:  
     <<: *ntsimConfig
     ipV6Enabled: false
-    sshConnections: 1
-    tlsConnections: 0
+    sshConnections: 0
+    tlsConnections: 1

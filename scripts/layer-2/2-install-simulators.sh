@@ -27,14 +27,8 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
-if [[ $# -eq 0 ]] ; then
-    echo 'Usage:  2-install-simulators.sh <host-ip>'
-    echo 'Example: 2-install-simulators.sh 192.168.1.46'
-    exit 1
-fi
 echo "Starting Network Simulators namespace ..."
-echo "Onap IP is: "+$1
-../sub-scripts/install-simulators.sh ../../helm-override/simulators-override.yaml $1
+../sub-scripts/install-simulators.sh ../../helm-override/simulators-override.yaml
 
 kubectl get pods -n network
 kubectl get namespaces

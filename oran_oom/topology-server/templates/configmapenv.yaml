@@ -21,13 +21,14 @@ data:
   SDN_CONTROLLER_USERNAME: {{ .Values.ntsimNg.sdnControllerUsername | quote }}
   SDN_CONTROLLER_PASSWORD: {{ .Values.ntsimNg.sdnControllerPassword | quote }} 
   SDN_CONTROLLER_PROTOCOL: {{ .Values.ntsimNg.sdnControllerProtocol | quote }}
+  SDN_CONTROLLER_CALLHOME_IP: {{ .Values.ntsimNg.sdnControllerCallHomeAddress | quote }}
   SDN_CONTROLLER_CALLHOME_PORT: {{ .Values.ntsimNg.sdnControllerCallHomePort | quote }}
-  SDN_CONTROLLER_IP: {{ .Values.ntsimNg.sdnControllerIp | quote }}
+  SDN_CONTROLLER_IP: {{ .Values.ntsimNg.sdnControllerAddress | quote }}
   SDN_CONTROLLER_PORT: {{ .Values.ntsimNg.sdnControllerPort | quote }}
 
   VES_COMMON_HEADER_VERSION: {{ .Values.ntsimNg.vesCommonHeaderVersion | quote }}
   VES_ENDPOINT_PROTOCOL: {{ .Values.ntsimNg.vesEndpointProtocol | quote }}
-  VES_ENDPOINT_IP: {{ .Values.ntsimNg.vesEndpointIp | quote }}
+  VES_ENDPOINT_IP: {{ .Values.ntsimNg.vesEndpointAddress | quote }}
   VES_ENDPOINT_PORT: {{ .Values.ntsimNg.vesEndpointPort | quote }}
   VES_ENDPOINT_AUTH_METHOD: {{ .Values.ntsimNg.vesEndpointAuthMethod | quote }}
   VES_ENDPOINT_USERNAME: {{ .Values.ntsimNg.vesEndpointUsername | quote }}

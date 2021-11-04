@@ -76,12 +76,22 @@ nodes:
     nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede22
     interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc62"
     interfaceDescription: "Simulated interface for O-RU"
+  - name: o-ru-11222
+    uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa2
+    nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede23
+    interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc63"
+    interfaceDescription: "Simulated interface for O-RU"
+
 
 topologyUuid: 7adfee73-44be-4813-a0dc-89f657f0a436
 links:
   - duNode: o-du-1122
     ruNode: o-ru-11221
     uuid: ac78b69f-22df-46fd-ae76-cc989bc30abc
+  - duNode: o-du-1122
+    ruNode: o-ru-11222
+    uuid: ac78b69f-22df-46fd-ae76-cc989bc30abd
+
 
 # NTS NG settings
 ntsimNg:
@@ -95,16 +105,17 @@ ntsimNg:
   ntsHostTransferSftpBasePort: 2000
   ntsNfMountPointAddressingMethod: docker-mapping
 
-  sdnControllerProtocol: http
+  sdnControllerProtocol: https
+  sdnControllerCallHomeAddress: sdnc-callhome.onap
   sdnControllerCallHomePort: 6666
   sdnControllerUsername: admin
   sdnControllerPassword: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
-  sdnControllerPort: 8181
-  sdnControllerIp: 2001:db8:1:50::27
+  sdnControllerPort: 8443
+  sdnControllerAddress: sdnc.onap
 
   vesCommonHeaderVersion: 7.2.1
   vesEndpointProtocol: https
-  vesEndpointIp: 2001:db8:1:50::27
+  vesEndpointAddress: dcae-ves-collector.onap
   vesEndpointPort: 8443
   vesEndpointAuthMethod: basic-auth
   vesEndpointUsername: sample1

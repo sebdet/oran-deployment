@@ -16,5 +16,5 @@
 
 ru-du-simulators:
   topologyServer: true
-  ru-simulator: true
-  du-simulator: true
+  ruSimulator: true
+  duSimulator: true
