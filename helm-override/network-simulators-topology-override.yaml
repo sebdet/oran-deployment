@@ -1,0 +1,392 @@
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO Package
+# ================================================================================
+# Copyright (C) 2021 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+# 
+###
+
+
+###### Sim Topology Override ########
+ru-simulator:
+  rus:
+    - name: o-ru-11211
+      simulatedFaults:
+        - name: fault1
+          condition: "C/U-plane logical Connection faulty"
+          severity: CRITICAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12301fc66"
+        - name: fault1-close
+          condition: "C/U-plane logical Connection faulty"
+          severity: NORMAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12301fc66"
+
+    - name: o-ru-11221
+      simulatedFaults:
+        - name: fault1
+          condition: "C/U-plane logical Connection faulty"
+          severity: CRITICAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc62"
+        - name: fault1-close
+          condition: "C/U-plane logical Connection faulty"
+          severity: NORMAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc62"
+
+    - name: o-ru-11222
+      simulatedFaults:
+        - name: fault1
+          condition: "C/U-plane logical Connection faulty"
+          severity: CRITICAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc63"
+        - name: fault1-close
+          condition: "C/U-plane logical Connection faulty"
+          severity: NORMAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc63"
+
+    - name: o-ru-11223
+      simulatedFaults:
+        - name: fault1
+          condition: "C/U-plane logical Connection faulty"
+          severity: CRITICAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc64"
+        - name: fault1-close
+          condition: "C/U-plane logical Connection faulty"
+          severity: NORMAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc64"
+
+    - name: o-ru-11224
+      simulatedFaults:
+        - name: fault1
+          condition: "C/U-plane logical Connection faulty"
+          severity: CRITICAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc65"
+        - name: fault1-close
+          condition: "C/U-plane logical Connection faulty"
+          severity: NORMAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc65"
+
+    - name: o-ru-11225
+      simulatedFaults:
+        - name: fault1
+          condition: "C/U-plane logical Connection faulty"
+          severity: CRITICAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc66"
+        - name: fault1-close
+          condition: "C/U-plane logical Connection faulty"
+          severity: NORMAL
+          specificProblem: "C/U-plane logical Connection faulty"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+          faultId: 28,
+          object: "09a95e08-5b53-4734-815f-a9c12300fc66"
+
+du-simulator:
+  dus:
+    - name: o-du-1121
+      rus:
+        - name: o-ru-11211
+          administrativeState: LOCKED
+          operationalState: ENABLED
+          status: disconnected
+
+      simulatedFaults:
+        - name: o-ru-11211
+          condition: "O-RU Port Down"
+          severity: CRITICAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+        - name: o-ru-11211
+          condition: "O-RU Port Down"
+          severity: NORMAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+
+    - name: o-du-1122
+      rus:
+        - name: o-ru-11221
+          administrativeState: LOCKED
+          operationalState: ENABLED
+          status: disconnected
+        - name: o-ru-11222
+          administrativeState: LOCKED
+          operationalState: ENABLED
+          status: disconnected
+        - name: o-ru-11223
+          administrativeState: LOCKED
+          operationalState: ENABLED
+          status: disconnected
+        - name: o-ru-11224
+          administrativeState: LOCKED
+          operationalState: ENABLED
+          status: disconnected
+        - name: o-ru-11225
+          administrativeState: LOCKED
+          operationalState: ENABLED
+          status: disconnected
+
+      simulatedFaults:
+        - name: o-ru-11221
+          condition: "O-RU Port Down"
+          severity: CRITICAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+        - name: o-ru-11221
+          condition: "O-RU Port Down"
+          severity: NORMAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+
+        - name: o-ru-11222
+          condition: "O-RU Port Down"
+          severity: CRITICAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+        - name: o-ru-11222
+          condition: "O-RU Port Down"
+          severity: NORMAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+
+        - name: o-ru-11223
+          condition: "O-RU Port Down"
+          severity: CRITICAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+        - name: o-ru-11223
+          condition: "O-RU Port Down"
+          severity: NORMAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+
+        - name: o-ru-11224
+          condition: "O-RU Port Down"
+          severity: CRITICAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+        - name: o-ru-11224
+          condition: "O-RU Port Down"
+          severity: NORMAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+
+        - name: o-ru-11225
+          condition: "O-RU Port Down"
+          severity: CRITICAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: false
+          text: "O-RU Port Down"
+        - name: o-ru-11225
+          condition: "O-RU Port Down"
+          severity: NORMAL
+          specificProblem: "O-RU Port Down"
+          faultSeverity: CRITICAL
+          cleared: true
+          text: "O-RU Port Down"
+
+topology-server:
+  simulatedFaults:
+    - name: o-ru-11221
+      condition: "CPRI Port Down"
+      severity: MAJOR
+      object: "Slot-0-Port-A"
+      specificProblem: "CPRI Port Down"
+      faultSeverity: MAJOR
+      cleared: false
+      text: "CPRI Port Down"
+    - name: o-ru-11221
+      condition: "CPRI Port Down"
+      severity: NORMAL
+      object: "Slot-0-Port-A"
+      specificProblem: "CPRI Port Down"
+      faultSeverity: MAJOR
+      cleared: true
+      text: "CPRI Port Down"
+    - name: o-ru-11221
+      condition: "CPRI Port Down"
+      severity: MAJOR
+      object: "Slot-0-Port-C"
+      specificProblem: "CPRI Port Down"
+      faultSeverity: MAJOR
+      cleared: false
+      text: "CPRI Port Down"
+    - name: o-ru-11221
+      condition: "CPRI Port Down"
+      severity: NORMAL
+      object: "Slot-0-Port-C"
+      specificProblem: "CPRI Port Down"
+      faultSeverity: MAJOR
+      cleared: true
+      text: "CPRI Port Down"
+    - name: o-ru-11221
+      condition: "CPRI Port Down"
+      severity: MAJOR
+      object: "Slot-2-Port-B"
+      specificProblem: "CPRI Port Down"
+      faultSeverity: MAJOR
+      cleared: false
+      text: "CPRI Port Down"
+    - name: o-ru-11221
+      condition: "CPRI Port Down"
+      severity: NORMAL
+      object: "Slot-2-Port-B"
+      specificProblem: "CPRI Port Down"
+      faultSeverity: MAJOR
+      cleared: false
+      text: "CPRI Port Down"
+  nodes:
+    - name: o-du-1121
+      uuid: ac089635-7a85-4198-9310-9b14f476b4a9
+      nodeEdgePointUuid: 539f24cb-a5e9-454f-b06d-6307be419afe
+      interfaceName: "O-DU-interface-1"
+      interfaceDescription: "Simulated interface for O-DU"
+    - name: o-ru-11211
+      uuid: 6b0d3930-100b-466c-9f44-2748ffb6baa2
+      nodeEdgePointUuid: bb7e5882-6e4a-46a7-a95b-0bb7310ede22
+      interfaceName: "09a95e08-5b53-4834-815f-a9c12300fc62"
+      interfaceDescription: "Simulated interface for O-RU"
+
+    - name: o-du-1122
+      uuid: ac089635-7a85-4197-9310-9b14f476a4a9
+      nodeEdgePointUuid: 539f24cb-a5e9-454f-b05d-6307be419afe
+      interfaceName: "O-DU-interface-1"
+      interfaceDescription: "Simulated interface for O-DU"
+    - name: o-ru-11221
+      uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa1
+      nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede22
+      interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc62"
+      interfaceDescription: "Simulated interface for O-RU"
+    - name: o-ru-11222
+      uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa2
+      nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede23
+      interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc63"
+      interfaceDescription: "Simulated interface for O-RU"
+    - name: o-ru-11223
+      uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa3
+      nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede24
+      interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc64"
+      interfaceDescription: "Simulated interface for O-RU"
+    - name: o-ru-11224
+      uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa4
+      nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede25
+      interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc65"
+      interfaceDescription: "Simulated interface for O-RU"
+    - name: o-ru-11225
+      uuid: 6b0d3930-100b-466c-9f44-2748ffb6aaa5
+      nodeEdgePointUuid: bb7e5882-6e3a-46a7-a95b-0bb7310ede26
+      interfaceName: "09a95e08-5b53-4734-815f-a9c12300fc66"
+      interfaceDescription: "Simulated interface for O-RU"
+
+
+  topologyUuid: 7adfee73-44be-4813-a0dc-89f657f0a436
+  links:
+    - duNode: o-du-1121
+      ruNode: o-ru-11211
+      uuid: ac78b69f-22df-46fd-ae76-cc989bc30abb
+
+    - duNode: o-du-1122
+      ruNode: o-ru-11221
+      uuid: ac78b69f-22df-46fd-ae76-cc989bc30abc
+    - duNode: o-du-1122
+      ruNode: o-ru-11222
+      uuid: ac78b69f-22df-46fd-ae76-cc989bc30abd
+    - duNode: o-du-1122
+      ruNode: o-ru-11223
+      uuid: ac78b69f-22df-46fd-ae76-cc989bc30abe
+    - duNode: o-du-1122
+      ruNode: o-ru-11224
+      uuid: ac78b69f-22df-46fd-ae76-cc989bc30abf
+    - duNode: o-du-1122
+      ruNode: o-ru-11225
+      uuid: ac78b69f-22df-46fd-ae76-cc989bc30ace

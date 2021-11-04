@@ -28,7 +28,7 @@ SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
 echo "Starting Network Simulators namespace ..."
-../sub-scripts/install-simulators.sh ../../helm-override/simulators-override.yaml
+../sub-scripts/install-simulators.sh ../../helm-override/network-simulators-override.yaml ../../helm-override/network-simulators-topology-override.yaml
 
 kubectl get pods -n network
 kubectl get namespaces

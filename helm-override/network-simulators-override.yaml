@@ -21,7 +21,7 @@
 # 
 ###
 
-##### ORAN Simulators #####
+##### Network Simulators #####
 
 ru-du-simulators:
   topologyServer: true
