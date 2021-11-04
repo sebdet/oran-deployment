@@ -31,7 +31,7 @@ It has been created out of the ONAP vfirewall usecase.
 	
 	When all pods in "onap" and "nonrtric" namespaces are well up & running:
 	
-	```./oran-deployment/scripts/layer-2/2-install-simulators.sh <K8S_NODE_IP>```
+	```./oran-deployment/scripts/layer-2/2-install-simulators.sh```
 
 ## Structure
 The user entry point is located in the <strong>scripts</strong> folder
@@ -41,10 +41,11 @@ The user entry point is located in the <strong>scripts</strong> folder
 ├── cnf				<-- CNF packages that can be deployed by ONAP (Work In Progress, so not yet well documented)
 │   └── du-ru-simulators		<--- The CNF package containing DU/RU/Topology server simulators
 ├── helm-override		<-- The Configuration of the different HELM charts used in SMO package
-│   ├── onap-override-cnf.yaml  	<--- A medium ONAP config ready for CNF deployment
-│   ├── onap-override.yaml 		<--- A minimal ONAP config for SMO package
-│   ├── oran-override.yaml		<--- A minimal ORAN config for SMO package
-│   └── simulators-override.yaml	<--- A standard config that must be changed to deploy network simulators
+│   ├── network-simulators-override.yaml		<--- Standard config for the network simulators
+│   ├── network-simulators-topology-override.yaml	<--- Network simulator topology example that can be changed
+│   ├── onap-override-cnf.yaml		<--- A medium ONAP config ready for CNF deployment
+│   ├── onap-override.yaml		<--- A minimal ONAP config for SMO package
+│   └── oran-override.yaml		<--- A minimal ORAN config for SMO package
 ├── LICENSE
 ├── multicloud-k8s		<-- Git SUBMODULE required for KUD installation
 ├── onap_oom			<-- Git SUBMODULE required for ONAP installation
@@ -93,12 +94,17 @@ The user entry point is located in the <strong>scripts</strong> folder
 │   │   └── uninstall-simulators.sh
 │   └── uninstall-all.sh		<--- Uninstall ALL SMO K8S namespaces and cleanup K8S
 └── test			<-- Scripts to test the SMO installation (Work In Progress, so not yet well documented)
-    ├── data
-    ├──	apex-policy-test.sh			<--- Test apex policy (https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325, it requires simulators to be up)
-    ├── enable-network-sim-fault-reporting.sh	<--- Enable the fault reporting of the network simulators by SDNC
-    ├── health_check.sh
-    ├── simulators-data
-    └── validate-a1.sh				<--- Test nonrtric A1 interface (https://wiki.o-ran-sc.org/display/RICNR/Testing+End+to+End+call+in+release+D)
+    ├── a1-validation			<--- Test nonrtric A1 interface (https://wiki.o-ran-sc.org/display/RICNR/Testing+End+to+End+call+in+release+D)
+    │   ├── data
+    │   ├── subscripts
+    │   └── validate-a1.sh
+    ├── apex-policy-test		<--- Test apex policy (https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325, it requires simulators to be up)
+    │   ├── apex-policy-test.sh
+    │   └── data
+    └── enable-sim-fault-report		<--- Enable the fault reporting of the network simulators by SDNC
+        ├── data
+        └── enable-network-sim-fault-reporting.sh
+
 ```
 ## Download:
 Use git clone to get it on your server (github ssh key config is required):
@@ -165,7 +171,7 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 
 	- Execute the install script:
 		
-		```./oran-deployment/scripts/layer-2/2-install-simulators.sh <K8S_EXTERNAL_IP>```
+		```./oran-deployment/scripts/layer-2/2-install-simulators.sh```
 
 	- Check the simulators status:
 
