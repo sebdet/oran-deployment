@@ -176,7 +176,9 @@ in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</stro
 	- Check the simulators status:
 
 		```kubectl get pods -n network```
-	
+
+	Note: The simulators topology can be customized in the file ./oran-deployment/helm-override/network-simulators-topology-override.yaml
+
 ## Platform access points:
 * SDNR WEB: 
 	https://<K8SServerIP>:30205/odlux/index.html
