@@ -17,6 +17,8 @@ spec:
         vnf-name: {{ .Values.vnf_name }}
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}
+      annotations:
+        checksum/config: {{ print .Values | sha256sum }}
     spec:    
       hostname: "{{ .Values.vnf_name }}"
       containers:

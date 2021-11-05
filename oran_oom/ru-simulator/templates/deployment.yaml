@@ -19,6 +19,8 @@ spec:
         sim-name: {{ $ru.name }}
         release: {{ $.Release.Name }}
         chart: {{ $.Chart.Name }}
+      annotations:
+        checksum/config: {{ print $ru | sha256sum }}
     spec:
       hostname: "{{ $ru.name }}"
       containers:
