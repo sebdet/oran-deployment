@@ -29,6 +29,7 @@ mv helm-v3.5.4-linux-amd64.tar.gz /tmp/helm-v3.5.4-linux-amd64.tar.gz
 cd /tmp/
 tar xvfz /tmp/helm-v3.5.4-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
+apt-get install git -y
 
 echo "Checking HELM ..."
 helm version 
