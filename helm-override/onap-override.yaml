@@ -356,15 +356,6 @@ sdnc:
     enabled: true
   cds:
     enabled: false
-  vesCollector:
-    enabled: true
-    tls:
-      enabled: true
-    trustAllCertificates: true
-    username: sample1
-    password: sample1
-    address: dcae-ves-collector.onap
-    port: 8443
   sdnc-web:
     config:
       topologyserver:
@@ -383,6 +374,16 @@ sdnc:
       mountpointStateProviderEnabled: true
       netconfCallHome:
         enabled: true
+      vesCollector:
+        enabled: true
+        tls:
+          enabled: true
+        trustAllCertificates: true
+        username: sample1
+        password: sample1
+        address: dcae-ves-collector.onap
+        port: 8443
+
 sniro-emulator:
   enabled: false
 so: 

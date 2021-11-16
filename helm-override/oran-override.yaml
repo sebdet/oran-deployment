@@ -75,6 +75,21 @@ kong:
   admin:
     enabled: true
 
+oru-app:
+  simulators:
+    - simRu: o-ru-11221
+      simDu: o-du-1122
+    - simRu: o-ru-11222
+      simDu: o-du-1122
+    - simRu: o-ru-11223
+      simDu: o-du-1122
+    - simRu: o-ru-11224
+      simDu: o-du-1122
+    - simRu: o-ru-11211
+      simDu: o-du-1121
+
+
+
 ######### RIC_AUX #########
 dashboard:
   cipher:
@@ -100,4 +115,5 @@ dashboard:
             appUrlPrefix: http://ric-entry
             caasUrlPrefix: http://caas-ingress-is-REC-only
             pltUrlPrefix: http://ric-entry
+
 
