@@ -383,7 +383,7 @@ sdnc:
         password: sample1
         address: dcae-ves-collector.onap
         port: 8443
-
+        eventLogMsgDetail: LONG
 sniro-emulator:
   enabled: false
 so: 

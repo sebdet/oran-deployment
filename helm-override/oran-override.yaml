@@ -83,8 +83,6 @@ oru-app:
       simDu: o-du-1122
     - simRu: o-ru-11223
       simDu: o-du-1122
-    - simRu: o-ru-11224
-      simDu: o-du-1122
     - simRu: o-ru-11211
       simDu: o-du-1121
 
