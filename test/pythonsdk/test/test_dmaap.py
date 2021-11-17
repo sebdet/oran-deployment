@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
+
 import logging
+from pathlib import Path
 from onapsdk.configuration import settings
-from oransdk.dmaap.oran_dmaap import OranDmaap
+from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.a1sim.a1sim import A1sim
 
 BASIC_AUTH = {}
@@ -34,5 +36,12 @@ logger.info("response is: %s", topiclist)
 logger.info("Get ric version for ost")
 a1sim = A1sim()
 version1 = a1sim.check_version(settings.A1SIM_OST_URL)
-version2 = a1sim.check_version(settings.A1SIM_STD1_URL)
-version3 = a1sim.check_version(settings.A1SIM_STD2_URL)
+
+status = a1sim.check_status(settings.A1SIM_OST_URL)
+
+number = a1sim.get_policy_number(settings.A1SIM_OST_URL)
+
+# open(Path(Path(__file__).resolve().parent, "data/OSC/policy_type.json"), "rb") as f:
+with open('data/OSC/policy_type.json', mode='rb') as f:
+    data = f.read()
+a1sim.create_policy_type(settings.A1SIM_OST_URL, 1, data)
