@@ -13,18 +13,23 @@ class OranPolicy(OnapService):
     header={"accept: application/json", "Content-Type: application/json"}
 
     @classmethod
-    def get_status(cls) -> str:
+    def get_components_status(cls,
+                   basic_auth: Dict[str, str]) -> str:
         """
         Get status of Policy component.
+
+        Args:
+           basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
 
         Returns:
            the status of the Policy component
 
         """
         url = f"{pap_url}/policy/pap/v1/components/healthcheck"
-        status = cls.send_message('GET',
+        status = cls.send_message_json('GET',
                                   'Get status of Policy component',
-                                  url)
+                                  url,
+                                  basic_auth=basic_auth)
         return status
 
     @classmethod
