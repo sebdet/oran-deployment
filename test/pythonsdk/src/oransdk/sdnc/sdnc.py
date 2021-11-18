@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Onap Sdnc module."""
 from typing import Dict
-from onapsdk.sdnc.sdnc_Element import SdncElement
+from onapsdk.sdnc.sdnc_element import SdncElement
 
 class OranSdnc(SdncElement):
 
@@ -38,7 +38,7 @@ class OranSdnc(SdncElement):
 
         """
         url = f"{cls.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={odu_node}/yang-ext:mount/o-ran-sc-du-hello-world:network-function/du-to-ru-connection={oru_node}"
-        status = cls.send_message('GET',
+        status = cls.send_message_json('GET',
                                   'Get status of Odu Oru connectivity',
                                   url,
                                   basic_auth=basic_auth)

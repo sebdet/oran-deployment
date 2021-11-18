@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: Apache-2.0
 """Onap Policy module."""
-
+from typing import Dict
 from onapsdk.onap_service import OnapService
 from onapsdk.configuration import settings
 
@@ -10,11 +10,11 @@ class OranPolicy(OnapService):
 
     pap_url: str = settings.POLICY_PAP_URL
     api_url: str = settings.POLICY_API_URL
-    header={"accept: application/json", "Content-Type: application/json"}
+    header={"accept": "application/json", "Content-Type": "application/json"}
 
     @classmethod
     def get_components_status(cls,
-                   basic_auth: Dict[str, str]) -> str:
+                   basic_auth: Dict[str, str]) -> Dict:
         """
         Get status of Policy component.
 
@@ -25,7 +25,7 @@ class OranPolicy(OnapService):
            the status of the Policy component
 
         """
-        url = f"{pap_url}/policy/pap/v1/components/healthcheck"
+        url = f"{cls.pap_url}/policy/pap/v1/components/healthcheck"
         status = cls.send_message_json('GET',
                                   'Get status of Policy component',
                                   url,
@@ -33,7 +33,8 @@ class OranPolicy(OnapService):
         return status
 
     @classmethod
-    def get_policy_status(cls) -> str:
+    def get_policy_status(cls,
+                          basic_auth: Dict[str, str]) -> Dict:
         """
         Get status of all the policies.
 
@@ -41,10 +42,11 @@ class OranPolicy(OnapService):
            the status of all the policies
 
         """
-        url = f"{pap_url}/policy/pap/v1/policies/status"
+        url = f"{cls.pap_url}/policy/pap/v1/policies/status"
         status = cls.send_message('GET',
                                   'Get status of all the policies',
-                                  url)
+                                  url,
+                                  basic_auth=basic_auth)
         return status
 
     @classmethod
@@ -68,7 +70,7 @@ class OranPolicy(OnapService):
            the policy
 
         """
-        url = f"{api_url}/policy/api/v1/policytypes/{policy_type}/versions/{type_version}/policies/{policy_name}/versions/{policy_version}"
+        url = f"{cls.api_url}/policy/api/v1/policytypes/{policy_type}/versions/{type_version}/policies/{policy_name}/versions/{policy_version}"
         policy = cls.send_message('GET',
                                   'Get the policy',
                                   url,
@@ -90,12 +92,12 @@ class OranPolicy(OnapService):
            policy_data: the policy to be created, in binary format
 
         """
-        url = f"{api_url}/policy/api/v1/policytypes/{policy_type}/versions/{type_version}/policies"
+        url = f"{cls.api_url}/policy/api/v1/policytypes/{policy_type}/versions/{type_version}/policies"
         instance_details = cls.send_message('POST',
                                             'Create Policy',
                                             url,
                                             data=policy_data,
-                                            headers=header,
+                                            headers=cls.header,
                                             basic_auth=basic_auth)
 
     @classmethod
@@ -109,10 +111,10 @@ class OranPolicy(OnapService):
            policy_data: the policy to be deployed, in binary format
 
         """
-        url = f"{pap_url}/policy/pap/v1/pdps/policie"
+        url = f"{cls.pap_url}/policy/pap/v1/pdps/policies"
         instance_details = cls.send_message('POST',
                                             'Deploy Policy',
                                             url,
                                             data=policy_data,
-                                            headers=header,
+                                            headers=cls.header,
                                             basic_auth=basic_auth)

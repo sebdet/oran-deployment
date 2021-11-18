@@ -10,7 +10,7 @@ class OranDmaap(Dmaap):
     """Dmaap library provides functions for getting events from Dmaap."""
 
     get_all_topics_url = f"{DmaapService._url}/topics/listAll"
-    header={"accept: application/json", "Content-Type: application/json"}
+    HEADER={"accept": "application/json", "Content-Type": "application/json"}
 
     @classmethod
     def create_topic(cls,
@@ -28,7 +28,7 @@ class OranDmaap(Dmaap):
                                             'Create Dmaap Topic',
                                             url,
                                             data=topic,
-                                            headers=header)
+                                            headers=cls.HEADER)
 
     @classmethod
     def create_service(cls,
@@ -94,4 +94,4 @@ class OranDmaap(Dmaap):
                                             description,
                                             url,
                                             data=event,
-                                            headers=header)
+                                            headers=cls.HEADER)
