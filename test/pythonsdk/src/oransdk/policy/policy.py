@@ -43,7 +43,7 @@ class OranPolicy(OnapService):
 
         """
         url = f"{cls.pap_url}/policy/pap/v1/policies/status"
-        status = cls.send_message('GET',
+        status = cls.send_message_json('GET',
                                   'Get status of all the policies',
                                   url,
                                   basic_auth=basic_auth)

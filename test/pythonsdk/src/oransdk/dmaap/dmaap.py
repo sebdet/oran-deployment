@@ -40,7 +40,7 @@ class OranDmaap(Dmaap):
            service_data: the service data in binary format
 
         """
-        OranDmaap.__get_events("A1-POLICY-AGENT-READ", service_data, "Create Service via Dmaap")
+        OranDmaap.send_event("A1-POLICY-AGENT-READ", service_data, "Create Service via Dmaap")
 
     @classmethod
     def send_link_failure_event(cls,
@@ -52,7 +52,7 @@ class OranDmaap(Dmaap):
            event: the event to sent, in binary format
 
         """
-        OranDmaap.__get_events("unauthenticated.SEC_FAULT_OUTPUT", event, "Send link failure event")
+        OranDmaap.send_event("unauthenticated.SEC_FAULT_OUTPUT", event, "Send link failure event")
 
     @classmethod
     def get_result(cls) -> str:
@@ -85,7 +85,7 @@ class OranDmaap(Dmaap):
         return super().get_all_topics(basic_auth)
 
     @classmethod
-    def __send_event(cls,
+    def send_event(cls,
                    topic,
                    event_data,
                    description) -> None:
@@ -93,5 +93,5 @@ class OranDmaap(Dmaap):
         instance_details = cls.send_message('POST',
                                             description,
                                             url,
-                                            data=event,
+                                            data=event_data,
                                             headers=cls.HEADER)
