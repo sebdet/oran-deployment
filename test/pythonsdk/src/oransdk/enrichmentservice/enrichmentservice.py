@@ -3,12 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 """Oran Enrichment Service module."""
 
+from oransdk.configuration import settings
 from onapsdk.onap_service import OnapService
 
 class EnrichmentService(OnapService):
+    """Enrichment Service library."""
 
-    base_url: str = settings.EMS_URL
-    ems_header={"Content-Type": "application/json"}
+    base_url = settings.EMS_URL
+    header = {"Content-Type": "application/json"}
 
     @classmethod
     def check_status(cls) -> str:
@@ -19,10 +21,10 @@ class EnrichmentService(OnapService):
             the status of the EnrichmentService component
 
         """
-        url = f"{base_url}/status"
+        url = f"{cls.base_url}/status"
         status = cls.send_message('GET',
-                                   'Get EMS status',
-                                    url)
+                                  'Get EMS status',
+                                  url)
         return status
 
     @classmethod
@@ -34,30 +36,30 @@ class EnrichmentService(OnapService):
             the list of EiTypes
 
         """
-        url = f"{base_url}/data-producer/v1/info-types"
+        url = f"{cls.base_url}/data-producer/v1/info-types"
         eitypes = cls.send_message('GET',
                                    'Get all the EiTypes',
-                                    url,
-                                    headers=ems_header)
+                                   url,
+                                   headers=cls.header)
         return eitypes
 
     @classmethod
-    def get_eitype_individual(cls, type) -> str:
+    def get_eitype_individual(cls, eitype_name) -> str:
         """
         Get individual EiType.
 
         Args:
-           type: the EiType name
+           eitype_name: the EiType name
 
         Returns:
             the details of the EiType
 
         """
-        url = f"{base_url}/data-producer/v1/info-types/{type}"
+        url = f"{cls.base_url}/data-producer/v1/info-types/{eitype_name}"
         eitype = cls.send_message('GET',
-                                   'Get individual EiType',
-                                    url,
-                                    headers=ems_header)
+                                  'Get individual EiType',
+                                  url,
+                                  headers=cls.header)
         return eitype
 
     @classmethod
@@ -69,11 +71,11 @@ class EnrichmentService(OnapService):
             the list of EiProducers
 
         """
-        url = f"{base_url}/data-producer/v1/info-producers"
+        url = f"{cls.base_url}/data-producer/v1/info-producers"
         eitypes = cls.send_message('GET',
                                    'Get all the EiProducers',
-                                    url,
-                                    headers=ems_header)
+                                   url,
+                                   headers=cls.header)
         return eitypes
 
     @classmethod
@@ -88,11 +90,11 @@ class EnrichmentService(OnapService):
             the details of the EiProducer
 
         """
-        url = f"{base_url}/data-producer/v1/info-producers/{producer}"
+        url = f"{cls.base_url}/data-producer/v1/info-producers/{producer}"
         eiproducer = cls.send_message('GET',
-                                   'Get individual EiProducer',
-                                    url,
-                                    headers=ems_header)
+                                      'Get individual EiProducer',
+                                      url,
+                                      headers=cls.header)
         return eiproducer
 
     @classmethod
@@ -107,11 +109,11 @@ class EnrichmentService(OnapService):
             the status of the EiProducer
 
         """
-        url = f"{base_url}/data-producer/v1/info-producers/{producer}/status"
+        url = f"{cls.base_url}/data-producer/v1/info-producers/{producer}/status"
         status = cls.send_message('GET',
-                                   'Get the status of EiProducer',
-                                    url,
-                                    headers=ems_header)
+                                  'Get the status of EiProducer',
+                                  url,
+                                  headers=cls.header)
         return status
 
     @classmethod
@@ -123,11 +125,11 @@ class EnrichmentService(OnapService):
             the list of EiJobs
 
         """
-        url = f"{base_url}/A1-EI/v1/eijobs"
+        url = f"{cls.base_url}/A1-EI/v1/eijobs"
         eijobs = cls.send_message('GET',
-                                   'Get all the EiJobs',
-                                    url,
-                                    headers=ems_header)
+                                  'Get all the EiJobs',
+                                  url,
+                                  headers=cls.header)
         return eijobs
 
     @classmethod
@@ -142,17 +144,17 @@ class EnrichmentService(OnapService):
             the details of the EiJob
 
         """
-        url = f"{base_url}/A1-EI/v1/eijobs/{job}"
+        url = f"{cls.base_url}/A1-EI/v1/eijobs/{job}"
         eijob = cls.send_message('GET',
                                  'Get individual EiJob',
                                  url,
-                                 headers=ems_header)
+                                 headers=cls.header)
         return eijob
 
     @classmethod
     def create_eitype(cls,
-                    type,
-                    type_data) -> None:
+                      type_name,
+                      type_data) -> None:
         """
         Create EiType.
 
@@ -161,17 +163,17 @@ class EnrichmentService(OnapService):
            type_data: the EiType data to create, in binary format
 
         """
-        url = f"{base_url}/data-producer/v1/info-types/{type}"
-        instance_details = cls.send_message('PUT',
-                                            'Create EiType',
-                                            url,
-                                            data=type_data,
-                                            headers=ems_header)
+        url = f"{cls.base_url}/data-producer/v1/info-types/{type_name}"
+        cls.send_message('PUT',
+                         'Create EiType',
+                         url,
+                         data=type_data,
+                         headers=cls.header)
 
     @classmethod
     def create_eiproducer(cls,
-                    producer,
-                    producer_data) -> None:
+                          producer,
+                          producer_data) -> None:
         """
         Create EiProducer.
 
@@ -180,17 +182,17 @@ class EnrichmentService(OnapService):
            producer_data: the EiProducer data to create, in binary format
 
         """
-        url = f"{base_url}/data-producer/v1/info-producers/{producer}"
-        instance_details = cls.send_message('PUT',
-                                            'Create EiProducer',
-                                            url,
-                                            data=producer_data,
-                                            headers=ems_header)
+        url = f"{cls.base_url}/data-producer/v1/info-producers/{producer}"
+        cls.send_message('PUT',
+                         'Create EiProducer',
+                         url,
+                         data=producer_data,
+                         headers=cls.header)
 
     @classmethod
-    def create_eitype(cls,
-                    job,
-                    job_data) -> None:
+    def create_eijob(cls,
+                     job,
+                     job_data) -> None:
         """
         Create EiJob.
 
@@ -199,9 +201,9 @@ class EnrichmentService(OnapService):
            job_data: the EiJob data to create, in binary format
 
         """
-        url = f"{base_url}/A1-EI/v1/eijobs/{type}"
-        instance_details = cls.send_message('PUT',
-                                            'Create EiJob',
-                                            url,
-                                            data=job_data,
-                                            headers=ems_header)
+        url = f"{cls.base_url}/A1-EI/v1/eijobs/{job}"
+        cls.send_message('PUT',
+                         'Create EiJob',
+                         url,
+                         data=job_data,
+                         headers=cls.header)

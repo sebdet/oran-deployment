@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: Apache-2.0
 """Oran Dmaap module."""
-from typing import Dict
+
+from oransdk.configuration import settings
 from onapsdk.dmaap.dmaap import Dmaap
-from onapsdk.dmaap.dmaap_service import DmaapService
 
 class OranDmaap(Dmaap):
     """Dmaap library provides functions for getting events from Dmaap."""
 
-    get_all_topics_url = f"{DmaapService._url}/topics/listAll"
-    HEADER={"accept": "application/json", "Content-Type": "application/json"}
+    base_url = settings.DMAAP_URL
+    get_all_topics_url = f"{base_url}/topics/listAll"
+    header = {"accept": "application/json", "Content-Type": "application/json"}
 
     @classmethod
     def create_topic(cls,
-                    topic) -> None:
+                     topic) -> None:
         """
         Create topic in Dmaap.
 
@@ -23,16 +24,16 @@ class OranDmaap(Dmaap):
            basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
 
         """
-        url = f"{DmaapService._url}/topics/create"
-        instance_details = cls.send_message('POST',
-                                            'Create Dmaap Topic',
-                                            url,
-                                            data=topic,
-                                            headers=cls.HEADER)
+        url = f"{cls.base_url}/topics/create"
+        cls.send_message('POST',
+                         'Create Dmaap Topic',
+                         url,
+                         data=topic,
+                         headers=cls.header)
 
     @classmethod
     def create_service(cls,
-                    service_data) -> None:
+                       service_data) -> None:
         """
         Create Service to policy agent via Dmaap.
 
@@ -40,11 +41,11 @@ class OranDmaap(Dmaap):
            service_data: the service data in binary format
 
         """
-        OranDmaap.send_event("A1-POLICY-AGENT-READ", service_data, "Create Service via Dmaap")
+        OranDmaap._send_event("A1-POLICY-AGENT-READ", service_data, "Create Service via Dmaap")
 
     @classmethod
     def send_link_failure_event(cls,
-                    event) -> None:
+                                event) -> None:
         """
         Send link failure event.
 
@@ -52,7 +53,7 @@ class OranDmaap(Dmaap):
            event: the event to sent, in binary format
 
         """
-        OranDmaap.send_event("unauthenticated.SEC_FAULT_OUTPUT", event, "Send link failure event")
+        OranDmaap._send_event("unauthenticated.SEC_FAULT_OUTPUT", event, "Send link failure event")
 
     @classmethod
     def get_result(cls) -> str:
@@ -63,35 +64,21 @@ class OranDmaap(Dmaap):
             the result
 
         """
-        url = f"{url}/events/A1-POLICY-AGENT-WRITE/users/policy-agent?timeout=15000&limit=100"
+        topic = "A1-POLICY-AGENT-WRITE"
+        url = f"{cls.base_url}/events/{topic}/users/policy-agent?timeout=15000&limit=100"
         result = cls.send_message('GET',
-                                   'Get result from previous request',
-                                    url)
+                                  'Get result from previous request',
+                                  url)
         return result
 
     @classmethod
-    def get_all_topics(cls,
-                       basic_auth: Dict[str, str]) -> dict:
-        """
-        Get all topics stored in Dmaap.
-
-        Args:
-           basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
-
-        Returns:
-            (dict) Topics from Dmaap
-
-        """
-        return super().get_all_topics(basic_auth)
-
-    @classmethod
-    def send_event(cls,
-                   topic,
-                   event_data,
-                   description) -> None:
-        url = f"{DmaapService._url}/events/{topic}/"
-        instance_details = cls.send_message('POST',
-                                            description,
-                                            url,
-                                            data=event_data,
-                                            headers=cls.HEADER)
+    def _send_event(cls,
+                    topic,
+                    event_data,
+                    description) -> None:
+        url = f"{cls.base_url}/events/{topic}/"
+        cls.send_message('POST',
+                         description,
+                         url,
+                         data=event_data,
+                         headers=cls.header)
