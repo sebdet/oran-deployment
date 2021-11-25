@@ -33,14 +33,15 @@ logger.addHandler(fh)
 #logger.info("response is: %s", topiclist)
 
 
+def test_dmaap():
+    logger.info("Get ric version for ost")
+    a1sim = A1sim()
+    version1 = a1sim.check_version(settings.A1SIM_OSC_URL)
 
-logger.info("Get ric version for ost")
-a1sim = A1sim()
-version1 = a1sim.check_version(settings.A1SIM_OSC_URL)
+    status = a1sim.check_status(settings.A1SIM_OSC_URL)
 
-status = a1sim.check_status(settings.A1SIM_OSC_URL)
+    number = a1sim.get_policy_number(settings.A1SIM_OSC_URL)
 
-number = a1sim.get_policy_number(settings.A1SIM_OSC_URL)
-
-data = jinja_env().get_template("OSC/policy_type.json.j2").render()
-a1sim.create_policy_type(settings.A1SIM_OSC_URL, 1, data)
+    data = jinja_env().get_template("OSC/policy_type.json.j2").render()
+    a1sim.create_policy_type(settings.A1SIM_OSC_URL, 1, data)
+    assert(true)
