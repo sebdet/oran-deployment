@@ -3,8 +3,6 @@
 """Test OranSdnc module."""
 
 from unittest import mock
-import pytest
-
 from oransdk.sdnc.sdnc import OranSdnc
 
 BASE_URL = "http://localhost:8282"

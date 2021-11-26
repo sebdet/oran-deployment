@@ -3,8 +3,6 @@
 """Test A1policymanagement module."""
 
 from unittest import mock
-import pytest
-
 from oransdk.a1policymanagement.a1policymanagement import A1policymanagement
 
 HEADER = {"Accept": "application/json", "Content-Type": "application/json"}

@@ -3,8 +3,6 @@
 """Test Policy module."""
 
 from unittest import mock
-import pytest
-
 from oransdk.policy.policy import OranPolicy, PolicyType
 
 HEADER = {"Accept": "application/json", "Content-Type": "application/json"}

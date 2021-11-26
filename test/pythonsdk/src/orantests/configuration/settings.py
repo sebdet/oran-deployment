@@ -29,7 +29,7 @@ LOG_CONFIG = {
             "level": "DEBUG",
             "class": "logging.FileHandler",
             "formatter": "default",
-            "filename": "/tmp/pythonsdk.debug.log",
+            "filename": "pythonsdk.debug.log",
             "mode": "w"
         }
     },

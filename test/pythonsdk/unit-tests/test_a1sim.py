@@ -3,8 +3,6 @@
 """Test A1sim module."""
 
 from unittest import mock
-import pytest
-
 from oransdk.a1sim.a1sim import A1sim
 
 HEADER = {"Accept": "application/json", "Content-Type": "application/json"}

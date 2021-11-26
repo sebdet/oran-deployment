@@ -3,8 +3,6 @@
 """Test Enrichment Service module."""
 
 from unittest import mock
-import pytest
-
 from oransdk.enrichmentservice.enrichmentservice import EnrichmentService
 
 HEADER = {"Content-Type": "application/json"}

@@ -3,8 +3,6 @@
 """Test clamp module."""
 
 from unittest import mock
-import pytest
-
 from oransdk.dmaap.dmaap import OranDmaap
 from onapsdk.dmaap.dmaap_service import DmaapService
 
