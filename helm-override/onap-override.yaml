@@ -313,6 +313,11 @@ policy:
     enabled: false
   policy-nexus:
     enabled: false
+  policy-clamp-cl-pf-ppnt:
+    enabled: false
+  policy-clamp-cl-http-ppnt:
+    enabled: false
+
 pomba:
   enabled: false
 portal: 

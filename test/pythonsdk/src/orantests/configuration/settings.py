@@ -64,16 +64,19 @@ VID_API_VERSION = "/vid"
 CLAMP_URL       = "https://clamp.api.simpledemo.onap.org:30258"
 CLAMP_AUTH      = "Basic ZGVtb0BwZW9wbGUub3NhYWYub3JnOmRlbW8xMjM0NTYh"
 VES_URL         = "http://ves.api.simpledemo.onap.org:30417"
-#DMAAP_URL       = "http://192.168.1.39:3904"
+DMAAP_URL       = "http://192.168.1.39:3904"
 NBI_URL         = "https://nbi.api.simpledemo.onap.org:30274"
 NBI_API_VERSION = "/nbi/api/v4"
 
+POLICY_BASICAUTH = { 'username': 'healthcheck', 'password': 'zb!XztG34' }
 
-DMAAP_URL = "http://"+str(subprocess.run("kubectl get services message-router -n onap |grep message-router | awk '{print $3}'", shell=True, check=True))+":3904"
-A1SIM_OSC_URL = "http://10.1.42.167:8085"
-A1SIM_STD1_URL = "http://10.1.42.163:8085"
-A1SIM_STD2_URL = "http://10.1.42.163:8085"
-POLICY_PAP_URL = "https://"+str(subprocess.run("kubectl get services policy-pap -n onap |grep policy-pap | awk '{print $3}'", shell=True, check=True))+":6969"
-POLICY_API_URL = "https://"+str(subprocess.run("kubectl get services policy-api -n onap |grep policy-api | awk '{print $3}'", shell=True, check=True))+":6969"
-SDNC_URL = "http://"+str(subprocess.run("kubectl get services sdnc-oam -n onap |grep sdnc-oam | awk '{print $3}'", shell=True, check=True))+":8282"
-print("DMAAP: "+DMAAP_URL)
+DMAAP_URL = "http://"+subprocess.run("kubectl get services message-router -n onap |grep message-router | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
+
+A1SIM_OSC_URL = "http://10.1.42.131:8085"
+A1SIM_STD1_URL = "http://10.1.42.177:8085"
+A1SIM_STD2_URL = "http://10.1.42.178:8085"
+
+POLICY_PAP_URL = "https://"+subprocess.run("kubectl get services policy-pap -n onap |grep policy-pap | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":6969"
+POLICY_API_URL = "https://"+subprocess.run("kubectl get services policy-api -n onap |grep policy-api | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":6969"
+SDNC_URL = "http://"+subprocess.run("kubectl get services sdnc-oam -n onap |grep sdnc-oam | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8282"
+

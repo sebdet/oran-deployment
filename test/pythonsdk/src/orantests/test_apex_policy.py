@@ -4,18 +4,15 @@
 import time
 import subprocess
 import logging
+import logging.config
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
 
-logger = logging.getLogger("")
-logger.setLevel(logging.INFO)
-fh = logging.StreamHandler()
-fh_formatter = logging.Formatter('%(asctime)s %(levelname)s %(lineno)d:%(filename)s(%(process)d) - %(message)s')
-fh.setFormatter(fh_formatter)
-logger.addHandler(fh)
+logging.config.dictConfig(settings.LOG_CONFIG)
+logger = logging.getLogger("test APEX policy")
 
 def test_a1():
     dmaap = OranDmaap()
@@ -38,12 +35,11 @@ def test_a1():
           logger.info("Topic creation failed")
 
 
-    POLICY_BASICAUTH = { 'username': 'healthcheck', 'password': 'zb!XztG34' }
     logger.info("Verify policy components are ready")
     policy = OranPolicy()
     policy_ready = {"api_ready": False, "pap_ready": False, "apex_ready": False}
     for x in range(60):
-        policy_status = policy.get_components_status(POLICY_BASICAUTH)
+        policy_status = policy.get_components_status(settings.POLICY_BASICAUTH)
         if (policy_status["api"]["healthy"] and policy_ready["api_ready"] == False):
             logger.info("Policy Api is ready")
             policy_ready["api_ready"] = True
@@ -64,11 +60,11 @@ def test_a1():
 
     logger.info("Create policy")
     policy_data = jinja_env().get_template("ToscaPolicy.json.j2").render()
-    policy.create_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"), policy_data, POLICY_BASICAUTH)
+    policy.create_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"), policy_data, settings.POLICY_BASICAUTH)
 
     logger.info("Verify whether policy created successfully")
     policy_response = policy.get_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"),
-                                        "onap.policies.native.apex.LinkMonitor", "1.0.0", POLICY_BASICAUTH)
+                                        "onap.policies.native.apex.LinkMonitor", "1.0.0", settings.POLICY_BASICAUTH)
     if (policy_response):
         logger.info("Policy created successfully")
     else:
@@ -76,10 +72,10 @@ def test_a1():
 
     logger.info("Deploy policy")
     deploy_policy = jinja_env().get_template("DeployPolicyPAP.json.j2").render()
-    policy.deploy_policy(deploy_policy, POLICY_BASICAUTH)
+    policy.deploy_policy(deploy_policy, settings.POLICY_BASICAUTH)
 
     logger.info("Verify the policy is deployed")
-    policy_status_list = policy.get_policy_status(POLICY_BASICAUTH)
+    policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
     policy_deployed = False
     for status in policy_status_list:
         logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"] , status["deploy"] )

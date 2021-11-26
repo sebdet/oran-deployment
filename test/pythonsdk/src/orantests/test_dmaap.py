@@ -9,12 +9,9 @@ from oransdk.a1sim.a1sim import A1sim
 from oransdk.utils.jinja import jinja_env
 
 BASIC_AUTH = {}
-logger = logging.getLogger("")
-logger.setLevel(logging.DEBUG)
-fh = logging.StreamHandler()
-fh_formatter = logging.Formatter('%(asctime)s %(levelname)s %(lineno)d:%(filename)s(%(process)d) - %(message)s')
-fh.setFormatter(fh_formatter)
-logger.addHandler(fh)
+
+logging.config.dictConfig(settings.LOG_CONFIG)
+logger = logging.getLogger("test DMAAP")
 
 #dmaap = OranDmaap()
 #logger.info("Get all the topics")
@@ -44,4 +41,4 @@ def test_dmaap():
 
     data = jinja_env().get_template("OSC/policy_type.json.j2").render()
     a1sim.create_policy_type(settings.A1SIM_OSC_URL, 1, data)
-    assert(true)
+    assert(True)

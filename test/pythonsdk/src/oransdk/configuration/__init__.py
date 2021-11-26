@@ -1,4 +1,4 @@
 """Configuration module."""
-from .loader import SettingsLoader
+from onapsdk.configuration.loader import SettingsLoader
 
-settings = SettingsLoader() # pylint: disable=invalid-name
+settings = SettingsLoader()
