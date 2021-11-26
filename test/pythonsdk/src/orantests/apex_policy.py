@@ -6,7 +6,7 @@ import subprocess
 import logging
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
-from oransdk.policy.policy import OranPolicy
+from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
 
@@ -64,10 +64,11 @@ def test_a1():
 
     logger.info("Create policy")
     policy_data = jinja_env().get_template("ToscaPolicy.json.j2").render()
-    policy.create_policy("onap.policies.native.Apex", "1.0.0", policy_data, POLICY_BASICAUTH)
+    policy.create_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"), policy_data, POLICY_BASICAUTH)
 
     logger.info("Verify whether policy created successfully")
-    policy_response = policy.get_policy("onap.policies.native.Apex", "1.0.0", "onap.policies.native.apex.LinkMonitor", "1.0.0", POLICY_BASICAUTH)
+    policy_response = policy.get_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"),
+                                        "onap.policies.native.apex.LinkMonitor", "1.0.0", POLICY_BASICAUTH)
     if (policy_response):
         logger.info("Policy created successfully")
     else:
