@@ -57,6 +57,45 @@ global:
 # Enable/disable and configure helm charts (ie. applications)
 # to customize the ONAP deployment.
 #################################################################
+a1policymanagement:
+  enabled: true
+  rics:
+    - name: ric1
+      link: http://a1-sim-osc-0.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric2
+      link: http://a1-sim-osc-1.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric3
+      link: http://a1-sim-std-0.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric4
+      link: http://a1-sim-std-1.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric5
+      link: http://a1-sim-std2-0.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric6
+      link: http://a1-sim-std2-1.a1-sim.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
 aaf:
   enabled: true
   aaf-service:
@@ -68,10 +107,10 @@ aai:
   global:
     flavorOverride: unlimited
     cassandra:
-      replicas: 3
+      replicas: 1
   aai-cassandra:
     flavorOverride: unlimited
-    replicaCount: 3
+    replicaCount: 1
   aai-babel:
     flavorOverride: unlimited
   aai-data-router:
@@ -100,7 +139,7 @@ appc:
   enabled: false
 cassandra:
   enabled: true
-  replicaCount: 3
+  replicaCount: 1
   config:
     cluster_domain: cluster.local
     heap:
@@ -126,15 +165,20 @@ cds:
   enabled: true
 cli:
   enabled: false
-consul:
-  enabled: false
 contrib:
   enabled: true
   awx:
     enabled: false
   netbox:
     enabled: true
-dcaegen2:
+consul:
+  enabled: true
+  consul-server:
+    replicaCount: 1
+cps: 
+  enabled: false
+
+dcaegen2: 
   enabled: true
   dcae-bootstrap:
     enabled: false
@@ -156,7 +200,7 @@ dcaegen2:
     enabled: false
   dcae-ves-openapi-manager:
     enabled: false
-dcaegen2-services:
+dcaegen2-services: 
   enabled: true
   dcae-bbs-eventprocessor-ms:
     enabled: false
@@ -196,15 +240,16 @@ dcaegen2-services:
     enabled: true
   dcae-ves-mapper:
     enabled: false
-dcaemod:
-  enabled: false
-holmes:
-  enabled: false
-dmaap:
+dcaemod: 
+  enabled: false 
+holmes: 
+  enabled: false 
+dmaap: 
   enabled: true 
   message-router:
     message-router-zookeeper:
       replicaCount: 1
+      zookeeperServers: 1
     message-router-kafka:
       zookeeper:
         replicaCount: 1
@@ -215,11 +260,9 @@ dmaap:
         "log.dirs": "/var/lib/kafka/data"
         "log.retention.hours": "168"
         "num.partitions": "1"
-        "offsets.topic.replication.factor": "1"
         "transaction.state.log.replication.factor": "1"
         "transaction.state.log.min.isr": "1"
         "num.recovery.threads.per.data.dir": "5"
-        "log.retention.hours": "168"
         "zookeeper.connection.timeout.ms": "6000"
         "default.replication.factor": "1"
         "zookeeper.set.acl": "true"
@@ -246,7 +289,7 @@ oof:
   enabled: false
 platform:
   enabled: true
-policy:
+policy: 
   enabled: true
   policy-api:
     enabled: true
@@ -272,38 +315,16 @@ policy:
     enabled: false
   policy-nexus:
     enabled: false
+  policy-clamp-cl-pf-ppnt:
+    enabled: false
+  policy-clamp-cl-http-ppnt:
+    enabled: false
 pomba:
   enabled: false
 portal:
-  enabled: true
-robot:
   enabled: false
-  flavor: small
-  appcUsername: "appc@appc.onap.org"
-  appcPassword: "demo123456!"
-  openStackKeyStoneUrl: "http://10.12.25.2:5000"
-  openStackKeystoneAPIVersion: "v3"
-  openStackPublicNetId: "5771462c-9582-421c-b2dc-ee6a04ec9bde"
-  openStackTenantId: "c9ef9a6345b440b7a96d906a0f48c6b1"
-  openStackUserName: "user_name"
-  openStackUserDomain: "default"
-  openStackProjectName: "TEST"
-  ubuntu14Image: "trusty-server-cloudimg-amd64-disk1"
-  ubuntu16Image: "xenial-server-cloudimg-amd64-disk1"
-  openStackPrivateNetCidr: "10.0.0.0/16"
-  openStackPrivateNetId: "fd05c1ab-3f43-4f6f-8a8c-76aee04ef293"
-  openStackPrivateSubnetId: "fd05c1ab-3f43-4f6f-8a8c-76aee04ef293"
-  openStackSecurityGroup: "f05e9cbf-d40f-4d1f-9f91-d673ba591a3a"
-  openStackOamNetworkCidrPrefix: "10.0"
-  dcaeCollectorIp: "10.12.6.1"
-  vnfPubKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKXDgoo3+WOqcUG8/5uUbk81+yczgwC4Y8ywTmuQqbNxlY1oQ0YxdMUqUnhitSXs5S/yRuAVOYHwGg2mCs20oAINrP+mxBI544AMIb9itPjCtgqtE2EWo6MmnFGbHB4Sx3XioE7F4VPsh7japsIwzOjbrQe+Mua1TGQ5d4nfEOQaaglXLLPFfuc7WbhbJbK6Q7rHqZfRcOwAMXgDoBqlyqKeiKwnumddo2RyNT8ljYmvB6buz7KnMinzo7qB0uktVT05FH9Rg0CTWH5norlG5qXgP2aukL0gk1ph8iAt7uYLf1ktp+LJI2gaF6L0/qli9EmVCSLr1uJ38Q8CBflhkh"
-  demoArtifactsVersion: "1.4.0"
-  demoArtifactsRepoUrl: "https://nexus.onap.org/content/repositories/releases"
-  scriptVersion: "1.4.0"
-  nfsIpAddress: "10.12.6.1"
-  config:
-    openStackEncryptedPasswordHere: "e10c86aa13e692020233d18f0ef6d527"
-    openStackSoEncryptedPassword: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
+robot: 
+  enabled: false
 sdc:
   enabled: true
   sdc-be:
@@ -325,40 +346,50 @@ sdc:
           cpu: 100m
           memory: 500Mi
 
-sdnc:
+sdnc: 
   enabled: true
   replicaCount: 1
   elasticsearch:
     master:
       replicaCount: 1
-   mysql:
-     replicaCount: 1
-   ueb-listener:
-     enabled: false
-   sdnc-ansible-server:
-     enabled: false
-   dgbuilder:
-     enabled: false
-   cds:
-     enabled: false
-   sdnc-web:
-     config:
-       topologyserver:
-         enabled: true
-         topologyserverUrl: http://topology.nonrtric:3001
-   config:
-     sdnr:
-       enabled: true
-       # mode: web - SDNC contains device manager only plus dedicated webserver service for ODLUX (default),
-       # mode: dm - SDNC contains sdnr device manager + ODLUX components
-       mode: dm
-       # sdnronly: true starts sdnc container with odl and sdnrwt features only
-       sdnronly: false
-       sdnrdbTrustAllCerts: true
-       mountpointRegistrarEnabled: true
-       mountpointStateProviderEnabled: true
-       netconfCallHome:
-         enabled: true
+  mysql:
+    replicaCount: 1
+  ueb-listener:
+    enabled: false
+  sdnc-ansible-server:
+    enabled: true
+  dgbuilder:
+    enabled: true
+  cds:
+    enabled: false
+  sdnc-web:
+    config:
+      topologyserver:
+        enabled: true
+        topologyserverUrl: http://topology.nonrtric:3001
+  config:
+    sdnr:
+      enabled: true
+      # mode: web - SDNC contains device manager only plus dedicated webserver service for ODLUX (default),
+      # mode: dm - SDNC contains sdnr device manager + ODLUX components
+      mode: dm
+      # sdnronly: true starts sdnc container with odl and sdnrwt features only
+      sdnronly: false
+      sdnrdbTrustAllCerts: true
+      mountpointRegistrarEnabled: true
+      mountpointStateProviderEnabled: true
+      netconfCallHome:
+        enabled: true
+      vesCollector:
+        enabled: true
+        tls:
+          enabled: true
+        trustAllCertificates: true
+        username: sample1
+        password: sample1
+        address: dcae-ves-collector.onap
+        port: 8443
+        eventLogMsgDetail: LONG
 sniro-emulator:
   enabled: false
 so:
@@ -377,5 +408,4 @@ vid:
   enabled: false
 vnfsdk:
   enabled: false
-
 
