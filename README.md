@@ -107,6 +107,7 @@ The user entry point is located in the <strong>scripts</strong> folder
 │   │   ├── 2-install-oran-cnf.sh		<--- Install SMO full with ONAP CNF features
 │   │   ├── 2-install-oran.sh			<--- Install SMO minimal 
 │   │   └── 2-install-simulators.sh		<--- Install Network simulator (RU/DU/Topology Server)
+│   │   └── 2-upgrade-simulators.sh		<--- Upgrade the simulators install at runtime when changes are done on override files
 │   ├── sub-scripts			<--- Sub-Scripts used by the main layer-0, layer-1, layer-2
 │   │   ├── clean-up.sh
 │   │   ├── install-nonrtric.sh
