@@ -8,7 +8,7 @@ This project uses different helm charts from different Linux Foundation projects
 The CNF part is still a "work in progress" so not well documented, it's a DU/RU/topology server deployment done by ONAP SO instantiation.
 It has been created out of the ONAP vfirewall usecase.
 
-## Quick Installation
+## Quick Installation on blank node
 * Setup a VM with 20GB Memory, 6VCPU, 60GB of diskspace. 
 * Install an ubuntu live server 20.04 LTS (https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso)
 * Execute the following commands being logged as root:
@@ -32,6 +32,29 @@ It has been created out of the ONAP vfirewall usecase.
 	When all pods in "onap" and "nonrtric" namespaces are well up & running:
 	
 	```./oran-deployment/scripts/layer-2/2-install-simulators.sh```
+
+## Quick Installation on existing kubernetes
+* Ensure you have at least 20GB Memory, 6VCPU, 60GB of diskspace. 
+* Execute the following commands being logged as root:
+
+	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
+
+	```./oran-deployment/scripts/layer-0/0-setup-charts-museum.sh```
+	
+	```./oran-deployment/scripts/layer-0/0-setup-helm3.sh```
+	
+	```./oran-deployment/scripts/layer-1/1-build-all-charts.sh```
+
+	```./oran-deployment/scripts/layer-2/2-install-oran.sh```
+
+	Verify pods:
+
+	```kubectl get pods -n onap && kubectl get pods -n nonrtric```
+	
+	When all pods in "onap" and "nonrtric" namespaces are well up & running:
+	
+	```./oran-deployment/scripts/layer-2/2-install-simulators.sh```
+
 
 ## Structure
 The user entry point is located in the <strong>scripts</strong> folder
@@ -101,9 +124,17 @@ The user entry point is located in the <strong>scripts</strong> folder
     ├── apex-policy-test		<--- Test apex policy (https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=35881325, it requires simulators to be up)
     │   ├── apex-policy-test.sh
     │   └── data
-    └── enable-sim-fault-report		<--- Enable the fault reporting of the network simulators by SDNC
-        ├── data
-        └── enable-network-sim-fault-reporting.sh
+    ├── enable-sim-fault-report		<--- Enable the fault reporting of the network simulators by SDNC
+    │   ├── data
+    │   └── enable-network-sim-fault-reporting.sh
+    └── pythonsdk			<--- Test based on ONAP Python SDK to validate O1 and A1
+        ├── oran-tests.xml
+        ├── Pipfile.lock
+        ├── README.md
+        ├── src
+        ├── test.json
+        ├── tox.ini
+        └── unit-tests
 
 ```
 ## Download:
@@ -142,8 +173,7 @@ Use git clone to get it on your server (github ssh key config is required):
     
 ## Configuration:
 In the ./helm-override/ folder the helm config that are used by the SMO installation. 
-<p>Different flavors are preconfigured, and should NOT be changed EXCEPT for the simulators (due to current DNS limitations in the simulators)
-in ./helm-override/simulators-override.yaml, the <strong>"sdnControllerIp"</strong> and <strong>"vesEndpointIp"</strong> must be set to the server external IP</p>
+<p>Different flavors are preconfigured, and should NOT be changed unless you intentionally want to updates some configurations.
 
 ## Installation:
 * Build ONAP/ORAN charts 
