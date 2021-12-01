@@ -1,0 +1,36 @@
+{{- range $i, $a1sim := .Values.a1Sims }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $a1sim.name }}
+  labels:
+    sim-name: {{ $a1sim.name }}
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      sim-name: {{ $a1sim.name }}
+  template:
+    metadata:
+      labels:
+        sim-name: {{ $a1sim.name }}
+        release: {{ $.Release.Name }}
+        chart: {{ $.Chart.Name }}
+      annotations:
+        checksum/config: {{ print $a1sim | sha256sum }}
+    spec:
+      hostname: "{{ $a1sim.name }}"
+      containers:
+        - name: {{ $.Chart.Name }}
+          image: "{{ $.Values.image.repository }}/{{ $.Values.image.name}}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: {{ $a1sim.name }}-configmapenv
+
+{{- end }}
