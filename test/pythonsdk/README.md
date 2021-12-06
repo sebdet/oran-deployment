@@ -1,7 +1,6 @@
 # Python ORAN SDK
 
-an extension of ONAP SDK, to use ORAN and ONAP components programmatically with Python code
-
+An extension of ONAP SDK, to use ORAN and ONAP components programmatically with Python code
 
 ## Description
 
