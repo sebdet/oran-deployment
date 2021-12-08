@@ -47,3 +47,50 @@ class O1sim(OnapService):
                                      url,
                                      data=device_type_data,
                                      headers={"Accept":"application/json", "Content-Type":"application/json"})
+
+              @classmethod
+                 def get_device_status(cls,
+                                        device_node,
+                                        basic_auth: Dict[str, str]) -> dict:
+                     """
+                     Get status of the device.
+
+                     Args:
+                        basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
+
+                     Returns:
+                        the status of the device
+
+                     """
+                     url = f"{cls.base_url}/rests/operations/data-provider:read-network-element-connection-list"\
+                           + f"/node={node-id}/yang-ext:mount/"
+                     status = cls.send_message_json('GET',
+                                                    'Get status of device connectivity',
+                                                    url,
+                                                    basic_auth=basic_auth)
+                     return status
+
+
+              @classmethod
+                 def get_fault_status(cls,
+                                        fault_node,
+                                        basic_auth: Dict[str, str]) -> dict:
+                     """
+                     Get status of the fault.
+
+                     Args:
+                        basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
+
+                     Returns:
+                        the status of the fault
+
+                     """
+                     url = f"{cls.base_url}/rests/operations/data-provider:read-network-status"\
+                           + f"/node={node-id}/yang-ext:mount/"
+                     status = cls.send_message_json('GET',
+                                                    'Get status of device connectivity',
+                                                    url,
+                                                    basic_auth=basic_auth)
+                     return status
+                     
+
