@@ -8,7 +8,6 @@ image:
 
 global:
   aafEnabled: true
-  sdncChart: oru-app
 
 service:
   type: NodePort
