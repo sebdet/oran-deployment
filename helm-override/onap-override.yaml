@@ -306,17 +306,17 @@ policy:
   policy-clamp-fe:
     enabled: false
   policy-clamp-cl-runtime:
-    enabled: false
+    enabled: true
   policy-clamp-cl-k8s-ppnt:
-    enabled: false
+    enabled: true
   policy-gui:
     enabled: false
   policy-nexus:
     enabled: false
   policy-clamp-cl-pf-ppnt:
-    enabled: false
+    enabled: true
   policy-clamp-cl-http-ppnt:
-    enabled: false
+    enabled: true
 
 pomba:
   enabled: false
