@@ -44,7 +44,7 @@ def is_onap_up():
 	cmd="kubectl get pods --field-selector status.phase!=Running -n onap | wc -l"
 	result=check_output(cmd, shell=True).decode('utf-8')
 	logger.info (f"Checking if ONAP is UP:{result}")
-	if int(result) <= 8:
+	if int(result) <= 9:
 		logger.info ("ONAP is Up")
 		return True
 	else:
@@ -55,7 +55,7 @@ def is_nonrtric_up():
 	cmd="kubectl get pods --field-selector status.phase!=Running -n nonrtric | wc -l"
 	result=check_output(cmd, shell=True).decode('utf-8')
 	logger.info (f"Checking if NONRTRIC is UP:{result}")
-	if int(result) <= 2:
+	if int(result) == 0:
 		logger.info ("NONRTRIC is Up")
 		return True
 	else:
