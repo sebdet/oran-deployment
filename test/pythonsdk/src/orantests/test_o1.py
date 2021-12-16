@@ -4,7 +4,6 @@
 import logging
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
-import time
 import json
 
 BASIC_AUTH = {}
@@ -13,8 +12,6 @@ logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test O1")
 
 def test_network_devices_registration():
-	# Wait enough time to have at least the SDNR notifications
-	time.sleep(20)
 	logger.info("Verify if SDNR sends well the RU registration to VES by checking in DMAAP")
 	dmaap = OranDmaap()
 	# As the user has been registered in DMAAP during test session init, that call should return all sims registered by SDNR

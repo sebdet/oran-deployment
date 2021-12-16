@@ -73,7 +73,7 @@ def pytest_sessionstart(session):
 	# Due to an Onap Ves bugs or dmaap ?? DU sims must send messages twice so we need to restart the sims
 	start_network_simulators()
 	wait_for_network_simulators_to_be_running()
-	time.sleep(10)
+	time.sleep(2)
 	dmaap = OranDmaap()
         # Do a first get to register the o1test/o1test user in DMAAP, all messages will then be stored for him
 	dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 10000, settings.DMAAP_GROUP, settings.DMAAP_USER)
@@ -83,6 +83,13 @@ def pytest_sessionstart(session):
 
 	start_network_simulators()
 	wait_for_network_simulators_to_be_running()
+	# Wait enough time to have at least the SDNR notifications sent
+	time.sleep(30)
+	logger.info ("Test Session setup completed successfully")
+
+
 
 def pytest_sessionfinish(session, exitstatus):
 	stop_network_simulators()
+	logger.info ("Test Session cleanup done")
+
