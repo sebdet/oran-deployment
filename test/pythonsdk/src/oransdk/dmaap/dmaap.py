@@ -56,7 +56,7 @@ class OranDmaap(Dmaap):
         OranDmaap._send_event("unauthenticated.SEC_FAULT_OUTPUT", event, "Send link failure event")
 
     @classmethod
-    def get_message_from_topic(cls, topic, timeout, dmaap_group, daap_user) -> str:
+    def get_message_from_topic(cls, topic, timeout, dmaap_group, dmaap_user) -> str:
         """
         Get payload from any topic.
 
