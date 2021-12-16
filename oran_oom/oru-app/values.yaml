@@ -6,11 +6,39 @@ image:
   tag: 1.0.0
   pullPolicy: IfNotPresent
 
+global:
+  aafEnabled: true
+
 service:
   type: NodePort
   ports:
     port: 830
     nodePort: 30835
+
+certInitializer:
+  readinessCheck:
+    namespace: "onap"
+  aaf_namespace: "onap"
+  nameOverride: oru-app-cert-initializer
+  fqdn: "sdnc"
+  app_ns: "org.osaaf.aaf"
+  fqi: "sdnc@sdnc.onap.org"
+  fqi_namespace: "org.onap.sdnc"
+  public_fqdn: "sdnc.onap.org"
+  aafDeployFqi: "deployer@people.osaaf.org"
+  aafDeployPass: demo123456!
+  cadi_latitude: "38.0"
+  cadi_longitude: "-72.0"
+  addconfig: true
+  credsPath: /opt/app/osaaf/local
+  aaf_add_config: >
+    cd /opt/app/osaaf/local;
+    mkdir -p certs;
+    export $(/opt/app/aaf_config/bin/agent.sh local showpass | grep '^c' | xargs -0);
+    keytool -exportcert -rfc -file certs/cacert.pem -keystore {{ .Values.fqi_namespace }}.trust.jks -alias ca_local_0 -storepass $cadi_truststore_password;
+    openssl pkcs12 -in {{ .Values.fqi_namespace }}.p12 -out certs/cert.pem -passin pass:$cadi_keystore_password_p12 -passout pass:$cadi_keystore_password_p12;
+    cp {{ .Values.fqi_namespace }}.key certs/key.pem;
+    chmod -R 755 certs;
 
 simulators:
   - simRu: o-ru-11221
@@ -22,4 +50,10 @@ conf:
   sdnrHost: https://sdnc.onap
   sdnrPort: 8443
   verbose: on
- 
+  caCertificate: /opt/app/osaaf/local/certs/cacert.pem
+
+#Pods Service Account
+serviceAccount:
+  nameOverride: oru-app
+  roles:
+    - read

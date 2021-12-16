@@ -17,7 +17,11 @@ spec:
         name: oru-app
         release: {{ .Release.Name }}
         chart: {{ .Chart.Name }}
-    spec:    
+    spec:
+      initContainers:
+      {{- if .Values.global.aafEnabled }}
+      {{ include "common.certInitializer.initContainer" . | indent 6 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
@@ -25,24 +29,33 @@ spec:
           tty: true
           stdin: true
           env:
-            - name: CURL_CA_BUNDLE
-              value: ''
+          - name: REQUESTS_CA_BUNDLE
+            value: "{{ .Values.conf.caCertificate }}"
           envFrom:
             - configMapRef:
                 name: oru-app-configmapenv
           volumeMounts:
-            - name: oru-app-config-volume
-              subPath: o-ru-to-o-du-map.txt
-              mountPath: /usr/src/app/o-ru-to-o-du-map.txt
+          {{- if .Values.global.aafEnabled }}
+          {{ include "common.certInitializer.volumeMount" . | nindent 10 }}
+          {{- end }}
+          - name: oru-app-config-volume
+            subPath: o-ru-to-o-du-map.txt
+            mountPath: /usr/src/app/o-ru-to-o-du-map.txt
           securityContext:
             capabilities:
               add:
                 - SYS_ADMIN
                 - SYS_PTRACE
-      volumes: 
-        - name: oru-app-config-volume
-          configMap:
-            name: oru-app-configmap
-            items:
-              - key: o-ru-to-o-du-map.txt
-                path: o-ru-to-o-du-map.txt
+      {{- if .Values.global.aafEnabled }}
+      serviceAccountName: {{ include "common.fullname" (dict "suffix" "read" "dot" . ) }}
+      {{- end }}
+      volumes:
+      {{- if .Values.global.aafEnabled }}
+      {{ include "common.certInitializer.volumes" . | nindent 6 }}
+      {{- end }}
+      - name: oru-app-config-volume
+        configMap:
+          name: oru-app-configmap
+          items:
+          - key: o-ru-to-o-du-map.txt
+            path: o-ru-to-o-du-map.txt

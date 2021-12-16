@@ -39,3 +39,5 @@ kong:
     installCRDs: false 
   admin:
     enabled: true
+cert-wrapper:
+  enabled: true

@@ -1,0 +1,15 @@
+{{- range $i, $a1sim := .Values.a1Sims }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $a1sim.name }}-configmapenv
+  labels:
+    sim-name: {{ $a1sim.name }}-env
+    release: {{ $.Release.Name }}
+    chart: {{ $.Chart.Name }}
+data:
+  A1_VERSION: {{ $a1sim.a1Version | quote }}
+  ALLOW_HTTP: {{ $a1sim.allowHttp | quote }}
+
+{{- end }}
