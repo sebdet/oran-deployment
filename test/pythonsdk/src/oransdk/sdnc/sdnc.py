@@ -50,3 +50,18 @@ class OranSdnc(SdncElement):
                                        url,
                                        basic_auth=basic_auth)
         return status
+
+    @classmethod
+    def get_devices(cls, device_node: Dict[str]) -> dict:
+
+        """
+        Get Devices
+
+        Returns the status of the sdnc component
+        """
+
+        url = f"{cls.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={device_node}"
+        status = cls.send_message_json('GET',
+                                       'Get status of Device connectivity',
+                                       url)
+        return status
