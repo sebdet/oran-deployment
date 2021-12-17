@@ -14,27 +14,29 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-# Default values for a1controller.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-a1controller:
-  imagePullPolicy: IfNotPresent
-  image:
-    registry: 'nexus3.onap.org:10002/onap'
-    name: sdnc-image
-    tag: 2.1.6
-  replicaCount: 1
-  service:
-    allowHttp: true
-    httpName: http
-    internalPort1: 8282
-    targetPort1: 8181
-    httpsName: https
-    internalPort2: 8383
-    targetPort2: 8443
-  liveness:
-    initialDelaySeconds: 300
-    periodSeconds: 10
-  readiness:
-    initialDelaySeconds: 60
-    periodSeconds: 10
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "common.name.informationservice" . }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.informationservice" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    {{if eq .Values.informationservice.service.allowHttp true -}}
+    - name: {{ index .Values.informationservice.service.httpName }}
+      port: {{ .Values.informationservice.service.internalPort1 }}
+      targetPort: {{ .Values.informationservice.service.targetPort1 }}
+      protocol: TCP
+    {{- end }}
+    - name: {{ index .Values.informationservice.service.httpsName }}
+      port: {{ .Values.informationservice.service.internalPort2 }}
+      targetPort: {{ .Values.informationservice.service.targetPort2 }}
+      protocol: TCP
+  selector:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.informationservice" . }}
+    release: {{ .Release.Name }}
+  type: ClusterIP

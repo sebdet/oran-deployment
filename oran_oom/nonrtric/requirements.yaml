@@ -35,10 +35,10 @@ dependencies:
     repository: "@local"
     condition: nonrtric.installPms
 
-  - name: enrichmentservice
+  - name: informationservice
     version: ~1.0.0
     repository: "@local"
-    condition: nonrtric.installEnrichmentservice
+    condition: nonrtric.installInformationservice
 
   - name: nonrtric-common
     version: ^2.0.0
@@ -63,6 +63,16 @@ dependencies:
     version: ~1.0.0
     repository: "@local"
     condition: nonrtric.installTopology
+
+  - name: dmaapmediatorservice
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installDmaapmediatorservice
+
+  - name: helmmanager
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installHelmmanager
 
   - name: kong
     version: ~2.4.0

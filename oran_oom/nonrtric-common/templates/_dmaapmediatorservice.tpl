@@ -1,5 +1,5 @@
 ################################################################################
-#   Copyright (c) 2020 Nordix Foundation.                                      #
+#   Copyright (c) 2021 Nordix Foundation.                                      #
 #                                                                              #
 #   Licensed under the Apache License, Version 2.0 (the "License");            #
 #   you may not use this file except in compliance with the License.           #
@@ -13,28 +13,11 @@
 #   See the License for the specific language governing permissions and        #
 #   limitations under the License.                                             #
 ################################################################################
+{{- define "common.name.dmaapmediatorservice" -}}
+  {{- printf "dmaapmediatorservice" -}}
+{{- end -}}
+{{- define "common.container.dmaapmediatorservice" -}}
+  {{- $name := ( include "common.name.dmaapmediatorservice" . ) -}}
+  {{- printf "container-%s" $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
-# Default values for a1controller.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-a1controller:
-  imagePullPolicy: IfNotPresent
-  image:
-    registry: 'nexus3.onap.org:10002/onap'
-    name: sdnc-image
-    tag: 2.1.6
-  replicaCount: 1
-  service:
-    allowHttp: true
-    httpName: http
-    internalPort1: 8282
-    targetPort1: 8181
-    httpsName: https
-    internalPort2: 8383
-    targetPort2: 8443
-  liveness:
-    initialDelaySeconds: 300
-    periodSeconds: 10
-  readiness:
-    initialDelaySeconds: 60
-    periodSeconds: 10

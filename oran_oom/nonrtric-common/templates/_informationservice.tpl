@@ -13,28 +13,10 @@
 #   See the License for the specific language governing permissions and        #
 #   limitations under the License.                                             #
 ################################################################################
-
-# Default values for a1controller.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-a1controller:
-  imagePullPolicy: IfNotPresent
-  image:
-    registry: 'nexus3.onap.org:10002/onap'
-    name: sdnc-image
-    tag: 2.1.6
-  replicaCount: 1
-  service:
-    allowHttp: true
-    httpName: http
-    internalPort1: 8282
-    targetPort1: 8181
-    httpsName: https
-    internalPort2: 8383
-    targetPort2: 8443
-  liveness:
-    initialDelaySeconds: 300
-    periodSeconds: 10
-  readiness:
-    initialDelaySeconds: 60
-    periodSeconds: 10
+{{- define "common.name.informationservice" -}}
+  {{- printf "informationservice" -}}
+{{- end -}}
+{{- define "common.container.informationservice" -}}
+  {{- $name := ( include "common.name.informationservice" . ) -}}
+  {{- printf "container-%s" $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

@@ -29,13 +29,15 @@ nonrtric:
   installA1controller: false
   installA1simulator: true
   installControlpanel: true
-  installEnrichmentservice: true
+  installInformationservice: true
   installRappcatalogueservice: true
   installNonrtricgateway: true
   installKong: true
   installORUApp: true
   installTopology: true
   installDmaapadapterservice: true
+  installDmaapmediatorservice: true
+  installHelmmanager: true
   # override default mount path root directory
   # referenced by persistent volumes and log files
   persistence:
@@ -47,18 +49,25 @@ nonrtric:
   volume2: 
      # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
     size: 2Gi 
-    storageClassName: ecs-storage 
- 
+    storageClassName: ics-storage 
+  volume3:
+    size: 1Gi
+    storageClassName: helmmanager-storage 
+
 common: 
   releasePrefix: r3-dev-nonrtric 
   ingressClassName: kong 
-enrichmentservice: 
-  enrichmentservice: 
-    persistence: 
-      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same. 
-      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
-      size: 2Gi 
-      storageClassName: ecs-storage 
+
+informationservice:
+  informationservice:
+    persistence:
+      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same.
+      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be for instance 'standard' or 'gluster-fs' (depeneds on which classes that are available)
+      size: 2Gi
+      storageClassName: ics-storage
+    ingress:
+      enabled: true
+
  
 # Need to check the external port Availability 
 policymanagementservice: 
@@ -68,12 +77,26 @@ policymanagementservice:
       # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
       size: 2Gi 
       storageClassName: pms-storage 
+  ingress:
+    enabled: true
 
 kong:
   ingressController:
     installCRDs: false 
   admin:
     enabled: true
+
+helmmanager:
+  helmmanager:
+    persistence:
+      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed si>
+      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be f>
+      storageClassName: helmmanager-storage
+
+controlpanel:
+  controlpanel:
+    ingress:
+      enabled: false
 
 oru-app:
   simulators:

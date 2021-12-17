@@ -2,7 +2,13 @@
    "types": [
       {
          "id": "ExampleInformationType",
-         "dmaapTopicUrl": "/events/unauthenticated.VES_NOTIFICATION_OUTPUT/OpenDcae-c12/C12"
-      }
+         "dmaapTopicUrl": "/events/unauthenticated.dmaapadp.json/dmaapadapterproducer/msgs?timeout=15000&limit=100",
+         "useHttpProxy": false
+      },
+      {
+       "id": "ExampleInformationTypeKafka",
+       "kafkaInputTopic": "unauthenticated.dmaapadp_kafka.text",
+       "useHttpProxy": false
+    }
    ]
-}
+ }

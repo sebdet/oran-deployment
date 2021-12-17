@@ -25,4 +25,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-{{ tpl (.Files.Glob "resources/*").AsConfig . | indent 2 }}
+{{ if eq .Values.controlpanel.ingress.enabled false }}
+{{ tpl (.Files.Glob "resources-ngw/*").AsConfig . | indent 2 }}
+{{ else }}
+{{ tpl (.Files.Glob "resources-ing/*").AsConfig . | indent 2 }}
+{{ end }}

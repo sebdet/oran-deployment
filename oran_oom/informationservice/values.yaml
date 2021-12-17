@@ -14,27 +14,32 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-# Default values for a1controller.
+# Default values for Information Coordinate Service.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-a1controller:
+
+informationservice:
   imagePullPolicy: IfNotPresent
   image:
-    registry: 'nexus3.onap.org:10002/onap'
-    name: sdnc-image
-    tag: 2.1.6
-  replicaCount: 1
+    registry: "nexus3.o-ran-sc.org:10004/o-ran-sc"
+    name: "nonrtric-information-coordinator-service"
+    tag: 1.2.0
   service:
     allowHttp: true
     httpName: http
-    internalPort1: 8282
-    targetPort1: 8181
+    internalPort1: 9082
+    targetPort1: 8083
     httpsName: https
-    internalPort2: 8383
-    targetPort2: 8443
+    internalPort2: 9083
+    targetPort2: 8434
   liveness:
-    initialDelaySeconds: 300
+    initialDelaySeconds: 20
     periodSeconds: 10
   readiness:
-    initialDelaySeconds: 60
+    initialDelaySeconds: 20
     periodSeconds: 10
+  persistence:
+    size: 2Gi
+    storageClassName: standard
+  ingress:
+    enabled: false

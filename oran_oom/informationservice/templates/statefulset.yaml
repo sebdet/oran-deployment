@@ -1,0 +1,82 @@
+################################################################################
+#   Copyright (c) 2020 Nordix Foundation.                                      #
+#                                                                              #
+#   Licensed under the Apache License, Version 2.0 (the "License");            #
+#   you may not use this file except in compliance with the License.           #
+#   You may obtain a copy of the License at                                    #
+#                                                                              #
+#       http://www.apache.org/licenses/LICENSE-2.0                             #
+#                                                                              #
+#   Unless required by applicable law or agreed to in writing, software        #
+#   distributed under the License is distributed on an "AS IS" BASIS,          #
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   #
+#   See the License for the specific language governing permissions and        #
+#   limitations under the License.                                             #
+################################################################################
+
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: {{ include "common.name.informationservice" . }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  generation: 1
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.informationservice" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  serviceName: {{ include "common.name.informationservice" . }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.informationservice" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.informationservice" . }}
+        release: {{ .Release.Name }}
+    spec:
+      hostname: {{ include "common.name.informationservice" . }}
+      containers:
+      - name: {{ include "common.container.informationservice" . }}
+        image: {{ .Values.informationservice.image.registry }}/{{ .Values.informationservice.image.name }}:{{ .Values.informationservice.image.tag }}
+        imagePullPolicy: {{ .Values.informationservice.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.informationservice.service.targetPort1 }}
+          protocol: TCP
+        - containerPort: {{ .Values.informationservice.service.targetPort2 }}
+          protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.informationservice.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.informationservice.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.informationservice.liveness.periodSeconds }}
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: {{ .Values.informationservice.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.informationservice.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.informationservice.liveness.periodSeconds }}
+        volumeMounts:
+        - name: {{ include "common.name.informationservice" . }}-information-config
+          mountPath: /opt/app/information-coordinator-service/config
+        - name: {{ include "common.name.informationservice" . }}-vardata
+          mountPath: /var/information-coordinator-service
+      volumes:
+        - name: {{ include "common.name.informationservice" . }}-information-config
+          configMap:
+            name: {{ include "common.name.informationservice" . }}-configmap
+
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "common.name.informationservice" . }}-vardata
+      spec:
+        accessModes: [ ReadWriteOnce ]
+        storageClassName: "{{ .Values.informationservice.persistence.storageClassName }}"
+        resources:
+          requests:
+            storage: "{{ .Values.informationservice.persistence.size }}"
