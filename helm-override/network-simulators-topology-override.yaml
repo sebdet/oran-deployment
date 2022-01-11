@@ -188,88 +188,158 @@ ru-simulator:
 du-simulator:
   dus:
     - name: o-du-1121
-      rus:
-        - name: o-ru-11211
-          administrativeState: LOCKED
-          operationalState: ENABLED
-          status: disconnected
+      operational:
+        administrativeState: locked
+        operationalState: enabled
+      running:
+        administrativeState: unlocked
+      cell:
+        name: cell-1
+        trafficState: active
+        localId: 1
+        physicalCellId: 1
+        operational:
+          administrativeState: locked
+          operationalState: enabled
+        running:
+          administrativeState: unlocked
+      radioResourcePolicy:
+        name: rrm-pol-1
+        resourceType: prb
+        operational:
+          administrativeState: locked
+          operationalState: enabled
+        running:
+          administrativeState: unlocked
 
       simulatedFaults:
-        - name: o-ru-11211
-          condition: "O-RU Port Down"
-          severity: CRITICAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+        - name: fault1
+          condition: "CPRI Port Down"
+          severity: MAJOR
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: false
-          text: "O-RU Port Down"
-        - name: o-ru-11211
-          condition: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-A"
+        - name: fault1-close
+          condition: "CPRI Port Down"
           severity: NORMAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: true
-          text: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-A"
+
+        - name: fault2
+          condition: "CPRI Port Down"
+          severity: MAJOR
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
+          cleared: false
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-C"
+        - name: fault2-close
+          condition: "CPRI Port Down"
+          severity: NORMAL
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
+          cleared: true
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-C"
+
+        - name: fault3
+          condition: "CPRI Port Down"
+          severity: MAJOR
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
+          cleared: false
+          text: "CPRI Port Down"
+          object: "Slot-2-Port-B"
+        - name: fault3-close
+          condition: "CPRI Port Down"
+          severity: NORMAL
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
+          cleared: true
+          text: "CPRI Port Down"
+          object: "Slot-2-Port-B"
 
     - name: o-du-1122
-      rus:
-        - name: o-ru-11221
-          administrativeState: LOCKED
-          operationalState: ENABLED
-          status: disconnected
-        - name: o-ru-11222
-          administrativeState: UNLOCKED
-          operationalState: ENABLED
-          status: connected
-        - name: o-ru-11223
-          administrativeState: LOCKED
-          operationalState: DISABLED
-          status: unable-to-connect
+      operational:
+        administrativeState: locked
+        operationalState: enabled
+      running:
+        administrativeState: unlocked
+      cell:
+        name: cell-2
+        trafficState: active
+        localId: 2
+        physicalCellId: 2
+        operational:
+          administrativeState: locked
+          operationalState: enabled
+        running:
+          administrativeState: unlocked
+      radioResourcePolicy:
+        name: rrm-pol-2
+        resourceType: prb
+        operational:
+          administrativeState: locked
+          operationalState: enabled
+        running:
+          administrativeState: unlocked
 
       simulatedFaults:
-        - name: o-ru-11221
-          condition: "O-RU Port Down"
-          severity: CRITICAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+        - name: fault1
+          condition: "CPRI Port Down"
+          severity: MAJOR
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: false
-          text: "O-RU Port Down"
-        - name: o-ru-11221
-          condition: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-A"
+        - name: fault1-close
+          condition: "CPRI Port Down"
           severity: NORMAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: true
-          text: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-A"
 
-        - name: o-ru-11222
-          condition: "O-RU Port Down"
-          severity: CRITICAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+        - name: fault2
+          condition: "CPRI Port Down"
+          severity: MAJOR
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: false
-          text: "O-RU Port Down"
-        - name: o-ru-11222
-          condition: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-C"
+        - name: fault2-close
+          condition: "CPRI Port Down"
           severity: NORMAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: true
-          text: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-0-Port-C"
 
-        - name: o-ru-11223
-          condition: "O-RU Port Down"
-          severity: CRITICAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+        - name: fault3
+          condition: "CPRI Port Down"
+          severity: MAJOR
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: false
-          text: "O-RU Port Down"
-        - name: o-ru-11223
-          condition: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-2-Port-B"
+        - name: fault3-close
+          condition: "CPRI Port Down"
           severity: NORMAL
-          specificProblem: "O-RU Port Down"
-          faultSeverity: CRITICAL
+          specificProblem: "CPRI Port Down"
+          faultSeverity: MAJOR
           cleared: true
-          text: "O-RU Port Down"
+          text: "CPRI Port Down"
+          object: "Slot-2-Port-B"
 
 topology-server:
   simulatedFaults:

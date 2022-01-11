@@ -2,7 +2,7 @@
 image:
   repository: 'nexus3.o-ran-sc.org:10004/o-ran-sc'
   name: nts-ng-o-ran-du 
-  tag: 1.3.7
+  tag: 1.4.3
   pullPolicy: IfNotPresent
 
 service:
@@ -12,44 +12,81 @@ service:
 
 dus:
   - name: o-du-1122
-    rus:
-      - name: o-ru-11221
-        administrativeState: LOCKED
-        operationalState: ENABLED
-        status: disconnected
-      - name: o-ru-11222
-        administrativeState: LOCKED
-        operationalState: ENABLED
-        status: disconnected
+    operational:
+      administrativeState: locked
+      operationalState: enabled
+    running:
+      administrativeState: unlocked
+    cell:
+      name: cell-1
+      trafficState: active
+      localId: 1
+      physicalCellId: 1
+      operational:
+        administrativeState: locked
+        operationalState: enabled
+      running:
+        administrativeState: unlocked
+    radioResourcePolicy:
+      name: rrm-pol-1 
+      resourceType: prb
+      operational:
+        administrativeState: locked
+        operationalState: enabled
+      running:
+        administrativeState: unlocked
+  
     simulatedFaults:
-      - name: o-ru-11221
-        condition: "O-RU Port Down"
-        severity: CRITICAL
-        specificProblem: "O-RU Port Down"
-        faultSeverity: CRITICAL
+      - name: fault1
+        condition: "CPRI Port Down"
+        severity: MAJOR
+        specificProblem: "CPRI Port Down"
+        faultSeverity: MAJOR
         cleared: false
-        text: "O-RU Port Down"
-      - name: o-ru-11221
-        condition: "O-RU Port Down"
+        text: "CPRI Port Down"
+        object: "Slot-0-Port-A"
+      - name: fault1-close
+        condition: "CPRI Port Down"
         severity: NORMAL
-        specificProblem: "O-RU Port Down"
-        faultSeverity: CRITICAL
+        specificProblem: "CPRI Port Down"
+        faultSeverity: MAJOR
         cleared: true
-        text: "O-RU Port Down"
-      - name: o-ru-11222
-        condition: "O-RU Port Down"
-        severity: CRITICAL
-        specificProblem: "O-RU Port Down"
-        faultSeverity: CRITICAL
+        text: "CPRI Port Down"
+        object: "Slot-0-Port-A"
+
+      - name: fault2
+        condition: "CPRI Port Down"
+        severity: MAJOR
+        specificProblem: "CPRI Port Down"
+        faultSeverity: MAJOR
         cleared: false
-        text: "O-RU Port Down"
-      - name: o-ru-11222
-        condition: "O-RU Port Down"
+        text: "CPRI Port Down"
+        object: "Slot-0-Port-C"
+      - name: fault2-close
+        condition: "CPRI Port Down"
         severity: NORMAL
-        specificProblem: "O-RU Port Down"
-        faultSeverity: CRITICAL
+        specificProblem: "CPRI Port Down"
+        faultSeverity: MAJOR
         cleared: true
-        text: "O-RU Port Down"
+        text: "CPRI Port Down"
+        object: "Slot-0-Port-C"
+      - name: fault3
+        condition: "CPRI Port Down"
+        severity: MAJOR
+        specificProblem: "CPRI Port Down"
+        faultSeverity: MAJOR
+        cleared: false
+        text: "CPRI Port Down"
+        object: "Slot-2-Port-B"
+      - name: fault3-close
+        condition: "CPRI Port Down"
+        severity: NORMAL
+        specificProblem: "CPRI Port Down"
+        faultSeverity: MAJOR
+        cleared: true
+        text: "CPRI Port Down"
+        object: "Slot-2-Port-B"
+
 
 # NTS NG settings
 ntsimNg:

@@ -1,10 +1,102 @@
 <network-function xmlns="urn:o-ran-sc:yang:o-ran-sc-du-hello-world">
-{{ range $i, $ru := .du.rus }}
-    <du-to-ru-connection>
-      <name>{{ $ru.name }}</name>
-      <administrative-state>{{ $ru.administrativeState }}</administrative-state>
-      <operational-state>{{ $ru.operationalState }}</operational-state>
-      <status>{{ $ru.status }}</status>
-    </du-to-ru-connection>
-{{ end }}
+    <id>{{ .du.name }}</id>
+    <administrative-state>{{ .du.operational.administrativeState }}</administrative-state>
+    <operational-state>{{ .du.operational.operationalState }}</operational-state>
+    <user-label>{{ .du.name }}</user-label>
+    <distinguished-name-prefix>CN=KarenBerge,CN=admin,DC=corp,DC=Fabrikam,DC=COM</distinguished-name-prefix>
+    <location-name>{{ .du.name }}</location-name>
+    <distributed-unit-functions>
+      <id>{{ .du.name }}</id>
+      <administrative-state>{{ .du.operational.administrativeState }}</administrative-state>
+      <operational-state>{{ .du.operational.operationalState }}</operational-state>
+      <user-label>{{ .du.name }}</user-label>
+      <cell>
+        <id>{{ .du.cell.name }}</id>
+        <administrative-state>{{ .du.cell.operational.administrativeState }}</administrative-state>
+        <operational-state>{{ .du.cell.operational.operationalState }}</operational-state>
+        <user-label>{{ .du.cell.name }}</user-label>
+        <traffic-state>{{ .du.cell.trafficState }}</traffic-state>
+        <local-id>{{ .du.cell.localId }}</local-id>
+        <public-land-mobile-networks>
+          <mobile-country-code>310</mobile-country-code>
+          <mobile-network-code>150</mobile-network-code>
+          <slice-differentiator>1</slice-differentiator>
+          <slice-service-type>1</slice-service-type>
+        </public-land-mobile-networks>
+        <physical-cell-id>{{ .du.cell.physicalCellId }}</physical-cell-id>
+        <tracking-area-code>10</tracking-area-code>
+        <absolute-radio-frequency-channel-number>
+          <downlink>15000</downlink>
+          <uplink>14000</uplink>
+          <supplementary-uplink>14500</supplementary-uplink>
+        </absolute-radio-frequency-channel-number>
+        <base-station-channel-bandwidth>
+          <downlink>80000</downlink>
+          <uplink>83000</uplink>
+          <supplementary-uplink>84000</supplementary-uplink>
+        </base-station-channel-bandwidth>
+        <synchronization-signal-block>
+          <frequency-channel-number>12</frequency-channel-number>
+          <periodicity>10</periodicity>
+          <subcarrier-spacing>30</subcarrier-spacing>
+          <offset>3</offset>
+          <duration>2</duration>
+        </synchronization-signal-block>
+        <supported-measurements>
+          <performance-measurement-type>user-equipment-average-throughput-downlink</performance-measurement-type>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>1</slice-differentiator>
+            <slice-service-type>1</slice-service-type>
+          </supported-snssai-subcounter-instances>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>1</slice-differentiator>
+            <slice-service-type>2</slice-service-type>
+          </supported-snssai-subcounter-instances>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>2</slice-differentiator>
+            <slice-service-type>1</slice-service-type>
+          </supported-snssai-subcounter-instances>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>2</slice-differentiator>
+            <slice-service-type>2</slice-service-type>
+          </supported-snssai-subcounter-instances>
+        </supported-measurements>
+        <supported-measurements>
+          <performance-measurement-type>user-equipment-average-throughput-uplink</performance-measurement-type>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>1</slice-differentiator>
+            <slice-service-type>1</slice-service-type>
+          </supported-snssai-subcounter-instances>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>1</slice-differentiator>
+            <slice-service-type>2</slice-service-type>
+          </supported-snssai-subcounter-instances>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>2</slice-differentiator>
+            <slice-service-type>1</slice-service-type>
+          </supported-snssai-subcounter-instances>
+          <supported-snssai-subcounter-instances>
+            <slice-differentiator>2</slice-differentiator>
+            <slice-service-type>2</slice-service-type>
+          </supported-snssai-subcounter-instances>
+        </supported-measurements>
+      </cell>
+      <radio-resource-management-policy-ratio>
+        <id>{{ .du.radioResourcePolicy.name }}</id>
+        <administrative-state>{{ .du.radioResourcePolicy.operational.administrativeState }}</administrative-state>
+        <operational-state>{{ .du.radioResourcePolicy.operational.operationalState }}</operational-state>
+        <user-label>{{ .du.radioResourcePolicy.name }}</user-label>
+        <resource-type>{{ .du.radioResourcePolicy.resourceType }}</resource-type>
+        <radio-resource-management-policy-members>
+          <mobile-country-code>310</mobile-country-code>
+          <mobile-network-code>150</mobile-network-code>
+          <slice-differentiator>1</slice-differentiator>
+          <slice-service-type>1</slice-service-type>
+        </radio-resource-management-policy-members>
+        <radio-resource-management-policy-max-ratio>20</radio-resource-management-policy-max-ratio>
+        <radio-resource-management-policy-min-ratio>10</radio-resource-management-policy-min-ratio>
+        <radio-resource-management-policy-dedicated-ratio>15</radio-resource-management-policy-dedicated-ratio>
+      </radio-resource-management-policy-ratio>
+    </distributed-unit-functions>
   </network-function>
+  
