@@ -61,37 +61,37 @@ a1policymanagement:
   enabled: true
   rics:
     - name: ric1
-      link: http://a1-sim-osc-0.a1-sim.nonrtric:8085
+      link: http://a1-sim-osc-0.nonrtric:8085
       controller: controller1
       managedElementIds:
         - kista_1
         - kista_2
     - name: ric2
-      link: http://a1-sim-osc-1.a1-sim.nonrtric:8085
+      link: http://a1-sim-osc-1.nonrtric:8085
       controller: controller1
       managedElementIds:
         - kista_1
         - kista_2
     - name: ric3
-      link: http://a1-sim-std-0.a1-sim.nonrtric:8085
+      link: http://a1-sim-std-0.nonrtric:8085
       controller: controller1
       managedElementIds:
         - kista_1
         - kista_2
     - name: ric4
-      link: http://a1-sim-std-1.a1-sim.nonrtric:8085
+      link: http://a1-sim-std-1.nonrtric:8085
       controller: controller1
       managedElementIds:
         - kista_1
         - kista_2
     - name: ric5
-      link: http://a1-sim-std2-0.a1-sim.nonrtric:8085
+      link: http://a1-sim-std2-0.nonrtric:8085
       controller: controller1
       managedElementIds:
         - kista_1
         - kista_2
     - name: ric6
-      link: http://a1-sim-std2-1.a1-sim.nonrtric:8085
+      link: http://a1-sim-std2-1.nonrtric:8085
       controller: controller1
       managedElementIds:
         - kista_1

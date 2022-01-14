@@ -13,24 +13,7 @@ BASIC_AUTH = {}
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test DMAAP")
 
-#dmaap = OranDmaap()
-#logger.info("Get all the topics")
-#topiclist = dmaap.get_all_topics(BASIC_AUTH)
-#logger.info("response is: %s", topiclist)
-
-
-#logger.info("Create new topic")
-#topic = '{  "topicName": "unauthenticated.SEC_FAULT_OUTPUT",  "topicDescription": "test topic",  "partitionCount": 1,  "replicationCnCount": 1,  "transactionEnabled": "false"}'
-#response = dmaap.create_topic(topic, BASIC_AUTH)
-#logger.info("response is: %s", response)
-
-
-#logger.info("Get topics again")
-#topiclist = dmaap.get_all_topics(BASIC_AUTH)
-#logger.info("response is: %s", topiclist)
-
-
-def test_dmaap():
+def test_a1sim():
     logger.info("Get ric version for ost")
     a1sim = A1sim()
     version1 = a1sim.check_version(settings.A1SIM_OSC_URL)

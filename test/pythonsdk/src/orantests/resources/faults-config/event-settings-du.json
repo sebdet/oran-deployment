@@ -1,0 +1,23 @@
+{
+    "nts-network-function:network-function": {
+      "fault-generation": {
+        "fault-delay-list": [
+          {
+            "index": 0,
+            "delay-period": 20
+          }
+        ]
+      },
+      "ves": {
+        "pnf-registration": true,
+        "faults-enabled": true,
+        "heartbeat-period": 120
+      },
+      "netconf": {
+        "faults-enabled": false,
+        "call-home": false
+      },
+      "mount-point-addressing-method": "docker-mapping",
+      "function-type": "NTS_FUNCTION_TYPE_O_RAN_O_DU"
+    }
+  }

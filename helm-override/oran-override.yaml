@@ -111,13 +111,22 @@ oru-app:
 
 a1simulator:
   a1Sims:
-    - name: a1-sim-osc
+    - name: a1-sim-osc-0
       a1Version: OSC_2.1.0
+      allowHttp: true
+    - name: a1-sim-osc-1
+      a1Version: OSC_2.1.0
+      allowHttp: true
+    - name: a1-sim-std-0
+      a1Version: STD_1.1.3
       allowHttp: true
     - name: a1-sim-std-1
       a1Version: STD_1.1.3
       allowHttp: true
-    - name: a1-sim-std-2
+    - name: a1-sim-std2-0
+      a1Version: STD_2.0.0
+      allowHttp: true
+    - name: a1-sim-std2-1
       a1Version: STD_2.0.0
       allowHttp: true
 
