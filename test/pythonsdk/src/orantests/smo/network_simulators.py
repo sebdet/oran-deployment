@@ -14,7 +14,7 @@ logger = logging.getLogger("Network Simulators k8s")
 
 class NetworkSimulators():
 
-   resources_path = ""
+    resources_path = ""
 
     def __init__(self, resources_dir):
         self.resources_path = resources_dir
@@ -27,7 +27,7 @@ class NetworkSimulators():
         logger.info ("Start the network simulators")
         cmd="kubectl create namespace network"
         check_output(cmd, shell=True).decode('utf-8')
-        cmd=f"helm install --debug oran-simulator local/ru-du-simulators --namespace network -f {resources_path}/network-simulators-topology/network-simulators-override.yaml -f {resources_path}/network-simulators-topology/network-simulators-topology-override.yaml"
+        cmd=f"helm install --debug oran-simulator local/ru-du-simulators --namespace network -f {cls.resources_path}/network-simulators-topology/network-simulators-override.yaml -f {cls.resources_path}/network-simulators-topology/network-simulators-topology-override.yaml"
         check_output(cmd, shell=True).decode('utf-8')
 
     @classmethod
@@ -54,7 +54,7 @@ class NetworkSimulators():
 
     @classmethod
     def update_event_settings(cls, nfName, nfType):
-        file = f'{resources_path}/faults-config/event-settings-'+nfType+'.json'
+        file = f'{cls.resources_path}/faults-config/event-settings-'+nfType+'.json'
         print ("File name:" + file)
         with open(file) as json_file:
             body = json.load(json_file)
