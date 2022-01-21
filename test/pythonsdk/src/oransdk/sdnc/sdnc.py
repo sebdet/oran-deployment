@@ -6,11 +6,13 @@
 from typing import Dict
 from oransdk.configuration import settings
 from onapsdk.sdnc.sdnc_element import SdncElement
+import requests
 
 class OranSdnc(SdncElement):
     """SDNC library."""
 
     base_url = settings.SDNC_URL
+    header = {"Accept": "application/json", "Content-Type": "application/json"}
 
     @classmethod
     def get_status(cls) -> str:
@@ -52,7 +54,7 @@ class OranSdnc(SdncElement):
         return status
 
     @classmethod
-    def get_devices(cls, device_node: Dict[str]) -> dict:
+    def get_devices(cls, device_node, basic_auth: Dict[str, str]) -> int:
 
         """
         Get Devices
@@ -61,7 +63,22 @@ class OranSdnc(SdncElement):
         """
 
         url = f"{cls.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={device_node}"
-        status = cls.send_message_json('GET',
+        status = cls.send_message('GET',
                                        'Get status of Device connectivity',
-                                       url)
-        return status
+                                       url, basic_auth=basic_auth)
+        return status.status_code
+
+    @classmethod
+    def get_events(cls, basic_auth: Dict[str, str], device):
+        """
+        Create event in Sdnc.
+
+        Args:
+           topic: the event to create, in json format
+           :param basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
+           :param device:
+
+        """
+        url = f"{cls.base_url}/rests/operations/data-provider:read-eventlog-list"
+        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "$
+

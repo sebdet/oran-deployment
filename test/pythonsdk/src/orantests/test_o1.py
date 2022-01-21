@@ -1,12 +1,13 @@
+
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
+from oransdk.sdnc.sdnc import OranSdnc
 import json
 
-BASIC_AUTH = {}
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test O1")
@@ -32,3 +33,16 @@ def test_network_devices_registration():
 		elif "o-du" in eventjson["event"]["commonEventHeader"]["sourceName"]:
 			logger.info(f"DU detected checking it has well registered itself")
 			assert("o-du" in eventjson["event"]["commonEventHeader"]["reportingEntityName"])
+
+def test_devices_in_sdnc():
+	logger.info("Verify if devices are well in SDNC")
+	for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+		logger.info("Verify if " +device+ " is well in SDNR")
+		assert(OranSdnc.get_devices(device,settings.SDNC_BASICAUTH) == 200)
+
+def test_event_in_sdnc():
+	logger.info("Verify is there is any events")
+	for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+		events = OranSdnc.get_events(settings.SDNC_BASICAUTH, device).json()
+		logger.info("Verify if " + device + "has events")
+		assert(int(events["data-provider:output"]["pagination"]["total"]) > 0)
