@@ -4,8 +4,8 @@
 """Onap Sdnc module."""
 
 from typing import Dict
-from oransdk.configuration import settings
 from onapsdk.sdnc.sdnc_element import SdncElement
+from oransdk.configuration import settings
 
 class OranSdnc(SdncElement):
     """SDNC library."""

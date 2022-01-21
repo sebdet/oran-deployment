@@ -1,4 +1,4 @@
-"""Specific settings module."""  # pylint: disable=bad-whitespace
+"""Specific settings module."""  # pylint: disable=bad-whitespace,line-too-long
 import subprocess
 
 ######################
@@ -84,7 +84,7 @@ SDNC_URL = "http://"+subprocess.run("kubectl get services sdnc-oam -n onap |grep
 NETWORK_SIMULATORS_RU_LIST = ["o-ru-11211","o-ru-11221","o-ru-11222","o-ru-11223"]
 NETWORK_SIMULATORS_DU_LIST = ["o-du-1121","o-du-1122"]
 NETWORK_SIMULATORS_TOPOLOGY_SERVER = ["topology-server"]
-NETWORK_SIMULATORS_DU_RU_LIST = NETWORK_SIMULATORS_RU_LIST + NETWORK_SIMULATORS_DU_LIST 
+NETWORK_SIMULATORS_DU_RU_LIST = NETWORK_SIMULATORS_RU_LIST + NETWORK_SIMULATORS_DU_LIST
 NETWORK_SIMULATORS_LIST = NETWORK_SIMULATORS_DU_RU_LIST + NETWORK_SIMULATORS_TOPOLOGY_SERVER
 DMAAP_GROUP = "o1test"
 DMAAP_USER = "o1test"

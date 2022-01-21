@@ -1,10 +1,12 @@
-import pytest
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+
+"""Module called by pytest."""
 import logging
 import logging.config
-from subprocess import check_output, run
 import time
-from onapsdk.configuration import settings
 import os
+from onapsdk.configuration import settings
 from smo.smo import Smo
 from smo.network_simulators import NetworkSimulators
 
@@ -20,9 +22,11 @@ network_sims = NetworkSimulators("./resources")
 smo = Smo()
 
 ###### Entry points of PYTEST Session
-def pytest_sessionstart(session):
+def pytest_sessionstart():
+    """Pytest calls it when starting a test session."""
     smo.wait_for_smo_to_be_running()
-    ### Due to an Onap Ves/dmaap behavior !!! DU sims must send messages twice so we need to create/delete the sims
+    ### Due to an Onap Ves/dmaap behavior !!! DU sims must send messages
+    ### twice so we need to create/delete the sims
     network_sims.start_network_simulators()
     network_sims.wait_for_network_simulators_to_be_running()
     time.sleep(3)

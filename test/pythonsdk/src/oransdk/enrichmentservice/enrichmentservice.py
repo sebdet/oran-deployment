@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Oran Enrichment Service module."""
 
-from oransdk.configuration import settings
 from onapsdk.onap_service import OnapService
+from oransdk.configuration import settings
 
 class EnrichmentService(OnapService):
     """Enrichment Service library."""
