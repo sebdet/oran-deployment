@@ -80,5 +80,5 @@ class OranSdnc(SdncElement):
 
         """
         url = f"{cls.base_url}/rests/operations/data-provider:read-eventlog-list"
-        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "$
+        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "ascending"}],"pagination": {"size": 10,"page": 1}}}', headers=cls.header, basic_auth=basic_auth)
 
