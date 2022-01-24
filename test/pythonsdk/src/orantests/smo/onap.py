@@ -21,8 +21,8 @@ class Onap():
         """Verify if ONAP platform is up or not."""
         cmd = "kubectl get pods --field-selector status.phase!=Running -n onap | wc -l"
         result = check_output(cmd, shell=True).decode('utf-8')
-        logger.info("Number of Onap pods not in Running state (expected <=9): %s", result)
-        if int(result) <= 9:
+        logger.info("Number of Onap pods not in Running state (expected <= 8): %s", result)
+        if int(result) <= 8:
             logger.info("ONAP is Up")
             return True
         logger.info("ONAP is Down")
