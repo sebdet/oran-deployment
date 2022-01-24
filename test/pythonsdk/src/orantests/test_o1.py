@@ -10,6 +10,8 @@ import pytest
 from onapsdk.configuration import settings
 from smo.network_simulators import NetworkSimulators
 from oransdk.dmaap.dmaap import OranDmaap
+from oransdk.sdnc.sdnc import OranSdnc
+
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -111,3 +113,16 @@ def test_device_faults_in_dmaap():
     for sim_name in settings.NETWORK_SIMULATORS_DU_RU_LIST:
         logger.info("Check if %s has at least >=3 faults", sim_name)
         assert sim_name in faults_received and faults_received[sim_name] >= 3
+
+def test_devices_in_sdnc():
+	logger.info("Verify if devices are well in SDNC")
+	for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+		logger.info("Verify if " +device+ " is well in SDNR")
+		assert(OranSdnc.get_devices(device,settings.SDNC_BASICAUTH) == 200)
+
+def test_event_in_sdnc():
+	logger.info("Verify is there is any events")
+	for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+		events = OranSdnc.get_events(settings.SDNC_BASICAUTH, device).json()
+		logger.info("Verify if " + device + "has events")
+		assert(int(events["data-provider:output"]["pagination"]["total"]) > 0)
