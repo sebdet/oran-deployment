@@ -1,4 +1,4 @@
-"""Specific settings module."""  # pylint: disable=bad-whitespace
+"""Specific settings module."""  # pylint: disable=bad-whitespace,line-too-long
 import subprocess
 
 ######################
@@ -73,9 +73,9 @@ SDNC_BASICAUTH = { 'username': 'admin', 'password': 'Kp8bJ4SXszM0WXlhak3eHlcse2g
 
 DMAAP_URL = "http://"+subprocess.run("kubectl get services message-router -n onap |grep message-router | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
 
-A1SIM_OSC_URL = "http://"+subprocess.run("kubectl get services a1-sim-osc -n nonrtric |grep a1-sim-osc | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8085"
-A1SIM_STD1_URL = "http://"+subprocess.run("kubectl get services a1-sim-std-1 -n nonrtric |grep a1-sim-std-1 | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
-A1SIM_STD2_URL = "http://"+subprocess.run("kubectl get services a1-sim-std-2 -n nonrtric |grep a1-sim-std-2 | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
+A1SIM_OSC_URL = "http://"+subprocess.run("kubectl get services a1-sim-osc-0 -n nonrtric |grep a1-sim-osc-0 | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8085"
+A1SIM_STD1_URL = "http://"+subprocess.run("kubectl get services a1-sim-std1-0 -n nonrtric |grep a1-sim-std1-0 | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
+A1SIM_STD2_URL = "http://"+subprocess.run("kubectl get services a1-sim-std2-0 -n nonrtric |grep a1-sim-std2-0 | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
 
 POLICY_PAP_URL = "https://"+subprocess.run("kubectl get services policy-pap -n onap |grep policy-pap | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":6969"
 POLICY_API_URL = "https://"+subprocess.run("kubectl get services policy-api -n onap |grep policy-api | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":6969"
@@ -85,6 +85,7 @@ SDNC_URL = "http://"+subprocess.run("kubectl get services sdnc-oam -n onap |grep
 NETWORK_SIMULATORS_RU_LIST = ["o-ru-11211","o-ru-11221","o-ru-11222","o-ru-11223"]
 NETWORK_SIMULATORS_DU_LIST = ["o-du-1121","o-du-1122"]
 NETWORK_SIMULATORS_TOPOLOGY_SERVER = ["topology-server"]
-NETWORK_SIMULATOR_DEVICES_LIST = NETWORK_SIMULATORS_RU_LIST + NETWORK_SIMULATORS_DU_LIST + NETWORK_SIMULATORS_TOPOLOGY_SERVER
+NETWORK_SIMULATORS_DU_RU_LIST = NETWORK_SIMULATORS_RU_LIST + NETWORK_SIMULATORS_DU_LIST
+NETWORK_SIMULATORS_LIST = NETWORK_SIMULATORS_DU_RU_LIST + NETWORK_SIMULATORS_TOPOLOGY_SERVER
 DMAAP_GROUP = "o1test"
 DMAAP_USER = "o1test"

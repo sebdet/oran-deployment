@@ -1,0 +1,74 @@
+################################################################################
+#   Copyright (c) 2021 Nordix Foundation.                                      #
+#                                                                              #
+#   Licensed under the Apache License, Version 2.0 (the "License");            #
+#   you may not use this file except in compliance with the License.           #
+#   You may obtain a copy of the License at                                    #
+#                                                                              #
+#       http://www.apache.org/licenses/LICENSE-2.0                             #
+#                                                                              #
+#   Unless required by applicable law or agreed to in writing, software        #
+#   distributed under the License is distributed on an "AS IS" BASIS,          #
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   #
+#   See the License for the specific language governing permissions and        #
+#   limitations under the License.                                             #
+################################################################################
+
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: {{ include "common.name.helmmanager" . }}
+  namespace: {{ include "common.namespace.nonrtric" . }}
+  generation: 1
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.helmmanager" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+
+spec:
+  serviceName: {{ include "common.name.helmmanager" . }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.helmmanager" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.helmmanager" . }}
+        release: {{ .Release.Name }}
+    spec:
+      hostname: {{ include "common.name.helmmanager" . }}
+      containers:
+      - name: {{ include "common.container.helmmanager" . }}
+        image: {{ .Values.helmmanager.image.registry }}/{{ .Values.helmmanager.image.name }}:{{ .Values.helmmanager.image.tag }}
+        imagePullPolicy: {{ .Values.helmmanager.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.helmmanager.service.targetPort1 }}
+          protocol: TCP
+        # readinessProbe:
+        #   tcpSocket:
+        #     port: {{ .Values.helmmanager.service.targetPort1 }}
+        #   initialDelaySeconds: {{ .Values.helmmanager.liveness.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.helmmanager.liveness.periodSeconds }}
+        # livenessProbe:
+        #   httpGet:
+        #     path: /helm/charts
+        #     port: {{ .Values.helmmanager.service.targetPort1 }}
+        #   initialDelaySeconds: {{ .Values.helmmanager.liveness.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.helmmanager.liveness.periodSeconds }}
+        volumeMounts:
+        - name: {{ include "common.name.helmmanager" . }}-vardata
+          mountPath: "/var/helm-manager-service"
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "common.name.helmmanager" . }}-vardata
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: "{{ .Values.helmmanager.persistence.storageClassName }}"
+        resources:
+          requests:
+            storage: "{{ .Values.helmmanager.persistence.size }}"

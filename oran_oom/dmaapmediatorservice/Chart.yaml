@@ -14,29 +14,8 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-kind: Service
 apiVersion: v1
-metadata:
-  name: {{ include "common.name.enrichmentservice" . }}
-  namespace: {{ include "common.namespace.nonrtric" . }}
-  labels:
-    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.enrichmentservice" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-spec:
-  ports:
-    {{if eq .Values.enrichmentservice.service.allowHttp true -}}
-    - name: {{ index .Values.enrichmentservice.service.httpName }}
-      port: {{ .Values.enrichmentservice.service.internalPort1 }}
-      targetPort: {{ .Values.enrichmentservice.service.targetPort1 }}
-      protocol: TCP
-    {{- end }}
-    - name: {{ index .Values.enrichmentservice.service.httpsName }}
-      port: {{ .Values.enrichmentservice.service.internalPort2 }}
-      targetPort: {{ .Values.enrichmentservice.service.targetPort2 }}
-      protocol: TCP
-  selector:
-    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.enrichmentservice" . }}
-    release: {{ .Release.Name }}
-  type: ClusterIP
+appVersion: "1.0.0"
+description: A Helm chart for Dmaap Mediator Service
+name: dmaapmediatorservice
+version: 1.0.0

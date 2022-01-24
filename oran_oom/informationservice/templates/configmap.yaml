@@ -1,6 +1,5 @@
-{{/*
 ################################################################################
-#   Copyright (c) 2021 Nordix Foundation.                                      #
+#   Copyright (c) 2020 Nordix Foundation.                                      #
 #                                                                              #
 #   Licensed under the Apache License, Version 2.0 (the "License");            #
 #   you may not use this file except in compliance with the License.           #
@@ -14,32 +13,17 @@
 #   See the License for the specific language governing permissions and        #
 #   limitations under the License.                                             #
 ################################################################################
-*/}}
 
-{{- if .Values.enrichmentservice.ingress.enabled -}}
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: {{ include "common.name.enrichmentservice" . }}
+  name: {{ include "common.name.informationservice" . }}-configmap
   namespace: {{ include "common.namespace.nonrtric" . }}
-
-spec:
-  ingressClassName: {{ include "common.ingressClassName" . }}
-  rules:
-    - http:
-        paths:
-          - path: "/data-producer"
-            backend:
-              service:
-                name: {{ include "common.name.enrichmentservice" . }}
-                port:
-                  number: {{ .Values.enrichmentservice.service.internalPort1 }}
-            pathType: Prefix
-            path: "/data-consumer"
-            backend:
-              service:
-                name: {{ include "common.name.enrichmentservice" . }}
-                port:
-                  number: {{ .Values.enrichmentservice.service.internalPort1 }}
-            pathType: Prefix
-{{- end -}}
+  labels:
+    app: {{ include "common.namespace.nonrtric" . }}-{{ include "common.name.informationservice" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+{{ tpl (.Files.Glob "resources/config/*").AsConfig . | indent 2 }}

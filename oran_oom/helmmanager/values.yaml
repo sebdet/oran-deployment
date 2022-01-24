@@ -1,5 +1,5 @@
 ################################################################################
-#   Copyright (c) 2020 Nordix Foundation.                                      #
+#   Copyright (c) 2021 Nordix Foundation.                                      #
 #                                                                              #
 #   Licensed under the Apache License, Version 2.0 (the "License");            #
 #   you may not use this file except in compliance with the License.           #
@@ -14,11 +14,27 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-{{- define "common.name.enrichmentservice" -}}
-  {{- printf "enrichmentservice" -}}
-{{- end -}}
+# Default values for Helm Manager
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 
-{{- define "common.container.enrichmentservice" -}}
-  {{- $name := ( include "common.name.enrichmentservice" . ) -}}
-  {{- printf "container-%s" $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+helmmanager:
+  clusterRoleName: cluster-admin
+  imagePullPolicy: IfNotPresent
+  image:
+    registry: "nexus3.o-ran-sc.org:10004/o-ran-sc"
+    name: "nonrtric-helm-manager"
+    tag: 1.1.0
+  service:
+    httpName: http
+    internalPort1: 8112
+    targetPort1: 8083
+  liveness:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  readiness:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  persistence:
+    size: 1Gi
+    storageClassName: standard

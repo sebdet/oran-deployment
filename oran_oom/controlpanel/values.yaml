@@ -23,7 +23,7 @@ controlpanel:
   image:
     registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc'
     name: nonrtric-controlpanel
-    tag: 2.2.0
+    tag: 2.3.0
   replicaCount: 1
   service:
     allowHttp: true
@@ -41,3 +41,6 @@ controlpanel:
   readiness:
     initialDelaySeconds: 20
     periodSeconds: 10
+
+  ingress:
+    enabled: true

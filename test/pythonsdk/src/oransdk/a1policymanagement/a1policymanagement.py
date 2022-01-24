@@ -4,8 +4,8 @@
 """ONAP A1 Policy Management."""
 
 from typing import Dict
-from oransdk.configuration import settings
 from onapsdk.onap_service import OnapService
+from oransdk.configuration import settings
 
 class A1policymanagement(OnapService):
     """A1 Policy Management library."""

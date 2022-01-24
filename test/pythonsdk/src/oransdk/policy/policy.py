@@ -5,8 +5,8 @@
 
 from dataclasses import dataclass
 from typing import Dict
-from oransdk.configuration import settings
 from onapsdk.onap_service import OnapService
+from oransdk.configuration import settings
 
 @dataclass
 class PolicyType:

@@ -13,6 +13,14 @@
             "stderr": "log/netopeer-stderr.log"
         },
 
+        "sshd": {
+            "path": "/usr/sbin/sshd",
+            "args": ["-D"],
+            "autorestart": true,
+            "stdout": "log/sshd-stdout.log",
+            "stderr": "log/sshd-stderr.log"
+        },
+
         "ntsim-network-function": {
             "path": "/opt/dev/ntsim-ng/ntsim-ng",
             "args": ["-w/opt/dev/ntsim-ng", "-f"],
@@ -32,21 +40,22 @@
             "ietf-truststore",
             "ietf-system",
             "ietf-netconf-server",
-            "nts-network-function"
+            "nts-network-function",
+            "o-ran-sc-du-hello-world"
         ],
 
-        "default-list-instances": 2,
+        "default-list-instances": 1,
         "custom-list-instances" : []
     },
 
     "datastore-populate-rules": {
-        "random-generation-enabled": true,
+        "random-generation-enabled": false,
 
         "pre-generated-operational-data": [
-            "/opt/dev/deploy/data/o-ran-sc-du-hello-world-operational.xml"
+            "../deploy/data/o-ran-sc-du-hello-world-operational.xml"
         ],
         "pre-generated-running-data": [
-            "/opt/dev/deploy/data/o-ran-sc-du-hello-world-running.xml"
+            "../deploy/data/o-ran-sc-du-hello-world-running.xml"
         ]
     },
 
@@ -58,7 +67,7 @@
 {{ range $i, $fault := .du.simulatedFaults }}
               {
                 "condition" : "{{ $fault.condition  }}",
-                "object"    : "/o-ran-sc-du-hello-world:network-function/du-to-ru-connection[name='{{$fault.name}}']",
+                "object"    : "{{$fault.object}}",
                 "severity"  : "{{$fault.severity}}",
                 "date-time" : "$$time$$",
                 "specific-problem" : "{{$fault.specificProblem}}",

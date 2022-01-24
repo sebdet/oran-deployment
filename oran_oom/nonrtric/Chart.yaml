@@ -3,8 +3,7 @@ name: nonrtric
 version: 1.0.0
 appVersion: test
 description: Open Radio Access Network (ORAN)
-home: https://www.onap.org/
+home: https://www.o-ran.org/
 sources:
 - https://gerrit.o-ran-sc.org/r/#/admin/projects/
-icon: https://wiki.onap.org/download/thumbnails/1015829/onap_704x271%20copy.png?version=1&modificationDate=1488326334000&api=v2
-kubeVersion: ">=1.11.5-0"
+kubeVersion: ">=1.19.0-0"

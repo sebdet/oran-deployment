@@ -44,11 +44,6 @@ spec:
         - name: {{ include "common.containername.a1controller" . }}
           image: {{ .Values.a1controller.image.registry }}/{{ .Values.a1controller.image.name }}:{{ .Values.a1controller.image.tag }}
           imagePullPolicy: {{ .Values.a1controller.imagePullPolicy }}
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: openECOMP1.0
-            - name: SDNC_CONFIG_DIR
-              value: /opt/onap/sdnc/data/properties
           command:
             - /opt/onap/sdnc/bin/startODL.sh
           ports:
@@ -56,6 +51,35 @@ spec:
               protocol: TCP
             - containerPort: {{ .Values.a1controller.service.targetPort2 }}
               protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: 'itsASecret'
+            - name: MYSQL_USER
+              value: 'sdnctl'
+            - name: MYSQL_PASSWORD
+              value: 'gamma'
+            - name: MYSQL_DATABASE
+              value: 'sdnctl'
+            - name: SDNC_CONFIG_DIR
+              value: '/opt/onap/sdnc/data/properties'
+            - name: SDNC_BIN
+              value: '/opt/onap/sdnc/bin'
+            - name: ODL_CERT_DIR
+              value: '/tmp'
+            - name: ODL_ADMIN_USERNAME
+              value: admin
+            - name: ODL_ADMIN_PASSWORD
+              value: 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U'
+            - name: ODL_USERNAME
+              value: admin
+            - name: ODL_PASSWORD
+              value: 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U'
+            - name: SDNC_DB_INIT
+              value: 'true'
+            - name: A1_TRUSTSTORE_PASSWORD
+              value: 'a1adapter'
+            - name: AAI_TRUSTSTORE_PASSWORD
+              value: 'changeit'
           readinessProbe:
             tcpSocket:
               port: {{ .Values.a1controller.service.targetPort1 }}
@@ -85,12 +109,12 @@ spec:
     spec:
       containers:
         - name: sdnc-db-container
-          image: mysql/mysql-server:5.6
+          image: nexus3.o-ran-sc.org:10001/mariadb:10.5
           imagePullPolicy: IfNotPresent
           env:
             - name: MYSQL_ROOT_HOST
               value: '%'
             - name: MYSQL_ROOT_PASSWORD
-              value: openECOMP1.0
+              value: 'itsASecret'
           ports:
             - containerPort: 3306

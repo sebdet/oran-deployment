@@ -20,9 +20,9 @@
 a1controller:
   imagePullPolicy: IfNotPresent
   image:
-    registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc'
-    name: nonrtric-a1-controller
-    tag: 2.0.1
+    registry: 'nexus3.onap.org:10002/onap'
+    name: sdnc-image
+    tag: 2.1.6
   replicaCount: 1
   service:
     allowHttp: true

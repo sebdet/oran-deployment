@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Oran Dmaap module."""
 
-from oransdk.configuration import settings
 from onapsdk.dmaap.dmaap import Dmaap
+from oransdk.configuration import settings
 
 class OranDmaap(Dmaap):
     """Dmaap library provides functions for getting events from Dmaap."""
@@ -65,8 +65,7 @@ class OranDmaap(Dmaap):
 
         """
         url = f"{cls.base_url}/events/{topic}/{dmaap_group}/{dmaap_user}?timeout={timeout}"
-        return cls.send_message('GET',
-                                  'Get payload of specific topic', url)
+        return cls.send_message('GET', 'Get payload of specific topic', url)
 
     @classmethod
     def get_result(cls) -> str:
@@ -79,9 +78,7 @@ class OranDmaap(Dmaap):
         """
         topic = "A1-POLICY-AGENT-WRITE"
         url = f"{cls.base_url}/events/{topic}/users/policy-agent?timeout=15000&limit=100"
-        result = cls.send_message('GET',
-                                  'Get result from previous request',
-                                  url)
+        result = cls.send_message('GET', 'Get result from previous request', url)
         return result
 
     @classmethod
