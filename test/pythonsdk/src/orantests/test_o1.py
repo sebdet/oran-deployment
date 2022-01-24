@@ -78,6 +78,21 @@ def create_faults_structure(events):
     logger.info("Faults found in events: %s", faults_found_in_events)
     return faults_found_in_events
 
+def test_devices_in_sdnc():
+    """Verify that the devices are well defined in SDNC."""
+    logger.info("Verify if devices are well in SDNC")
+    for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+        logger.info("Verify if %s is well in SDNR", device)
+        assert OranSdnc.get_devices(device, settings.SDNC_BASICAUTH) == 200
+
+def test_device_faults_in_sdnc():
+    """Verify that the device faults are well defined in SDNC."""
+    logger.info("Verify is there is any events")
+    for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+        events = OranSdnc.get_events(settings.SDNC_BASICAUTH, device).json()
+        logger.info("Verify if %s has events", device)
+        assert int(events["data-provider:output"]["pagination"]["total"]) > 0
+
 def test_network_devices_registration_in_dmaap():
     """Validate that the devices are well registered in SDNR and forwarded to VES."""
     logger.info("Verify if SDNR sends well the RU registration to VES by checking in DMAAP")
@@ -113,16 +128,3 @@ def test_device_faults_in_dmaap():
     for sim_name in settings.NETWORK_SIMULATORS_DU_RU_LIST:
         logger.info("Check if %s has at least >=3 faults", sim_name)
         assert sim_name in faults_received and faults_received[sim_name] >= 3
-
-def test_devices_in_sdnc():
-	logger.info("Verify if devices are well in SDNC")
-	for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
-		logger.info("Verify if " +device+ " is well in SDNR")
-		assert(OranSdnc.get_devices(device,settings.SDNC_BASICAUTH) == 200)
-
-def test_event_in_sdnc():
-	logger.info("Verify is there is any events")
-	for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
-		events = OranSdnc.get_events(settings.SDNC_BASICAUTH, device).json()
-		logger.info("Verify if " + device + "has events")
-		assert(int(events["data-provider:output"]["pagination"]["total"]) > 0)

@@ -4,9 +4,8 @@
 """Onap Sdnc module."""
 
 from typing import Dict
-from oransdk.configuration import settings
 from onapsdk.sdnc.sdnc_element import SdncElement
-import requests
+from oransdk.configuration import settings
 
 class OranSdnc(SdncElement):
     """SDNC library."""
@@ -55,23 +54,20 @@ class OranSdnc(SdncElement):
 
     @classmethod
     def get_devices(cls, device_node, basic_auth: Dict[str, str]) -> int:
-
         """
-        Get Devices
+        Get Devices on SDNC.
 
-        Returns the status of the sdnc component
+        Returns:
+           the status of the sdnc component
         """
-
         url = f"{cls.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={device_node}"
-        status = cls.send_message('GET',
-                                       'Get status of Device connectivity',
-                                       url, basic_auth=basic_auth)
+        status = cls.send_message('GET', 'Get status of Device connectivity', url, basic_auth=basic_auth)
         return status.status_code
 
     @classmethod
     def get_events(cls, basic_auth: Dict[str, str], device):
         """
-        Create event in Sdnc.
+        Create device events in Sdnc.
 
         Args:
            topic: the event to create, in json format
@@ -80,5 +76,4 @@ class OranSdnc(SdncElement):
 
         """
         url = f"{cls.base_url}/rests/operations/data-provider:read-eventlog-list"
-        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "$
-
+        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "ascending"}],"pagination": {"size": 10,"page": 1}}}', basic_auth=basic_auth)
