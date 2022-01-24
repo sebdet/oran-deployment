@@ -32,19 +32,19 @@ def setup_simulators():
     # Do a first get to register the o1test/o1test user in DMAAP
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
-    dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 500, settings.DMAAP_GROUP, settings.DMAAP_USER)
+    dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER)
 
     network_simulators.start_network_simulators()
     network_simulators.wait_for_network_simulators_to_be_running()
     # Wait enough time to have at least the SDNR notifications sent
-    logger.info("Waiting 60s that SDNR sends all registration events to VES...")
-    time.sleep(60)
+    logger.info("Waiting 10s that SDNR sends all registration events to VES...")
+    time.sleep(10)
     logger.info("Enabling faults/events reporting on SDNR")
     network_simulators.enable_events_for_all_simulators()
     #time.sleep(3)
     # Preparing the DMaap to cache all the events for the fault topics.
     # If it exists already it clears all cached events.
-    dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 500, settings.DMAAP_GROUP, settings.DMAAP_USER)
+    dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER)
     logger.info("Waiting 180s to have registration and faults events in DMaap")
     time.sleep(180)
     logger.info("Test Session setup completed successfully")
@@ -81,14 +81,14 @@ def create_faults_structure(events):
 def test_devices_in_sdnc():
     """Verify that the devices are well defined in SDNC."""
     logger.info("Verify if devices are well in SDNC")
-    for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+    for device in settings.NETWORK_SIMULATORS_LIST:
         logger.info("Verify if %s is well in SDNR", device)
         assert OranSdnc.get_devices(device, settings.SDNC_BASICAUTH) == 200
 
 def test_device_faults_in_sdnc():
     """Verify that the device faults are well defined in SDNC."""
     logger.info("Verify is there is any events")
-    for device in settings.NETWORK_SIMULATOR_DEVICES_LIST:
+    for device in settings.NETWORK_SIMULATORS_DU_RU_LIST:
         events = OranSdnc.get_events(settings.SDNC_BASICAUTH, device).json()
         logger.info("Verify if %s has events", device)
         assert int(events["data-provider:output"]["pagination"]["total"]) > 0
