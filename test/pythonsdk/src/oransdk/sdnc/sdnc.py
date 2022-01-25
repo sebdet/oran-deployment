@@ -75,5 +75,5 @@ class OranSdnc(SdncElement):
            :param device:
 
         """
-        url = f"{cls.base_url}/rests/operations/data-provider:read-eventlog-list"
-        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "ascending"}],"pagination": {"size": 10,"page": 1}}}', basic_auth=basic_auth)
+        url = f"{cls.base_url}/rests/operations/data-provider:read-faultlog-list"
+        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "timestamp","sortorder": "descending"}],"pagination": {"size": 10,"page": 1}}}', basic_auth=basic_auth)

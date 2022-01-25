@@ -4,7 +4,6 @@
 """Module called by pytest."""
 import logging
 import logging.config
-import time
 import os
 from onapsdk.configuration import settings
 from smo.smo import Smo
@@ -27,9 +26,9 @@ def pytest_sessionstart():
     smo.wait_for_smo_to_be_running()
     ### Due to an Onap Ves/dmaap behavior !!! DU sims must send messages
     ### twice so we need to create/delete the sims
-    network_sims.start_network_simulators()
-    network_sims.wait_for_network_simulators_to_be_running()
-    time.sleep(3)
+#    network_sims.start_network_simulators()
+#    network_sims.wait_for_network_simulators_to_be_running()
+#    time.sleep(20)
     ## Now kill the simulators and restart them for the test session
     network_sims.stop_network_simulators()
     ###### END of FIRST start, now we can start the sims for the real tests.

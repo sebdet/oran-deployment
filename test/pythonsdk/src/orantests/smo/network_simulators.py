@@ -25,10 +25,6 @@ class NetworkSimulators():
 
     def start_network_simulators(self):
         """Start all simulators defined in resources_path."""
-        logger.info("Using the topology located in %s", self.resources_path)
-        logger.info("Clean up any network simulators")
-        cmd = "kubectl delete namespace network"
-        run(cmd, shell=True, check=False)
         logger.info("Start the network simulators")
         cmd = "kubectl create namespace network"
         check_output(cmd, shell=True).decode('utf-8')
@@ -44,8 +40,9 @@ class NetworkSimulators():
     @staticmethod
     def stop_network_simulators():
         """Stop the simulators."""
+        logger.info("Clean up any network simulators")
         cmd = "kubectl delete namespace network"
-        return check_output(cmd, shell=True).decode('utf-8')
+        run(cmd, shell=True, check=False)
 
     @staticmethod
     def is_network_simulators_up() -> bool:
