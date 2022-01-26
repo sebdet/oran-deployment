@@ -21,7 +21,6 @@ class OranDmaap(Dmaap):
 
         Args:
            topic: the topic to create, in json format
-           basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
 
         """
         url = f"{cls.base_url}/topics/create"

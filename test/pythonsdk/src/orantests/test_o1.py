@@ -34,11 +34,11 @@ def setup_simulators():
     # Do a first get to register the o1test/o1test user in DMAAP
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
-    dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER)
+    dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 1000, settings.DMAAP_GROUP, settings.DMAAP_USER)
 
     network_simulators.start_network_simulators()
     network_simulators.wait_for_network_simulators_to_be_running()
-  # ADDD D RESTART just in case
+  # ADD DU RESTART just in case
     # Wait enough time to have at least the SDNR notifications sent
     logger.info("Waiting 10s that SDNR sends all registration events to VES...")
     time.sleep(10)
@@ -48,9 +48,9 @@ def setup_simulators():
     time.sleep(10)
     # Preparing the DMaap to cache all the events for the fault topics.
     # If it exists already it clears all cached events.
-    dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER)
-    logger.info("Waiting 120s to have registration and faults events in DMaap")
-    time.sleep(120)
+    dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 1000, settings.DMAAP_GROUP, settings.DMAAP_USER)
+    logger.info("Waiting 180s to have registration and faults events in DMaap")
+    time.sleep(180)
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
