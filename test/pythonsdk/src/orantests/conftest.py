@@ -60,12 +60,13 @@ TOPIC_FAULT = '{"topicName": "unauthenticated.SEC_FAULT_OUTPUT"}'
 ###### Entry points of PYTEST Session
 def pytest_sessionstart():
     """Pytest calls it when starting a test session."""
+    logger.info("Check and wait for SMO to be running")
     smo.wait_for_smo_to_be_running()
-    logger.info("Dump %s",OranSdnc.get_events(settings.SDNC_BASICAUTH, "test"))
+    logger.info("Check and for for SDNC to be running")
     wait(lambda: OranSdnc.get_events(settings.SDNC_BASICAUTH, "test").status_code == 200, sleep_seconds=10, timeout_seconds=300, waiting_for="SDNC to be ready")
 
-#    dmaap.create_topic(TOPIC_PNFREG)
-#    dmaap.create_topic(TOPIC_FAULT)
+    dmaap.create_topic(TOPIC_PNFREG)
+    dmaap.create_topic(TOPIC_FAULT)
     ### Due to an Onap Ves/dmaap behavior !!! DU sims must send messages
     ### twice so we need to create/delete the sims
 #    network_sims.start_network_simulators()

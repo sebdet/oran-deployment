@@ -12,6 +12,7 @@ from onapsdk.configuration import settings
 from smo.network_simulators import NetworkSimulators
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.sdnc.sdnc import OranSdnc
+from waiting import wait
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -25,7 +26,6 @@ network_simulators = NetworkSimulators("./resources")
 dmaap = OranDmaap()
 test_session_timestamp = datetime.datetime.now()
 
-
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
     """Setup the simulators before the executing the tests."""
@@ -34,23 +34,22 @@ def setup_simulators():
     # Do a first get to register the o1test/o1test user in DMAAP
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
-    dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 1000, settings.DMAAP_GROUP, settings.DMAAP_USER)
-
+    wait(lambda: (dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
     network_simulators.start_network_simulators()
     network_simulators.wait_for_network_simulators_to_be_running()
   # ADD DU RESTART just in case
     # Wait enough time to have at least the SDNR notifications sent
-    logger.info("Waiting 10s that SDNR sends all registration events to VES...")
+    logger.info("Waiting 20s that SDNR sends all registration events to VES...")
     time.sleep(10)
     logger.info("Enabling faults/events reporting on SDNR")
     network_simulators.enable_events_for_all_simulators()
-    logger.info("Waiting 10s that the Dmaap faults topic is created...")
-    time.sleep(10)
+#    logger.info("Waiting 20s that the Dmaap faults topic is created...")
+#    time.sleep(20)
     # Preparing the DMaap to cache all the events for the fault topics.
     # If it exists already it clears all cached events.
-    dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 1000, settings.DMAAP_GROUP, settings.DMAAP_USER)
-    logger.info("Waiting 180s to have registration and faults events in DMaap")
-    time.sleep(180)
+    logger.info("Waiting 120s to have registration and faults events in DMaap")
+    time.sleep(120)
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
@@ -113,12 +112,19 @@ def test_network_devices_registration_in_dmaap():
     logger.info("Verify if SDNR sends well the RU registration to VES by checking in DMAAP")
     # As the user has been registered in DMAAP during test session init,
     # that call should return all sims registered by SDNR
-    events = dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()
+    all_registrations = []
+    events = []
+
+    while (events := dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()) != []:
+        logger.info("Getting a first set of event: %s", events)
+        all_registrations += events
+
+    logger.info("ALl registration events received: %s", all_registrations)
     # events should be a list of messages
     logger.info("Verify if the number of events is well >= to the number of expected devices")
     # The DU can send multiple times message to VES and SDNR can send multiple time event for RU
-    assert len(events) >= (len(settings.NETWORK_SIMULATORS_DU_RU_LIST))
-    devices_registered = create_registration_structure(events)
+    assert len(all_registrations) >= (len(settings.NETWORK_SIMULATORS_DU_RU_LIST))
+    devices_registered = create_registration_structure(all_registrations)
 
     # Each device must be at least one time in the event list
     for sim_name in settings.NETWORK_SIMULATORS_DU_RU_LIST:
@@ -134,7 +140,7 @@ def test_network_devices_registration_in_dmaap():
 def test_device_faults_in_dmaap():
     """Verify that device faults are well sent to DMAAP by SDNR."""
     logger.info("Verify if SDNR forwards well the faults sent by the simulators to DMAAP")
-    events = dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()
+    events = dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()
     logger.info("Verify if faults have well been received for each device")
     assert len(events) > 0
     faults_received = create_faults_structure(events)
