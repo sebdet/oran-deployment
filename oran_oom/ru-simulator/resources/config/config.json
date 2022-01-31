@@ -59,7 +59,7 @@
     },
 
     "datastore-populate-rules": {
-        "random-generation-enabled": true,
+        "random-generation-enabled": false,
 
         "pre-generated-operational-data": [
             "../deploy/data/ietf-hardware-operational.json",

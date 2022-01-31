@@ -68,7 +68,7 @@ DMAAP_URL       = "http://192.168.1.39:3904"
 NBI_URL         = "https://nbi.api.simpledemo.onap.org:30274"
 NBI_API_VERSION = "/nbi/api/v4"
 
-POLICY_BASICAUTH = { 'username': 'healthcheck', 'password': 'zb!XztG34' }
+POLICY_BASICAUTH = { 'username': 'policyadmin', 'password': 'zb!XztG34' }
 SDNC_BASICAUTH = { 'username': 'admin', 'password': 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U' }
 
 DMAAP_URL = "http://"+subprocess.run("kubectl get services message-router -n onap |grep message-router | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"

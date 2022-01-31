@@ -26,16 +26,45 @@ import time
 import subprocess
 import logging
 import logging.config
+import os
+import pytest
+from smo.network_simulators import NetworkSimulators
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
 
+# Set working dir as python script location
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+
+
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test APEX policy")
 dmaap = OranDmaap()
 policy = OranPolicy()
+network_simulators = NetworkSimulators("./resources")
+
+@pytest.fixture(scope="module", autouse=True)
+def setup_simulators():
+    """Setup the simulators before the executing the tests."""
+    logger.info("Test class setup for Apex tests")
+
+    network_simulators.start_network_simulators()
+    network_simulators.wait_for_network_simulators_to_be_running()
+
+    # Wait enough time to have at least the SDNR notifications sent
+    logger.info("Waiting 10s that SDNR sends all registration events to VES...")
+    time.sleep(10)
+    logger.info("Test Session setup completed successfully")
+
+    ### Cleanup code
+    yield
+    network_simulators.stop_network_simulators()
+    logger.info("Test Session cleanup done")
+
 
 def create_new_topic():
     """Create new topic."""
@@ -117,9 +146,8 @@ def deploy_policy():
 def check_sdnc():
     """Verify that apex has changed the sdnc status."""
     logger.info("Check O-du/O-ru status")
-    SDNC_BASICAUTH = {'username': 'admin', 'password': 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U'}
     sdnc = OranSdnc()
-    status = sdnc.get_odu_oru_status("o-du-1122", "o-ru-11221", SDNC_BASICAUTH)
+    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-1", settings.SDNC_BASICAUTH)
     if status["o-ran-sc-du-hello-world:du-to-ru-connection"][0]["administrative-state"] == "LOCKED":
         logger.info("The initial state of o-du o-ru connection is LOCKED")
 
@@ -134,7 +162,7 @@ def check_sdnc():
         time.sleep(2)
 
     logger.info("Check O-du/O-ru status again")
-    status = sdnc.get_odu_oru_status("o-du-1122", "o-ru-11221", SDNC_BASICAUTH)
+    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-1", settings.SDNC_BASICAUTH)
     if status["o-ran-sc-du-hello-world:du-to-ru-connection"][0]["administrative-state"] == "UNLOCKED":
         logger.info("The updated state of o-du o-ru connection is UNLOCKED")
 
