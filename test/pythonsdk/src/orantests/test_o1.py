@@ -46,6 +46,10 @@ network_simulators = NetworkSimulators("./resources")
 dmaap = OranDmaap()
 test_session_timestamp = datetime.datetime.now()
 
+TOPIC_PNFREG = '{"topicName": "unauthenticated.VES_PNFREG_OUTPUT"}'
+
+TOPIC_FAULT = '{"topicName": "unauthenticated.SEC_FAULT_OUTPUT"}'
+
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
     """Setup the simulators before the executing the tests."""
@@ -54,6 +58,8 @@ def setup_simulators():
     # Do a first get to register the o1test/o1test user in DMAAP
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
+    dmaap.create_topic(TOPIC_PNFREG)
+    dmaap.create_topic(TOPIC_FAULT)
     wait(lambda: (dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
     wait(lambda: (dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
     network_simulators.start_network_simulators()

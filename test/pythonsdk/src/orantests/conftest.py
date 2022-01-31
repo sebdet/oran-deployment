@@ -26,6 +26,7 @@ import logging
 import logging.config
 import os
 from oransdk.dmaap.dmaap import OranDmaap
+from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from onapsdk.configuration import settings
 from waiting import wait
@@ -44,38 +45,24 @@ network_sims = NetworkSimulators("./resources")
 smo = Smo()
 dmaap = OranDmaap()
 sdnc = OranSdnc()
+policy = OranPolicy()
 
-TOPIC_PNFREG = '{"topicName": "unauthenticated.VES_PNFREG_OUTPUT"}'
+def policy_component_ready():
+    """Check if components are ready."""
+    logger.info("Verify policy components are ready")
+    policy_ready = {"api_ready": False, "pap_ready": False, "apex_ready": False}
+    policy_status = policy.get_components_status(settings.POLICY_BASICAUTH)
+    if (policy_status["api"]["healthy"] and not policy_ready["api_ready"]):
+        logger.info("Policy Api is ready")
+        policy_ready["api_ready"] = True
+    if (policy_status["pap"]["healthy"] and not policy_ready["pap_ready"]):
+        logger.info("Policy Pap is ready")
+        policy_ready["pap_ready"] = True
+    if (policy_status["pdps"]["apex"][0]["healthy"] == "HEALTHY" and not policy_ready["apex_ready"]):
+        logger.info("Policy Apex is ready")
+        policy_ready["apex_ready"] = True
+    return policy_ready["api_ready"] and policy_ready["pap_ready"] and policy_ready["apex_ready"]  
 
-TOPIC_FAULT = '{"topicName": "unauthenticated.SEC_FAULT_OUTPUT"}'
-
-#TOPIC_PNFREG = {
-#    "owner": "",
-#    "readerAcl": {
-#        "enabled": "true",
-#        "users": []
-#    },
-#    "name": "unauthenticated.VES_PNFREG_OUTPUT",
-#    "description": "",
-#    "writerAcl": {
-#        "enabled": "true",
-#        "users": []
-#    }
-#}
-
-#TOPIC_FAULT = {
-#    "owner": "",
-#    "readerAcl": {
-#        "enabled": "true",
-#        "users": []
-#    },
-#    "name": "unauthenticated.SEC_FAULT_OUTPUT",
-#    "description": "",
-#    "writerAcl": {
-#        "enabled": "true",
-#        "users": []
-#    }
-#}
 
 ###### Entry points of PYTEST Session
 def pytest_sessionstart():
@@ -84,14 +71,8 @@ def pytest_sessionstart():
     smo.wait_for_smo_to_be_running()
     logger.info("Check and for for SDNC to be running")
     wait(lambda: OranSdnc.get_events(settings.SDNC_BASICAUTH, "test").status_code == 200, sleep_seconds=10, timeout_seconds=300, waiting_for="SDNC to be ready")
-
-    dmaap.create_topic(TOPIC_PNFREG)
-    dmaap.create_topic(TOPIC_FAULT)
-    ### Due to an Onap Ves/dmaap behavior !!! DU sims must send messages
-    ### twice so we need to create/delete the sims
-#    network_sims.start_network_simulators()
-#    network_sims.wait_for_network_simulators_to_be_running()
-#    time.sleep(20)
-    ## Now kill the simulators and restart them for the test session
+    wait(lambda: policy_component_ready(), sleep_seconds=10, timeout_seconds=300, waiting_for="Policy to be ready")
+    ## Just kill any simulators that could already be runnin
     network_sims.stop_network_simulators()
     ###### END of FIRST start, now we can start the sims for the real tests.
+    logger.info("Tests session setup is ready")
