@@ -2,7 +2,7 @@
 image:
   repository: 'nexus3.o-ran-sc.org:10004/o-ran-sc'
   name: a1-simulator
-  tag: 2.2.0
+  tag: 2.3.0
   pullPolicy: IfNotPresent
 
 service:
