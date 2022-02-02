@@ -1,6 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# SPDX-License-Identifier: Apache-2.0
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO PACKAGE - PYTHONSDK TESTS
+# ================================================================================
+# Copyright (C) 2021-2022 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+#
+###
 """Onap Sdnc module."""
 
 from typing import Dict
@@ -31,7 +51,7 @@ class OranSdnc(SdncElement):
     @classmethod
     def get_odu_oru_status(cls,
                            odu_node,
-                           oru_node,
+                           radio_unit,
                            basic_auth: Dict[str, str]) -> dict:
         """
         Get status of SDNC component.
@@ -43,11 +63,9 @@ class OranSdnc(SdncElement):
            the status of the SDNC component
 
         """
-        url = f"{cls.base_url}/rests/data/network-topology:network-topology/"\
-              + f"topology=topology-netconf/node={odu_node}/yang-ext:mount/"\
-              + f"o-ran-sc-du-hello-world:network-function/du-to-ru-connection={oru_node}"
+        url = f"{cls.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={odu_node}/yang-ext:mount/o-ran-sc-du-hello-world:network-function/distributed-unit-functions={odu_node}/radio-resource-management-policy-ratio={radio_unit}"
         status = cls.send_message_json('GET',
-                                       'Get status of Odu Oru connectivity',
+                                       'Get status of Odu connectivity',
                                        url,
                                        basic_auth=basic_auth)
         return status
@@ -75,5 +93,5 @@ class OranSdnc(SdncElement):
            :param device:
 
         """
-        url = f"{cls.base_url}/rests/operations/data-provider:read-eventlog-list"
-        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": "' + device + '"}],"sortorder": [{"property": "node-id","sortorder": "ascending"}],"pagination": {"size": 10,"page": 1}}}', basic_auth=basic_auth)
+        url = f"{cls.base_url}/rests/operations/data-provider:read-faultlog-list"
+        return cls.send_message('POST', 'Get SDNC events', url, data='{"input": {"filter": [ {"property": "node-id", "filtervalue": " ' + device + ' "}],"sortorder":[{"property": "timestamp","sortorder": "descending"}],"pagination": {"size": 10,"page": 1}}}', headers=cls.header, basic_auth=basic_auth)

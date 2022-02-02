@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: Apache-2.0
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO PACKAGE - PYTHONSDK TESTS
+# ================================================================================
+# Copyright (C) 2021-2022 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+#
+###
 
 """NetworkSimulators module."""
 import logging
@@ -25,10 +46,6 @@ class NetworkSimulators():
 
     def start_network_simulators(self):
         """Start all simulators defined in resources_path."""
-        logger.info("Using the topology located in %s", self.resources_path)
-        logger.info("Clean up any network simulators")
-        cmd = "kubectl delete namespace network"
-        run(cmd, shell=True, check=False)
         logger.info("Start the network simulators")
         cmd = "kubectl create namespace network"
         check_output(cmd, shell=True).decode('utf-8')
@@ -44,8 +61,9 @@ class NetworkSimulators():
     @staticmethod
     def stop_network_simulators():
         """Stop the simulators."""
+        logger.info("Clean up any network simulators")
         cmd = "kubectl delete namespace network"
-        return check_output(cmd, shell=True).decode('utf-8')
+        run(cmd, shell=True, check=False)
 
     @staticmethod
     def is_network_simulators_up() -> bool:
