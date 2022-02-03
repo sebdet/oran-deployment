@@ -138,7 +138,7 @@ def test_network_devices_registration_in_dmaap():
     all_registrations = []
     events = []
 
-    while (events := dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNGREG, 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()) != []:
+    while (events := dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()) != []:
         logger.info("Getting a first set of event: %s", events)
         all_registrations += events
 
