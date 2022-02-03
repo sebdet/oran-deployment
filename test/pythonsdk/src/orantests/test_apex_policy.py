@@ -48,7 +48,6 @@ dmaap = OranDmaap()
 policy = OranPolicy()
 network_simulators = NetworkSimulators("./resources")
 
-TOPIC_FAULT = '{"topicName": "unauthenticated.SEC_FAULT_OUTPUT"}'
 policy_id = "onap.policies.native.apex.LinkMonitor"
 policy_version = "1.0.0"
 policy_type_id = "onap.policies.native.Apex"
@@ -64,16 +63,18 @@ def setup_simulators():
     """Setup the simulators before the executing the tests."""
     logger.info("Test class setup for Apex tests")
 
-    dmaap.create_topic(TOPIC_FAULT)
+    dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
+    dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
     # Purge the FAULT TOPIC
-    wait(lambda: (dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
 
     network_simulators.start_network_simulators()
     network_simulators.wait_for_network_simulators_to_be_running()
 
     # Wait enough time to have at least the SDNR notifications sent
-    logger.info("Waiting 20s that SDNR sends all registration events to VES...")
-    time.sleep(20)
+    logger.info("Waiting 10s that SDNR sends all registration events to VES...")
+    time.sleep(10)
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
@@ -121,25 +122,23 @@ def check_policy_deployment():
 #        return True
 #    return False
 
-def check_sdnc():
-    """Verify that apex has changed the sdnc status."""
+def send_dmaap_event():
+    event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
+    dmaap.send_link_failure_event(event)
+
+def test_apex_policy():
+    """Test the apex policy."""
     logger.info("Check O-du/O-ru status")
     sdnc = OranSdnc()
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "locked"
-
-    event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
-    dmaap.send_link_failure_event(event)
-
-#    wait(lambda: policy_log_detected(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy apex log")
+#    for i in range(60):
+    send_dmaap_event()
+#        time.sleep(5)
+    create_policy()
+    deploy_policy()
+    time.sleep(10)
 
     logger.info("Check O-du/O-ru status again")
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"
-
-def test_apex_policy():
-    """Test the apex policy."""
-    create_policy()
-    deploy_policy()
-    time.sleep(10)
-    check_sdnc()
