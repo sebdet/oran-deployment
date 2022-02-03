@@ -113,15 +113,6 @@ def check_policy_deployment():
     logger.info("Policy deployement not yet OK")
     return False
 
-#def policy_log_detected():
-#    logger.info("Wait for a while for Apex engine to be ready before sending Dmaap event")
-#    event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
-#    dmaap.send_link_failure_event(event)
-#    if int(subprocess.getoutput('kubectl logs onap-policy-apex-pdp-0 -n onap | grep "Task Selection Execution: \'LinkMonitorPolicy:0.0.1:NULL:LinkFailureOrClearedState\'" | wc -l')) > 0:
-#        logger.info("Apex engine is ready. LinkFailureEvent sent to Dmaap")
-#        return True
-#    return False
-
 def send_dmaap_event():
     event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
     dmaap.send_link_failure_event(event)
@@ -132,9 +123,7 @@ def test_apex_policy():
     sdnc = OranSdnc()
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "locked"
-#    for i in range(60):
     send_dmaap_event()
-#        time.sleep(5)
     create_policy()
     deploy_policy()
     time.sleep(10)

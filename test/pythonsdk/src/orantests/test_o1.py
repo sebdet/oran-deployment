@@ -64,7 +64,7 @@ def setup_simulators():
   # ADD DU RESTART just in case
     # Wait enough time to have at least the SDNR notifications sent
     logger.info("Waiting 20s that SDNR sends all registration events to VES...")
-    time.sleep(10)
+    time.sleep(20)
     logger.info("Enabling faults/events reporting on SDNR")
     network_simulators.enable_events_for_all_simulators()
 #    logger.info("Waiting 20s that the Dmaap faults topic is created...")
