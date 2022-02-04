@@ -93,4 +93,3 @@ DMAAP_TOPIC_PNFREG = "unauthenticated.VES_PNFREG_OUTPUT"
 DMAAP_TOPIC_PNFREG_JSON = '{"topicName": "' + DMAAP_TOPIC_PNFREG + '"}'
 DMAAP_TOPIC_FAULT = "unauthenticated.SEC_FAULT_OUTPUT"
 DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '"}'
-

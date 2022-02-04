@@ -25,11 +25,11 @@
 import logging
 import logging.config
 import os
-from oransdk.dmaap.dmaap import OranDmaap
-from oransdk.policy.policy import OranPolicy, PolicyType
-from oransdk.sdnc.sdnc import OranSdnc
 from onapsdk.configuration import settings
 from waiting import wait
+from oransdk.dmaap.dmaap import OranDmaap
+from oransdk.policy.policy import OranPolicy
+from oransdk.sdnc.sdnc import OranSdnc
 from smo.smo import Smo
 from smo.network_simulators import NetworkSimulators
 
@@ -61,7 +61,7 @@ def policy_component_ready():
     if (policy_status["pdps"]["apex"][0]["healthy"] == "HEALTHY" and not policy_ready["apex_ready"]):
         logger.info("Policy Apex is ready")
         policy_ready["apex_ready"] = True
-    return policy_ready["api_ready"] and policy_ready["pap_ready"] and policy_ready["apex_ready"]  
+    return policy_ready["api_ready"] and policy_ready["pap_ready"] and policy_ready["apex_ready"]
 
 
 ###### Entry points of PYTEST Session

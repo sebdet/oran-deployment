@@ -29,10 +29,10 @@ import os
 import time
 import pytest
 from onapsdk.configuration import settings
+from waiting import wait
 from smo.network_simulators import NetworkSimulators
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.sdnc.sdnc import OranSdnc
-from waiting import wait
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)

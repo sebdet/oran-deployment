@@ -23,18 +23,17 @@
 ###
 """Apex policy tests module."""
 import time
-import subprocess
 import logging
 import logging.config
 import os
 import pytest
 from waiting import wait
-from smo.network_simulators import NetworkSimulators
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
+from smo.network_simulators import NetworkSimulators
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -53,10 +52,10 @@ policy_version = "1.0.0"
 policy_type_id = "onap.policies.native.Apex"
 policy_type_version = "1.0.0"
 policy_type = PolicyType(type=policy_type_id, version=policy_type_version)
-engine_name="LinkMonitorApexEngine"
-engine_version="0.0.1"
-engine_id="101"
-deployment_port="12345"
+engine_name = "LinkMonitorApexEngine"
+engine_version = "0.0.1"
+engine_id = "101"
+deployment_port = "12345"
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
@@ -102,6 +101,7 @@ def deploy_policy():
     wait(lambda: check_policy_deployment(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy Deployment to be OK")
 
 def check_policy_deployment():
+    """Verify the policy deployment."""
     logger.info("Verify if the policy is deployed")
     policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
 
@@ -114,6 +114,7 @@ def check_policy_deployment():
     return False
 
 def send_dmaap_event():
+    """Send a event to Dmaap that should trigger the apex policy."""
     event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
     dmaap.send_link_failure_event(event)
 

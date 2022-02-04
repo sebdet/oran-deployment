@@ -27,7 +27,7 @@ import logging
 
 import logging.config
 
-from subprocess import check_output,run
+from subprocess import check_output, run
 from onapsdk.configuration import settings
 
 logging.config.dictConfig(settings.LOG_CONFIG)
@@ -40,7 +40,7 @@ class Onap():
     def is_onap_up(cls) -> bool:
         """Verify if ONAP platform is up or not."""
         cmd = "kubectl get pods --field-selector 'status.phase=Failed' -n onap -o name | xargs kubectl delete -n onap"
-        run(cmd, shell=True)
+        run(cmd, shell=True, check=False)
         cmd = "kubectl get pods --field-selector status.phase!=Running -n onap | wc -l"
         result = check_output(cmd, shell=True).decode('utf-8')
         logger.info("Number of Onap pods not in Running state (expected <= 8): %s", result)
