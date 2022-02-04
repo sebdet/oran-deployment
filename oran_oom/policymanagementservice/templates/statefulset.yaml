@@ -41,6 +41,21 @@ spec:
         release: {{ .Release.Name }}
     spec:
       hostname: {{ include "common.name.policymanagementservice" . }}
+      initContainers:
+      - name: copy
+        image: busybox:1.28
+        command:
+        - /bin/sh
+        - -c
+        - FILE=/var/policy-management-service/application_configuration.json;
+          if [ ! -f $FILE ]; then
+            cp  /etc/app/policy-management-service/initialdata/application_configuration.json $FILE;
+          fi
+        volumeMounts:
+        - name: {{ include "common.name.policymanagementservice" . }}-vardata
+          mountPath: "/var/policy-management-service"
+        - name: {{ include "common.name.policymanagementservice" . }}-policy-data
+          mountPath: /etc/app/policy-management-service/initialdata
       containers:
       - name: {{ include "common.container.policymanagementservice" . }}
         image: {{ .Values.policymanagementservice.image.registry }}/{{ .Values.policymanagementservice.image.name }}:{{ .Values.policymanagementservice.image.tag }}
@@ -67,7 +82,7 @@ spec:
         - name: {{ include "common.name.policymanagementservice" . }}-policy-config
           mountPath: /opt/app/policy-agent/config
         - name: {{ include "common.name.policymanagementservice" . }}-policy-data
-          mountPath: /opt/app/policy-agent/data
+          mountPath: /etc/app/policy-management-service/initialdata
       volumes:
         - name: {{ include "common.name.policymanagementservice" . }}-policy-config
           configMap:
