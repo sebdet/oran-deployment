@@ -1,0 +1,9 @@
+apiVersion: v2
+name: oran-tests-suite
+version: 1.0.0
+appVersion: 1.0.0
+description: Open Radio Access Network (ORAN)
+home: https://www.o-ran.org/
+sources:
+- https://gerrit.o-ran-sc.org/r/#/admin/projects/
+kubeVersion: ">=1.19.0-0"
