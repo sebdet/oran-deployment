@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # Static Defaults
-replicaCount: 1
 image:
   repository: docker.io
   name: ubuntu
@@ -29,3 +28,4 @@ service:
   ports:
     port: 830
     nodePort: 30901
+

@@ -15,8 +15,7 @@
                 "type": "source-input"
             }
         },
-        "tags": "active-streams",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "active-streams"
     },
     "aic-cloud-region": {
         "group": "default",
@@ -31,8 +30,7 @@
                 "type": "source-input"
             }
         },
-        "tags": "aic-cloud-region",
-        "updated-by": "Singal, Kapil <ks220y@att.com>"
+        "tags": "aic-cloud-region"
     },
     "config-deploy-setup": {
         "group": "default",
@@ -90,8 +88,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "dcae_collector_ip",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "dcae_collector_ip"
     },
     "dcae_collector_port": {
         "group": "default",
@@ -129,8 +126,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "dcae_collector_port",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "dcae_collector_port"
     },
     "demo_artifacts_version": {
         "group": "default",
@@ -168,8 +164,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "demo_artifacts_version",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "demo_artifacts_version"
     },
     "int_private1_net_cidr": {
         "group": "default",
@@ -218,8 +213,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "int_private1_net_cidr",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "int_private1_net_cidr"
     },
     "int_private2_net_cidr": {
         "group": "default",
@@ -268,8 +262,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "int_private2_net_cidr",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "int_private2_net_cidr"
     },
     "k8s-rb-config-name": {
         "group": "default",
@@ -529,8 +522,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "management-prefix-id",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "management-prefix-id"
     },
     "onap_private_net_cidr": {
         "group": "default",
@@ -579,8 +571,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "onap_private_net_cidr",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "onap_private_net_cidr"
     },
     "private1-prefix-id": {
         "group": "default",
@@ -629,8 +620,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "private1-prefix-id",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "private1-prefix-id"
     },
     "private2-prefix-id": {
         "group": "default",
@@ -679,8 +669,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "private2-prefix-id",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "private2-prefix-id"
     },
     "put-active-streams": {
         "group": "default",
@@ -718,8 +707,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "put-active-streams",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "put-active-streams"
     },
     "service-instance-id": {
         "group": "default",
@@ -780,8 +768,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "service-instance-id, tosca.datatypes.Root, data_type",
-        "updated-by": "Singal, Kapil <ks220y@att.com>"
+        "tags": "service-instance-id, tosca.datatypes.Root, data_type"
     },
     "vf-module-id": {
         "group": "default",
@@ -818,8 +805,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "vf-module-id",
-        "updated-by": "Singal, Kapil <ks220y@att.com>"
+        "tags": "vf-module-id"
     },
     "vf-module-label": {
         "group": "default",
@@ -853,8 +839,7 @@
                 "type": "source-db"
             }
         },
-        "tags": "vf-module-label",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "vf-module-label"
     },
     "vf-module-model-customization-uuid": {
         "group": "default",
@@ -872,8 +857,7 @@
                 "type": "source-input"
             }
         },
-        "tags": "vf-module-model-customization-uuid",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "vf-module-model-customization-uuid"
     },
     "vf-module-model-invariant-uuid": {
         "group": "default",
@@ -1051,8 +1035,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "vf-naming-policy",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "vf-naming-policy"
     },
     "vnf-id": {
         "group": "default",
@@ -1090,8 +1073,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "vnf-id",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "vnf-id"
     },
     "vnf_name": {
         "group": "default",
@@ -1129,8 +1111,7 @@
                 "type": "source-rest"
             }
         },
-        "tags": "vnf_name",
-        "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>"
+        "tags": "vnf_name"
     },
     "vpg-management-port": {
         "group": "default",
@@ -1187,7 +1168,6 @@
                 "type": "source-rest"
             }
         },
-        "tags": "vpg_onap_private_ip_0",
-        "updated-by": "Singal, Kapil <ks220y@att.com>"
+        "tags": "vpg_onap_private_ip_0"
     }
 }

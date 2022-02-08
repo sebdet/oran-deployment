@@ -25,4 +25,4 @@
 
 kubectl create namespace tests
 echo  '### Installing ORAN Tests part ###'
-helm install --debug oran-tests local/oran-tests --namespace tests -f $1
+helm install --debug oran-tests-suite local/oran-tests-suite --namespace tests -f $1
