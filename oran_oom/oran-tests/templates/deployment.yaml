@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: {{ .Values.oranTests.name }}
   labels:
@@ -21,7 +21,7 @@ metadata:
     release: {{ .Release.Name }}
     chart: {{ .Chart.Name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  manualSelector: true
   selector:
     matchLabels:
       tests-name: {{ .Values.oranTests.name }}
@@ -35,6 +35,7 @@ spec:
         checksum/config: {{ print .Values | sha256sum }}
     spec:    
       hostname: "{{ .Values.oranTests.name }}"
+      restartPolicy: Never
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
@@ -53,16 +54,20 @@ spec:
           args:
             - apt-get update -y;
               DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata;
-              apt-get install git -y;
-              apt-get install snapd -y;
+              apt-get install git wget sudo -y;
+              wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl;
+              mv kubectl /usr/bin;
+              chmod a+x /usr/bin/kubectl;
+              kubectl version;
+
               cd /opt;
-              git clone "https://github.com/sebdet/oran-deployment.git";
+              git clone --recursive "https://github.com/sebdet/oran-deployment.git";
               cd /opt/oran-deployment;
               git reset --hard {{ .Values.oranTests.commitId }};
-              cd test/pythonsdk;
+              /opt/oran-deployment/scripts/layer-0/0-setup-tests-env.sh;
+              /opt/oran-deployment/scripts/layer-0/0-setup-charts-museum.sh;
+              /opt/oran-deployment/scripts/layer-0/0-setup-helm3.sh;
+              /opt/oran-deployment/scripts/layer-1/1-build-all-charts.sh;
 
-              snap install kubectl --classic --channel=1.22/stable;
-              apt-get install python3.8 -y;
-              apt-get install python3-pip -y;
-              pip3 install tox;
+              cd test/pythonsdk;
               tox;
