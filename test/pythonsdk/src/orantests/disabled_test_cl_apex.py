@@ -128,7 +128,7 @@ def test_cl_oru_recovery():
     verify_topic_created()
 
     #tosca_template = jinja_env().get_template("ToscaPolicy.json.j2").render(policyId=policy_id, policyVersion=policy_version, policyTypeId=policy_type_id, policyTypeVersion=policy_type_version, engineName=engine_name, engineVersion=engine_version, engineId=engine_id, deploymentPort=deployment_port, dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
-    tosca_template = jinja_env().get_template("commission_apex_new.json.j2").render()
+    tosca_template = jinja_env().get_template("commission_apex.json.j2").render()
 
     response = upload_commission(tosca_template)
     assert response["errorDetails"] is None
@@ -145,8 +145,8 @@ def test_cl_oru_recovery():
     assert verify_instance_status("RUNNING")
 
     sdnc = OranSdnc()
-    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-1", settings.SDNC_BASICAUTH)
-    assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"
+    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
+    assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "locked"
 
     send_dmaap_event()
 
@@ -154,7 +154,7 @@ def test_cl_oru_recovery():
 
     time.sleep(10)
     logger.info("Check O-du/O-ru status again")
-    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-1", settings.SDNC_BASICAUTH)
+    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"
 
     response = change_instance_status("PASSIVE")

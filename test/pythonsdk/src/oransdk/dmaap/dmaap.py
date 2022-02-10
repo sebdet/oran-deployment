@@ -1,10 +1,30 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# SPDX-License-Identifier: Apache-2.0
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO PACKAGE - PYTHONSDK TESTS
+# ================================================================================
+# Copyright (C) 2021-2022 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+#
+###
 """Oran Dmaap module."""
 
-from oransdk.configuration import settings
 from onapsdk.dmaap.dmaap import Dmaap
+from oransdk.configuration import settings
 
 class OranDmaap(Dmaap):
     """Dmaap library provides functions for getting events from Dmaap."""
@@ -21,7 +41,6 @@ class OranDmaap(Dmaap):
 
         Args:
            topic: the topic to create, in json format
-           basic_auth: (Dict[str, str]) for example:{ 'username': 'bob', 'password': 'secret' }
 
         """
         url = f"{cls.base_url}/topics/create"
@@ -65,8 +84,7 @@ class OranDmaap(Dmaap):
 
         """
         url = f"{cls.base_url}/events/{topic}/{dmaap_group}/{dmaap_user}?timeout={timeout}"
-        return cls.send_message('GET',
-                                  'Get payload of specific topic', url)
+        return cls.send_message('GET', 'Get payload of specific topic', url)
 
     @classmethod
     def get_result(cls) -> str:
@@ -79,9 +97,7 @@ class OranDmaap(Dmaap):
         """
         topic = "A1-POLICY-AGENT-WRITE"
         url = f"{cls.base_url}/events/{topic}/users/policy-agent?timeout=15000&limit=100"
-        result = cls.send_message('GET',
-                                  'Get result from previous request',
-                                  url)
+        result = cls.send_message('GET', 'Get result from previous request', url)
         return result
 
     @classmethod

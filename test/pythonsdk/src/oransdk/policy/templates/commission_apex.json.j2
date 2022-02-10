@@ -178,7 +178,7 @@ entity that generated the ONSET event will be the target.
                 "eventNameFilter": "LinkFailureOutputEvent",
                 "carrierTechnologyParameters": {
                   "parameters": {
-                    "url": "http://sdnc-oam:8282/rests/data/network-topology:network-topology/topology=topology-netconf/node={OduId}/yang-ext:mount/o-ran-sc-du-hello-world:network-function/distributed-unit-functions={OduId}/radio-resource-management-policy-ratio=rrm-pol-1",
+                    "url": "http://sdnc-oam:8282/rests/data/network-topology:network-topology/topology=topology-netconf/node={OduId}/yang-ext:mount/o-ran-sc-du-hello-world:network-function/distributed-unit-functions={OduId}/radio-resource-management-policy-ratio=rrm-pol-2",
                     "httpMethod": "PUT",
                     "httpHeaders": [
                       [
@@ -1652,7 +1652,7 @@ var oduId = executor.inFields.get(\"OduId\");
 var unlockMessageArray = new java.util.ArrayList();
 for (var i = 0; i < 1; i++) {
     unlockMessageArray.add({
-      \"id\":\"rrm-pol-1\",
+      \"id\":\"rrm-pol-2\",
       \"radio_DasH_resource_DasH_management_DasH_policy_DasH_max_DasH_ratio\":25,
       \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members\":
           [
@@ -1664,7 +1664,7 @@ for (var i = 0; i < 1; i++) {
               }
           ],
       \"radio_DasH_resource_DasH_management_DasH_policy_DasH_min_DasH_ratio\":15,
-      \"user_DasH_label\":\"rrm-pol-1\",
+      \"user_DasH_label\":\"rrm-pol-2\",
       \"resource_DasH_type\":\"prb\",
       \"radio_DasH_resource_DasH_management_DasH_policy_DasH_dedicated_DasH_ratio\":20,
       \"administrative_DasH_state\":\"unlocked\"

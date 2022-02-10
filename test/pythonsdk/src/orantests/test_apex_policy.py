@@ -1,114 +1,134 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: Apache-2.0
-
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO PACKAGE - PYTHONSDK TESTS
+# ================================================================================
+# Copyright (C) 2021-2022 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+#
+###
+"""Apex policy tests module."""
 import time
-import subprocess
 import logging
 import logging.config
+import os
+import pytest
+from waiting import wait
 from onapsdk.configuration import settings
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
+from smo.network_simulators import NetworkSimulators
+
+# Set working dir as python script location
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test APEX policy")
+dmaap = OranDmaap()
+policy = OranPolicy()
+network_simulators = NetworkSimulators("./resources")
 
-def test_a1():
-    dmaap = OranDmaap()
-    logger.info("Create new topic")
-    topic = '{  "topicName": "unauthenticated.SEC_FAULT_OUTPUT",  "topicDescription": "test topic",  "partitionCount": 1,  "replicationCnCount": 1,  "transactionEnabled": "false"}'
-    response = dmaap.create_topic(topic)
-    logger.info("response is: %s", response)
+policy_id = "onap.policies.native.apex.LinkMonitor"
+policy_version = "1.0.0"
+policy_type_id = "onap.policies.native.Apex"
+policy_type_version = "1.0.0"
+policy_type = PolicyType(type=policy_type_id, version=policy_type_version)
+engine_name = "LinkMonitorApexEngine"
+engine_version = "0.0.1"
+engine_id = "101"
+deployment_port = "12345"
 
-    logger.info("Verify topic created")
-    topiclist = dmaap.get_all_topics({})
-    topic_created = False
-    for topic in topiclist:
-      if topic["topicName"] == "unauthenticated.SEC_FAULT_OUTPUT":
-          topic_created = True
-          break
+@pytest.fixture(scope="module", autouse=True)
+def setup_simulators():
+    """Setup the simulators before the executing the tests."""
+    logger.info("Test class setup for Apex tests")
 
-    if (topic_created):
-          logger.info("Topic created successfully")
-    else:
-          logger.info("Topic creation failed")
+    dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
+    dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
+    # Purge the FAULT TOPIC
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
 
+    network_simulators.start_network_simulators()
+    network_simulators.wait_for_network_simulators_to_be_running()
 
-    logger.info("Verify policy components are ready")
-    policy = OranPolicy()
-    policy_ready = {"api_ready": False, "pap_ready": False, "apex_ready": False}
-    for x in range(60):
-        policy_status = policy.get_components_status(settings.POLICY_BASICAUTH)
-        if (policy_status["api"]["healthy"] and policy_ready["api_ready"] == False):
-            logger.info("Policy Api is ready")
-            policy_ready["api_ready"] = True
-        if (policy_status["pap"]["healthy"] and policy_ready["pap_ready"] == False):
-            logger.info("Policy Pap is ready")
-            policy_ready["pap_ready"] = True
-        if (policy_status["pdps"]["apex"][0]["healthy"] == "HEALTHY" and policy_ready["apex_ready"] == False):
-            logger.info("Policy Apex is ready")
-            policy_ready["apex_ready"] = True
-        if (policy_ready["api_ready"] and policy_ready["pap_ready"] and policy_ready["apex_ready"]):
-            logger.info("Policy status all ready")
-            break
+    # Wait enough time to have at least the SDNR notifications sent
+    logger.info("Waiting 10s that SDNR sends all registration events to VES...")
+    time.sleep(10)
+    logger.info("Test Session setup completed successfully")
 
+    ### Cleanup code
+    yield
+    network_simulators.stop_network_simulators()
+    policy.undeploy_policy(policy_id, policy_version, settings.POLICY_BASICAUTH)
+    policy.delete_policy(policy_type, policy_id, policy_version, settings.POLICY_BASICAUTH)
+    logger.info("Test Session cleanup done")
 
-    if (policy_ready["api_ready"] == False or policy_ready["pap_ready"] == False or policy_ready["apex_ready"] == False):
-        logger.info("Policy components are not ready. Exit the test.")
-
-
+def create_policy():
+    """Create the policy."""
     logger.info("Create policy")
-    policy_data = jinja_env().get_template("ToscaPolicy.json.j2").render()
-    policy.create_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"), policy_data, settings.POLICY_BASICAUTH)
+    policy_data = jinja_env().get_template("ToscaPolicy.json.j2").render(policyId=policy_id, policyVersion=policy_version, policyTypeId=policy_type_id, policyTypeVersion=policy_type_version, engineName=engine_name, engineVersion=engine_version, engineId=engine_id, deploymentPort=deployment_port, dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
+    policy.create_policy(policy_type, policy_data, settings.POLICY_BASICAUTH)
 
     logger.info("Verify whether policy created successfully")
-    policy_response = policy.get_policy(PolicyType(type="onap.policies.native.Apex", version="1.0.0"),
-                                        "onap.policies.native.apex.LinkMonitor", "1.0.0", settings.POLICY_BASICAUTH)
-    if (policy_response):
-        logger.info("Policy created successfully")
-    else:
-        logger.info("Policy creation failed")
+    assert policy.get_policy(policy_type, policy_id, policy_version, settings.POLICY_BASICAUTH).status_code == 200
 
+
+def deploy_policy():
+    """Deploy the policy."""
     logger.info("Deploy policy")
-    deploy_policy = jinja_env().get_template("DeployPolicyPAP.json.j2").render()
-    policy.deploy_policy(deploy_policy, settings.POLICY_BASICAUTH)
+    policy_to_deploy = jinja_env().get_template("DeployPolicyPAP.json.j2").render(policyId=policy_id, policyVersion=policy_version)
+    policy.deploy_policy(policy_to_deploy, settings.POLICY_BASICAUTH)
+    wait(lambda: check_policy_deployment(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy Deployment to be OK")
 
-    logger.info("Verify the policy is deployed")
+def check_policy_deployment():
+    """Verify the policy deployment."""
+    logger.info("Verify if the policy is deployed")
     policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
-    policy_deployed = False
+
     for status in policy_status_list:
-        logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"] , status["deploy"] )
-        if (status["policy"]["name"] == "onap.policies.native.apex.LinkMonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"]):
-            policy_deployed = True
-            break
+        logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"])
+        if (status["policy"]["name"] == policy_id and status["policy"]["version"] == policy_version and status["deploy"] and status["state"] == "SUCCESS"):
+            logger.info("Policy deployement OK")
+            return True
+    logger.info("Policy deployement not yet OK")
+    return False
 
-    if policy_deployed:
-        logger.info("Policy deployed successfully")
-    else:
-        logger.info("Failed to deploy policy")
-
-    logger.info("Check O-du/O-ru status")
-    SDNC_BASICAUTH = { 'username': 'admin', 'password': 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U' }
-    sdnc = OranSdnc()
-    status = sdnc.get_odu_oru_status("o-du-1122", "o-ru-11221", SDNC_BASICAUTH)
-    if status["o-ran-sc-du-hello-world:du-to-ru-connection"][0]["administrative-state"] == "LOCKED":
-        logger.info("The initial state of o-du o-ru connection is LOCKED")
-
-    logger.info("Wait for a while for Apex engine to be ready before sending Dmaap event")
-    dmaap = OranDmaap()
+def send_dmaap_event():
+    """Send a event to Dmaap that should trigger the apex policy."""
     event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
-    for x in range(60):
-        dmaap.send_link_failure_event(event)
-        output = subprocess.getoutput('kubectl logs onap-policy-apex-pdp-0 -n onap | grep "Task Selection Execution: \'LinkMonitorPolicy:0.0.1:NULL:LinkFailureOrClearedState\'" | wc -l')
-        if (int(output) > 0):
-            logger.info("Apex engine is ready. LinkFailureEvent sent to Dmaap")
-            break
-        else:
-            logger.info("Apex engine not ready yet, wait for a while and try again")
-            time.sleep(2)
+    dmaap.send_link_failure_event(event)
+
+def test_apex_policy():
+    """Test the apex policy."""
+    logger.info("Check O-du/O-ru status")
+    sdnc = OranSdnc()
+    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
+    assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "locked"
+    send_dmaap_event()
+    create_policy()
+    deploy_policy()
+    time.sleep(10)
 
     logger.info("Check O-du/O-ru status again")
-    status = sdnc.get_odu_oru_status("o-du-1122", "o-ru-11221", SDNC_BASICAUTH)
-    if status["o-ran-sc-du-hello-world:du-to-ru-connection"][0]["administrative-state"] == "UNLOCKED":
-        logger.info("The updated state of o-du o-ru connection is UNLOCKED")
+    status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
+    assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"

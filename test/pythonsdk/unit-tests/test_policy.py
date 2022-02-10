@@ -35,12 +35,12 @@ def test_get_policy_status(mock_send_message_json):
                                                    basic_auth=BASIC_AUTH)
 
 
-@mock.patch.object(OranPolicy, 'send_message_json')
-def test_get_policy(mock_send_message_json):
+@mock.patch.object(OranPolicy, 'send_message')
+def test_get_policy(mock_send_message):
     """Test Policy's class method."""
     OranPolicy.get_policy(PolicyType(type="test_type", version="type_version"),
                           "policy_name", "policy_version", BASIC_AUTH)
-    mock_send_message_json.assert_called_once_with('GET',
+    mock_send_message.assert_called_once_with('GET',
                                                    'Get the policy',
                                                    (f"{API_URL}/policy/api/v1/policytypes/test_type/versions/"\
                                                    + "type_version/policies/policy_name/versions/policy_version"),
@@ -67,5 +67,25 @@ def test_deploy_policy(mock_send_message):
                                               'Deploy Policy',
                                               (f"{API_URL}/policy/pap/v1/pdps/policies"),
                                               data={},
+                                              headers=HEADER,
+                                              basic_auth=BASIC_AUTH)
+
+@mock.patch.object(OranPolicy, 'send_message')
+def test_undeploy_policy(mock_send_message):
+    """Test Policy's class method."""
+    OranPolicy.undeploy_policy("policy_id","1.0.0", BASIC_AUTH)
+    mock_send_message.assert_called_once_with('DELETE',
+                                              'Undeploy Policy',
+                                              (f"{PAP_URL}/policy/pap/v1/pdps/policies/policy_id/versions/1.0.0"),
+                                              headers=HEADER,
+                                              basic_auth=BASIC_AUTH)
+
+@mock.patch.object(OranPolicy, 'send_message')
+def test_delete_policy(mock_send_message):
+    """Test Policy's class method."""
+    OranPolicy.delete_policy(PolicyType(type="test_type", version="type_version"), "policy_id","1.0.0", BASIC_AUTH)
+    mock_send_message.assert_called_once_with('DELETE',
+                                              'Delete Policy',
+                                              (f"{API_URL}/policy/api/v1/policytypes/test_type/versions/type_version/policies/policy_id/versions/1.0.0"),
                                               headers=HEADER,
                                               basic_auth=BASIC_AUTH)
