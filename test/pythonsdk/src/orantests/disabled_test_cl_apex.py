@@ -3,7 +3,7 @@
 
 # This usecase has limitations due to Clamp issue.
 # 1. manually change clamp-be settings before running the test
-# 2. make sure using the policy-clamp-be version 6.2.0-snapshot
+# 2. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
 
 import time
 import subprocess
@@ -21,25 +21,6 @@ logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery useca
 dmaap = OranDmaap()
 CLAMP_BASICAUTH = { 'username': 'demo@people.osaaf.org', 'password': 'demo123456!' }
 clamp = ClampToscaTemplate(CLAMP_BASICAUTH)
-
-policy_id = "onap.policies.native.apex.LinkMonitor"
-policy_version = "1.0.0"
-policy_type_id = "onap.policies.native.Apex"
-policy_type_version = "1.0.0"
-policy_type = PolicyType(type=policy_type_id, version=policy_type_version)
-engine_name = "LinkMonitorApexEngine"
-engine_version = "0.0.1"
-engine_id = "101"
-deployment_port = "12345"
-
-def update_clamp_config():
-    logger.info ("Update the clamp config")
-    #cmd="kubectl -n onap get cm onap-policy-clamp-be-configmap -o yaml | sed 's/clamp.config.controlloop.runtime.url=http:/clamp.config.controlloop.runtime.url=https:/' > temp.yaml"
-    #check_output(cmd, shell=True).decode('utf-8')
-	#cmd="kubectl create configmap onap-policy-clamp-be-configmap -n onap --from-file=temp.yaml -o yaml --dry-run | kubectl apply -f -"
-	#check_output(cmd, shell=True).decode('utf-8')
-	#cmd="kubectl rollout restart deployment onap-policy-clamp-be -n onap"
-	#check_output(cmd, shell=True).decode('utf-8')
 
 def create_topic():
     logger.info("Create new topic")
@@ -152,7 +133,7 @@ def test_cl_oru_recovery():
 
     verify_apex_policy_created()
 
-    time.sleep(10)
+    time.sleep(20)
     logger.info("Check O-du/O-ru status again")
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"
