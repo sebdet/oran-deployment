@@ -1,6 +1,26 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# SPDX-License-Identifier: Apache-2.0
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO PACKAGE - PYTHONSDK TESTS
+# ================================================================================
+# Copyright (C) 2022 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+#
+###
 """Onap Policy Clamp Tosca Template module."""
 
 from typing import Dict
@@ -20,10 +40,15 @@ class ClampToscaTemplate(Clamp):
 
         """
         super().__init__()
-        self.basic_auth =  basic_auth
+        self.basic_auth = basic_auth
 
     def get_template_instance(self) -> dict:
-        """Get tosca template instance."""
+        """
+        Get tosca template instance.
+
+        Returns:
+            the tosca template instance
+        """
         url = f"{self.base_url()}/toscaControlLoop/getToscaInstantiation"
         template_instance = self.send_message_json('GET',
                                                    'Get tosca template instance',
@@ -38,6 +63,8 @@ class ClampToscaTemplate(Clamp):
 
         Args:
             tosca_template: the tosca template yaml
+        Returns:
+            the response of the uploading action
 
         """
         url = f"{self.base_url()}/toscaControlLoop/commissionToscaTemplate"
@@ -55,7 +82,8 @@ class ClampToscaTemplate(Clamp):
 
         Args:
             tosca_instance_properties (str): the tosca template properties
-
+        Returns:
+            the response of the creation action
         """
         url = f"{self.base_url()}/toscaControlLoop/postToscaInstanceProperties"
         response = self.send_message_json('POST',
@@ -73,6 +101,8 @@ class ClampToscaTemplate(Clamp):
         Args:
             name (str): the name of the template instance
             version (str): the version of the template instance
+        Returns:
+            the template instance
         """
         url = f"{self.base_url()}/toscaControlLoop/getInstantiationOrderState?name={name}&version={version}"
         template_instance = self.send_message_json('GET',
@@ -90,7 +120,8 @@ class ClampToscaTemplate(Clamp):
             new_status (str): the new instance status
             name (str): the new instance name
             version (str): the new instance version
-
+        Returns:
+            the updated template instance
         """
         body = '{"orderedState":"' + new_status + '","controlLoopIdentifierList":[{"name":"' + name + '","version":"' + version + '"}]}'
         url = f"{self.base_url()}/toscaControlLoop/putToscaInstantiationStateChange"
@@ -104,12 +135,13 @@ class ClampToscaTemplate(Clamp):
 
     def delete_template_instance(self, name: str, version: str) -> dict:
         """
-        Delete the tosca instance
+        Delete the tosca instance.
 
         Args:
             name (str): the instance name.
             version (str): the instance version.
-
+        Returns:
+            the response of the deletion action
         """
         url = f"{self.base_url()}/toscaControlLoop/deleteToscaInstanceProperties?name={name}&version={version}"
         response = self.send_message_json('DELETE',
@@ -121,12 +153,13 @@ class ClampToscaTemplate(Clamp):
 
     def decommission_template(self, name: str, version: str) -> dict:
         """
-        Decommission the tosca template
+        Decommission the tosca template.
 
         Args:
             name (str): the tosca template name.
             version (str): the tosca template version.
-
+        Returns:
+            the response of the decommission action
         """
         url = f"{self.base_url()}/toscaControlLoop/decommissionToscaTemplate?name={name}&version={version}"
         response = self.send_message_json('DELETE',

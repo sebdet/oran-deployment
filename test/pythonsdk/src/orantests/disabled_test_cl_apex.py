@@ -1,17 +1,42 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: Apache-2.0
-
+###
+# ============LICENSE_START=======================================================
+# ORAN SMO PACKAGE - PYTHONSDK TESTS
+# ================================================================================
+# Copyright (C) 2022 AT&T Intellectual Property. All rights
+#                             reserved.
+# ================================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END============================================
+# ===================================================================
+#
+###
+"""Closed Loop Apex usecase tests module."""
 # This usecase has limitations due to Clamp issue.
-# 1. manually change clamp-be settings before running the test
+# 1. manually change clamp-be settings before running the test:
+#    - run command "kubectl -n onap edit cm onap-policy-clamp-be-configmap"
+#      find variable clamp.config.controlloop.runtime.url and change http into https
+#    - run command "kubectl rollout restart deployment onap-policy-clamp-be -n onap"
+#      and wait until policy-clamp-be pod restarted successfully
 # 2. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
 
 import time
-import subprocess
 import logging
 import logging.config
 from onapsdk.configuration import settings
+from onapsdk.exceptions import RequestError
 from oransdk.dmaap.dmaap import OranDmaap
-from oransdk.policy.policy import OranPolicy, PolicyType
+from oransdk.policy.policy import OranPolicy
 from oransdk.policy.clamp import ClampToscaTemplate
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
@@ -19,42 +44,67 @@ from oransdk.utils.jinja import jinja_env
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Apex policy")
 dmaap = OranDmaap()
-CLAMP_BASICAUTH = { 'username': 'demo@people.osaaf.org', 'password': 'demo123456!' }
-clamp = ClampToscaTemplate(CLAMP_BASICAUTH)
+clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
 
 def create_topic():
+    """Create the topic in Dmaap."""
     logger.info("Create new topic")
     topic = '{  "topicName": "unauthenticated.SEC_FAULT_OUTPUT",  "topicDescription": "test topic",  "partitionCount": 1,  "replicationCnCount": 1,  "transactionEnabled": "false"}'
     response = dmaap.create_topic(topic)
     logger.info("response is: %s", response)
 
 def verify_topic_created():
+    """Verify whether needed topic created."""
     logger.info("Verify topic created")
     topiclist = dmaap.get_all_topics({})
     topic_created = False
     for topic in topiclist:
-      if topic["topicName"] == "unauthenticated.SEC_FAULT_OUTPUT":
-          topic_created = True
-          break
+        if topic["topicName"] == "unauthenticated.SEC_FAULT_OUTPUT":
+            topic_created = True
+            break
 
-    if (topic_created):
-          logger.info("Topic created successfully")
+    if topic_created:
+        logger.info("Topic created successfully")
     else:
-          logger.info("Topic creation failed")
+        logger.info("Topic creation failed")
 
 def upload_commission(tosca_template):
+    """
+        Upload the tosca to commissioning.
+
+        Args:
+            tosca_template : the tosca template to upload in json format
+        Returns:
+            the response from the upload action
+    """
     logger.info("Upload tosca to commissioning")
     return clamp.upload_commission(tosca_template)
 
 def create_instance(tosca_template):
+    """
+        Create a instance.
+
+        Args:
+            tosca_template : the tosca template to create in json format
+        Returns:
+            the response from the creation action
+    """
     logger.info("Create Instance")
     return clamp.create_instance(tosca_template)
 
-def change_instance_status(new_status):
+def change_instance_status(new_status) -> str:
+    """
+        Change the instance statue.
+
+        Args:
+            new_status : the new instance to be changed to
+        Returns:
+            the new status to be changed to
+    """
     logger.info("Change Instance Status to %s", new_status)
     try:
         clamp.change_instance_status(new_status, "PMSH_Instance1", "1.2.3")
-    except RequestError as exc:
+    except RequestError:
         logger.info("Change Instance Status request returned failed. Will query the instance status to double check whether the request is successful or not.")
 
     # There's a bug in Clamp code, sometimes it returned 500, but actually the status has been changed successfully
@@ -64,38 +114,61 @@ def change_instance_status(new_status):
     return response["controlLoopList"][0]["orderedState"]
 
 def verify_instance_status(new_status):
+    """
+        Verify whether the instance changed to the new status.
+
+        Args:
+            new_status : the new status of the instance
+        Returns:
+            the boolean value indicating whether status changed successfully
+    """
     logger.info("Verify the Instance Status is updated to the expected status %s", new_status)
     for x in range(10):
         response = clamp.get_template_instance()
         if response["controlLoopList"][0]["state"] == new_status:
             return True
-        else:
-            time.sleep(5)
 
-    logger.info("Time out for Status being updated to the expected status", new_status)
+        time.sleep(5)
+
+    logger.info("Time out for Status being updated to the expected status %s", new_status)
     return False
 
 def verify_apex_policy_created():
+    """
+        Verify whether the Apex policy has deployed successfully.
+
+        Returns:
+            the boolean value indicating whether policy deployed successfully
+    """
     logger.info("Verify Apex policy is deployed")
     policy = OranPolicy()
     policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
-    policy_deployed = False
-    for status in policy_status_list:
-        logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"] , status["deploy"] )
-        if (status["policy"]["name"] == "onap.policies.native.apex.LinkMonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"]):
-            policy_deployed = True
-            break
 
-    if policy_deployed:
-        logger.info("Policy deployed successfully")
-    else:
-        logger.info("Failed to deploy policy")
+    for status in policy_status_list:
+        logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"])
+        if (status["policy"]["name"] == "operational.apex.linkmonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"]):
+            return True
+
+    logger.info("Failed to deploy Apex policy")
+    return False
 
 def delete_template_instance():
+    """
+        Delete the template instance.
+
+        Returns:
+            the response from the deletion action
+    """
     logger.info("Delete Instance")
     return clamp.delete_template_instance("PMSH_Instance1", "1.2.3")
 
 def decommission_tosca():
+    """
+        Decommission the tosca template.
+
+        Returns:
+            the response from the decommission action
+    """
     logger.info("Decommission tosca")
     return clamp.decommission_template("ToscaServiceTemplateSimple", "1.0.0")
 
@@ -105,10 +178,10 @@ def send_dmaap_event():
     dmaap.send_link_failure_event(event)
 
 def test_cl_oru_recovery():
+    """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     create_topic()
     verify_topic_created()
 
-    #tosca_template = jinja_env().get_template("ToscaPolicy.json.j2").render(policyId=policy_id, policyVersion=policy_version, policyTypeId=policy_type_id, policyTypeVersion=policy_type_version, engineName=engine_name, engineVersion=engine_version, engineId=engine_id, deploymentPort=deployment_port, dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
     tosca_template = jinja_env().get_template("commission_apex.json.j2").render()
 
     response = upload_commission(tosca_template)
@@ -131,7 +204,7 @@ def test_cl_oru_recovery():
 
     send_dmaap_event()
 
-    verify_apex_policy_created()
+    assert verify_apex_policy_created()
 
     time.sleep(20)
     logger.info("Check O-du/O-ru status again")
