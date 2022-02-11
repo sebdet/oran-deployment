@@ -138,7 +138,7 @@ aai:
 appc: 
   enabled: false 
 cassandra:
-  enabled: true
+  enabled: false
   replicaCount: 3
   config:
     cluster_domain: cluster.local
