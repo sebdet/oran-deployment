@@ -26,6 +26,8 @@ jenkins:
   controller:
     nodePort: 32080
     serviceType: NodePort
+    additionalPlugins: 
+      - job-dsl:1.77
     JCasC:
       securityRealm: |-
         local:
@@ -58,7 +60,6 @@ jenkins:
                         }
                       }
                       scriptPath("jenkins/automated-tests-pipeline")
-                      lightweight()
                     }
                   }
                 } 
