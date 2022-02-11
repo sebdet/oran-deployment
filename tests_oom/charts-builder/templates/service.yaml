@@ -12,12 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-dependencies:
-  - name: jenkins
-    version: ~3.11.3
-    repository: https://charts.jenkins.io
-    condition: testsSuite.jenkins
-  - name: oran-tests
-    version: ~1.0.0
-    repository: "@local"
-    condition: testsSuite.tests
+apiVersion: v1
+kind: Service
+metadata:
+  name: "chartsbuilder"
+  labels:
+    name: chartsbuilder
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.ports.port }}
+      nodePort: {{ .Values.service.ports.nodePort }}
+  selector:
+    name: chartsbuilder
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}

@@ -1,0 +1,12 @@
+dependencies:
+- name: jenkins
+  repository: https://charts.jenkins.io
+  version: 3.11.4
+- name: oran-tests
+  repository: http://localhost:18080
+  version: 1.0.0
+- name: chartmuseum
+  repository: https://chartmuseum.github.io/charts
+  version: 3.6.2
+digest: sha256:f95e89a5e6ccf6aab06eeb5ab747bddd8d9b2aac14fe9db4ad0e3063ddef9ad8
+generated: "2022-02-10T16:35:22.248833646Z"

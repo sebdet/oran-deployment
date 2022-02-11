@@ -27,8 +27,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
-./sub-scripts/uninstall-onap.sh
-./sub-scripts/uninstall-nonrtric.sh
-./sub-scripts/uninstall-simulators.sh
-./sub-scripts/uninstall-tests.sh
-./sub-scripts/clean-up.sh
+apt-get install make -y
+
+echo  '### Building ORAN tests part ###'
+(cd ../../tests_oom && make all)
