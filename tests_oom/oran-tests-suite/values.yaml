@@ -39,3 +39,26 @@ jenkins:
         loggedInUsersCanDoAnything:
           allowAnonymousRead: true
       defaultConfig: true
+      configScripts:
+        welcome-message: |
+          jenkins:
+            systemMessage: Welcome to the ORAN SMO Package CI\CD server.  This Jenkins is configured and managed 'as code'.
+        pipeline-job: | 
+          jobs:
+            - script: >
+                pipelineJob('job-dsl-plugin') {
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                            url('https://github.com/sebdet/oran-deployment.git')
+                          }
+                          branch('*/main')
+                        }
+                      }
+                      scriptPath("jenkins/automated-tests-pipeline")
+                      lightweight()
+                    }
+                  }
+                } 
