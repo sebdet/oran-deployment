@@ -27,7 +27,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
-echo "Starting TESTS namespace..."
+echo "Starting CICD in 'tests' namespace..."
 
 ../sub-scripts/install-tests.sh ../../helm-override/tests-override.yaml
 

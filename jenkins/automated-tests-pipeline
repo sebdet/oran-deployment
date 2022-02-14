@@ -15,7 +15,6 @@ podTemplate(yaml: '''
     stage('Checkout') {
       git branch: 'main', url:'https://github.com/sebdet/oran-deployment.git'
     }
-    stage('Setup Container') {
       container('jenkins-ubuntu') {
         stage('Setup tools') {
             sh 'apt-get update -y'
@@ -29,7 +28,7 @@ podTemplate(yaml: '''
             sh './scripts/layer-0/0-setup-charts-museum.sh'
             sh './scripts/layer-0/0-setup-helm3.sh'
         }
-        stage('Build test charts') {
+        stage('Build tests charts') {
             sh './scripts/sub-scripts/build-tests.sh'
         }
         stage('Test ORAN') {
@@ -38,7 +37,7 @@ podTemplate(yaml: '''
             }
         }
       }
-    }
+    
     post {
         always {
             archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
