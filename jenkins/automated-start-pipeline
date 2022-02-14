@@ -13,7 +13,7 @@ podTemplate(yaml: '''
 
   node(POD_LABEL) {
     stage('Checkout') {
-      checkout scm: [$class: 'GitSCM', url: 'https://github.com/sebdet/oran-deployment.git', clean: true, extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
+      checkout scm: [$class: 'GitSCM', url: 'https://github.com/sebdet/oran-deployment.git', extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
     }
       container('jenkins-ubuntu') {
         stage('Setup tools') {
