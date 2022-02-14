@@ -12,6 +12,7 @@ podTemplate(yaml: '''
 ''') {
 
   node(POD_LABEL) {
+   stages { 
     stage('Checkout') {
       git branch: 'main', url:'https://github.com/sebdet/oran-deployment.git'
     }
@@ -37,13 +38,12 @@ podTemplate(yaml: '''
             }
         }
       }
-    
-  }
-  post {
+   }
+   post {
         always {
             archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
             junit 'test/pythonsdk/src/orantests/oran-tests.xml'
         }
+   }
   }
-
 }
