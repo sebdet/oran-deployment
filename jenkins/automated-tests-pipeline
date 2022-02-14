@@ -1,5 +1,4 @@
-stages {
- podTemplate(yaml: '''
+podTemplate(yaml: '''
               apiVersion: v1
               kind: Pod
               spec:
@@ -10,7 +9,7 @@ stages {
                   - sleep
                   args: 
                   - 99d
- ''') {
+''') {
   node(POD_LABEL) {
     stage('Checkout') {
       git branch: 'main', url:'https://github.com/sebdet/oran-deployment.git'
@@ -36,14 +35,11 @@ stages {
                 sh 'tox -e oran-tests'
             }
         }
+        stage('Get Results') {
+          archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
+          junit 'test/pythonsdk/src/orantests/oran-tests.xml'
+        }
       }
    
   }
- }
-}
-post {
-        always {
-            archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
-            junit 'test/pythonsdk/src/orantests/oran-tests.xml'
-        }
 }
