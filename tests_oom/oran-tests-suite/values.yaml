@@ -78,3 +78,19 @@ jenkins:
                     }
                   }
                 }
+            - script: >
+                pipelineJob('stop-smo-github') {
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                            url('https://github.com/sebdet/oran-deployment.git')
+                          }
+                          branch('*/main')
+                        }
+                      }
+                      scriptPath("jenkins/automated-stop-pipeline")
+                    }
+                  }
+                }

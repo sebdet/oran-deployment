@@ -1,0 +1,38 @@
+options {
+  disableConcurrentBuilds()
+}
+podTemplate(yaml: '''
+              apiVersion: v1
+              kind: Pod
+              spec:
+                containers:
+                - name: jenkins-ubuntu
+                  image: ubuntu:20.04
+                  command:
+                  - sleep
+                  args: 
+                  - 99d
+''') {
+
+  node(POD_LABEL) {
+    stage('Checkout') {
+      checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/sebdet/oran-deployment.git']], branches: [[name: '*/main']], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
+    }
+      container('jenkins-ubuntu') {
+        stage('Setup tools') {
+            sh 'apt-get update -y'
+            sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
+            sh 'apt-get install git wget sudo -y'
+            sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
+            sh 'mv kubectl /usr/bin'
+            sh 'chmod a+x /usr/bin/kubectl'
+            sh 'kubectl version'
+            sh './scripts/layer-0/0-setup-helm3.sh'
+        }
+        stage('Stop SMO') {
+            sh './scripts/uninstall-all.sh'
+        }
+      }
+    
+  }
+}
