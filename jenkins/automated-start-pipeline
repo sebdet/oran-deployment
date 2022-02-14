@@ -29,21 +29,13 @@ podTemplate(yaml: '''
             sh './scripts/layer-0/0-setup-charts-museum.sh'
             sh './scripts/layer-0/0-setup-helm3.sh'
         }
-        stage('Build test charts') {
-            sh './scripts/sub-scripts/build-tests.sh'
+        stage('Build SMO charts') {
+            sh './scripts/layer-1/1-build-all-charts.sh'
         }
-        stage('Test ORAN') {
-            dir("test/pythonsdk") {
-                sh 'tox -e oran-tests'
-            }
+        stage('Start SMO') {
+            sh './scripts/layer-2/2-install-oran.sh'
         }
       }
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
-            junit 'test/pythonsdk/src/orantests/oran-tests.xml'
-        }
     }
   }
 }

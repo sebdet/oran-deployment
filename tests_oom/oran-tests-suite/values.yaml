@@ -48,7 +48,7 @@ jenkins:
         pipeline-job: | 
           jobs:
             - script: >
-                pipelineJob('job-dsl-plugin') {
+                pipelineJob('test-smo-pack-github') {
                   definition {
                     cpsScm {
                       scm {
@@ -63,3 +63,19 @@ jenkins:
                     }
                   }
                 } 
+            - script: >
+                pipelineJob('start-smo-github') {
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                            url('https://github.com/sebdet/oran-deployment.git')
+                          }
+                          branch('*/main')
+                        }
+                      }
+                      scriptPath("jenkins/automated-start-pipeline")
+                    }
+                  }
+                }
