@@ -43,7 +43,7 @@ jenkins:
       configScripts:
         welcome-message: |
           jenkins:
-            systemMessage: Welcome to the ORAN SMO Package CI\CD server.  This Jenkins is configured and managed 'as code'.
+            systemMessage: Welcome to the ORAN SMO Package embedded CI\CD server.  This Jenkins is configured and managed 'as code'.
         pipeline-job: | 
           jobs:
             - script: >
