@@ -32,7 +32,12 @@ podTemplate(yaml: '''
         }
         stage('Test ORAN') {
             dir("test/pythonsdk") {
-                sh 'tox -e oran-tests'
+              try {
+                  sh 'tox -e oran-tests'
+              }
+              catch(exec) {
+                echo 'TOX tests crashed'
+              }
             }
         }
         stage('Get Results') {
