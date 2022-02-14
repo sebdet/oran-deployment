@@ -41,7 +41,7 @@ podTemplate(yaml: '''
             }
         }
         stage('Get Results') {
-          archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
+          archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log, **/reports/junit/*.xml', fingerprint: true
           junit '**/reports/junit/*.xml'
         }
       }
