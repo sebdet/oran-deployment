@@ -13,9 +13,8 @@ podTemplate(yaml: '''
 
   node(POD_LABEL) {
     stage('Checkout') {
-      git branch: 'main', url:'https://github.com/sebdet/oran-deployment.git'
+      checkout scm: [$class: 'GitSCM', url: 'https://github.com/sebdet/oran-deployment.git', clean: true, extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
     }
-    stage('Setup Container') {
       container('jenkins-ubuntu') {
         stage('Setup tools') {
             sh 'apt-get update -y'
@@ -36,6 +35,6 @@ podTemplate(yaml: '''
             sh './scripts/layer-2/2-install-oran.sh'
         }
       }
-    }
+    
   }
 }
