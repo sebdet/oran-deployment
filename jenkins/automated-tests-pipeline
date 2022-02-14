@@ -1,4 +1,5 @@
-podTemplate(yaml: '''
+stages {
+ podTemplate(yaml: '''
               apiVersion: v1
               kind: Pod
               spec:
@@ -9,8 +10,7 @@ podTemplate(yaml: '''
                   - sleep
                   args: 
                   - 99d
-''') {
- stages {
+ ''') {
   node(POD_LABEL) {
     stage('Checkout') {
       git branch: 'main', url:'https://github.com/sebdet/oran-deployment.git'
@@ -40,11 +40,10 @@ podTemplate(yaml: '''
    
   }
  }
- post {
+}
+post {
         always {
             archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log', fingerprint: true
             junit 'test/pythonsdk/src/orantests/oran-tests.xml'
         }
- }
-
 }
