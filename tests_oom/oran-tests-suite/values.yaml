@@ -21,10 +21,20 @@ oran-tests:
   flag: true
   commitId: 7b4b4007db003d28ee347e3d373e8ac605581cb5
 
+github:
+  username: test
+  password: test
+
 jenkins:
   controller:
     nodePort: 32080
     serviceType: NodePort
+    additionalExistingSecrets:
+      - name: github-secret-credentials
+        keyName: username
+      - name: github-secret-credentials
+        keyName: password
+
     additionalPlugins: 
       - job-dsl:1.77
     JCasC:
@@ -44,6 +54,17 @@ jenkins:
         welcome-message: |
           jenkins:
             systemMessage: Welcome to the ORAN SMO Package embedded CI\CD server.  This Jenkins is configured and managed 'as code'.
+        credentials: |
+          credentials:
+            system:
+              domainCredentials:
+              - credentials:
+                - usernamePassword:
+                    description: "github access username password"
+                    id: "github_username_pass"
+                    password: ${github-secret-credentials-password}
+                    scope: GLOBAL
+                    username: ${github-secret-credentials-username}
         views: |
           jenkins:
             views:
