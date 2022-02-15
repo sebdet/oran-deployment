@@ -44,10 +44,42 @@ jenkins:
         welcome-message: |
           jenkins:
             systemMessage: Welcome to the ORAN SMO Package embedded CI\CD server.  This Jenkins is configured and managed 'as code'.
+        views: |
+          jenkins:
+            views:
+            - all:
+                name: "all"
+            - list:
+                columns:
+                - "status"
+                - "weather"
+                - "jobName"
+                - "lastSuccess"
+                - "lastFailure"
+                - "lastDuration"
+                - "buildButton"
+                includeRegex: "github-manual.*"
+                name: "github-manual"
+            - list:
+                columns:
+                - "status"
+                - "weather"
+                - "jobName"
+                - "lastSuccess"
+                - "lastFailure"
+                - "lastDuration"
+                - "buildButton"
+                includeRegex: "github-automatic.*"
+                name: "github-automatic"
+
         pipeline-job: | 
           jobs:
             - script: >
-                pipelineJob('test-smo-pack-github') {
+                pipelineJob('github-manual-start-test') {
+                  parameters {
+                    stringParam('BRANCH',"*/main","Branch or Commit ID")
+                  }
+                  concurrentBuild(false)
                   definition {
                     cpsScm {
                       scm {
@@ -55,15 +87,22 @@ jenkins:
                           remote {
                             url('https://github.com/sebdet/oran-deployment.git')
                           }
-                          branch('*/main')
+                          branch('$BRANCH')
+                          extensions { 
+                            cleanBeforeCheckout()
+                          }
+
                         }
                       }
-                      scriptPath("jenkins/automated-tests-pipeline")
+                      scriptPath("jenkins/github/manual-tests-pipeline")
                     }
                   }
                 } 
             - script: >
-                pipelineJob('start-smo-github') {
+                pipelineJob('github-manual-start-smo') {
+                  parameters {
+                    stringParam('BRANCH',"*/main","Branch or Commit ID")
+                  }
                   concurrentBuild(false)
                   definition {
                     cpsScm {
@@ -72,15 +111,18 @@ jenkins:
                           remote {
                             url('https://github.com/sebdet/oran-deployment.git')
                           }
-                          branch('*/main')
+                          branch('$BRANCH')
+                          extensions {
+                            cleanBeforeCheckout()
+                          }
                         }
                       }
-                      scriptPath("jenkins/automated-start-pipeline")
+                      scriptPath("jenkins/github/manual-start-pipeline")
                     }
                   }
                 }
             - script: >
-                pipelineJob('stop-smo-github') {
+                pipelineJob('github-manual-stop-smo') {
                   concurrentBuild(false)
                   definition {
                     cpsScm {
@@ -92,7 +134,27 @@ jenkins:
                           branch('*/main')
                         }
                       }
-                      scriptPath("jenkins/automated-stop-pipeline")
+                      scriptPath("jenkins/github/manual-stop-pipeline")
+                    }
+                  }
+                }
+            - script: >
+                pipelineJob('github-automatic-trigger-verify') {
+                  concurrentBuild(false)
+                  triggers {
+                    scm("* * * * *")
+                  }
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                            url('https://github.com/sebdet/oran-deployment.git')
+                          }
+                          branch('*/main')
+                        }
+                      }
+                      scriptPath("jenkins/github/automatic-verify-pipeline")
                     }
                   }
                 }
