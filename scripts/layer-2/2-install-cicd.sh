@@ -29,7 +29,7 @@ cd $SCRIPT_PATH
 
 echo "Starting CICD in 'tests' namespace..."
 
-../sub-scripts/install-tests.sh ../../helm-override/tests-override.yaml
+../sub-scripts/install-tests.sh ../../helm-override/cicd-override.yaml
 
 kubectl get pods -n tests
 kubectl get namespaces

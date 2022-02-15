@@ -64,6 +64,7 @@ jenkins:
                 } 
             - script: >
                 pipelineJob('start-smo-github') {
+                  concurrentBuild(false)
                   definition {
                     cpsScm {
                       scm {
@@ -80,6 +81,7 @@ jenkins:
                 }
             - script: >
                 pipelineJob('stop-smo-github') {
+                  concurrentBuild(false)
                   definition {
                     cpsScm {
                       scm {

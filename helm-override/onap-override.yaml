@@ -393,7 +393,7 @@ sdnc:
 sniro-emulator:
   enabled: false
 so: 
-  enabled: true
+  enabled: false
   so-catalog-db-adapter:
     config:
       openStackUserName: "the username"
