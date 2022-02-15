@@ -12,6 +12,7 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
       stage('Checkout') {
+        echo 'Commit ID that will be used: {GIT_COMMIT}'
         git branch: '${GIT_COMMIT}', url:'https://github.com/sebdet/oran-deployment.git'
       }
       container('jenkins-ubuntu') {
