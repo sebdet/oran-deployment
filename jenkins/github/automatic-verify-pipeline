@@ -12,7 +12,7 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
       stage('Checkout') {
-        git branch: env.GIT_COMMIT, url:'https://github.com/sebdet/oran-deployment.git'
+        git branch: env.GIT_BRANCH, url:'https://github.com/sebdet/oran-deployment.git'
       }
       container('jenkins-ubuntu') {
         stage('Setup tools') {
