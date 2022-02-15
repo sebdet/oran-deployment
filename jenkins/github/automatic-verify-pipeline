@@ -12,11 +12,10 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
       stage('Checkout') {
-        sh 'printenv'
         git branch: "main", url:'https://github.com/sebdet/oran-deployment.git'
         sh 'printenv'
-	echo "Test: " env.GIT_COMMIT
-	echo "Test: " env.GIT_BRANCH
+	echo "Test: "+ env.BUILD_NUMBER
+	echo "Test: "+ env.PWD
 
       }
       container('jenkins-ubuntu') {
