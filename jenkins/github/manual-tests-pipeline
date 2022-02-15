@@ -11,6 +11,9 @@ podTemplate(yaml: '''
                   - 99d
 ''') {
   node(POD_LABEL) {
+     stage('Checkout') {
+        git branch: 'main', url:'https://github.com/sebdet/oran-deployment.git'
+      }
       container('jenkins-ubuntu') {
         stage('Setup tools') {
             sh 'apt-get update -y'
