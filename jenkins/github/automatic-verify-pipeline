@@ -18,7 +18,7 @@ podTemplate(yaml: '''
 	echo "Test: "+ env.PWD
         echo "Test: "+ gitInfo
 	echo "Test: "+ gitInfo.GIT_COMMIT
-        githubNotify description:'SMO Package verify starts', repo:'sebdet/oran-deployment', status:'PENDING', sha:gitInfo.GIT_COMMIT
+        githubNotify description:'SMO Package verify starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT
 
       }
       container('jenkins-ubuntu') {
