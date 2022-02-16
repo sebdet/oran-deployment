@@ -39,7 +39,6 @@ jenkins:
     additionalPlugins: 
       - job-dsl:1.77
       - pipeline-githubnotify-step:1.0.5
-      - ghprb:1.42.2
     JCasC:
       securityRealm: |-
         local:
@@ -166,37 +165,7 @@ jenkins:
                   }
                 }
             - script: >
-                pipelineJob('github-automatic-trigger-verify') {
-                  concurrentBuild(false)
-                  description('This job is triggered automatically when pull requests are opened on GITHUB.')
-                  triggers {
-                    githubPullRequest {
-                      admin('test')
-                      cron('* * * * *')
-                      triggerPhrase('jenkinstest')
-                      onlyTriggerPhrase()
-                      userWhitelist(['sebdet'])
-                      whiteListTargetBranches(['main'])
-                    }
-                  }
-                  definition {
-                    cpsScm {
-                      scm {
-                        git {
-                          remote {
-                            name('origin')
-                            github('sebdet/oran-deployment')
-                            refspec('+refs/pull/*:refs/remotes/origin/pr/*')
-                          }
-                          branch('${ghprbActualCommit}')
-                        }
-                      }
-                      scriptPath("jenkins/github/automatic-verify-pipeline")
-                    }
-                  }
-                }
-            - script: >
-                multibranchPipelineJob('github-automatic-trigger-verify2') {
+                multibranchPipelineJob('github-automatic-trigger-verify') {
                   description('This job is triggered automatically when pull requests are opened on GITHUB.')
                   triggers {
                     periodic(3)
@@ -209,8 +178,8 @@ jenkins:
                       scanCredentialsId('github_username_pass')
                       buildForkPRHead(false)
                       buildForkPRMerge(false)
-                      buildOriginBranch(true)
-                      buildOriginBranchWithPR(true)
+                      buildOriginBranch(false)
+                      buildOriginBranchWithPR(false)
                       buildOriginPRHead(true)
                       buildOriginPRMerge(false)
                     }
