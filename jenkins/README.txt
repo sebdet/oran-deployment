@@ -29,4 +29,4 @@ Automatic GITHUB trigger:
 ENV VAR created: https://plugins.jenkins.io/ghprb/
 https://github.com/jenkinsci/ghprb-plugin/blob/master/README.md
 
-test
+testos
