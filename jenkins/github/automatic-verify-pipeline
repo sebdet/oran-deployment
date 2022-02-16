@@ -13,12 +13,12 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
       sh 'printenv'
       stage('Checkout') {
-        gitInfo = git branch: "main", url:'https://github.com/sebdet/oran-deployment.git'
+        gitInfo = git branch: env.BRANCH_NAME, url:'https://github.com/sebdet/oran-deployment.git'
 	echo "Test: "+ env.BUILD_NUMBER
 	echo "Test: "+ env.PWD
         echo "Test: "+ gitInfo
 	echo "Test: "+ gitInfo.GIT_COMMIT
-        githubNotify description:'SMO Package verify starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+        githubNotify description:'SMO Package verify job starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
 
       }
       container('jenkins-ubuntu') {
@@ -41,9 +41,11 @@ podTemplate(yaml: '''
             dir("test/pythonsdk") {
               try {
                   sh 'tox'
+                  githubNotify description:'SMO Package verify job SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
+                githubNotify description:'SMO Package verify job FAILED, TOX tests crashed', repo:'oran-deployment', account: 'sebdet', status:'FAILURE', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
               }
             }
         }

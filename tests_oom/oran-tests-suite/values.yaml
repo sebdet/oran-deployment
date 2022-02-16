@@ -171,29 +171,12 @@ jenkins:
                   description('This job is triggered automatically when pull requests are opened on GITHUB.')
                   triggers {
                     githubPullRequest {
+                      admin('test')
                       cron('* * * * *')
-                      triggerPhrase('test this please')
+                      triggerPhrase('jenkinstest')
                       onlyTriggerPhrase()
                       userWhitelist(['sebdet'])
                       whiteListTargetBranches(['main'])
-                      displayBuildErrorsOnDownstreamBuilds()
-                      extensions {
-                        commitStatus {
-                          context('deploy to staging site')
-                          triggeredStatus('starting deployment to staging site...')
-                          startedStatus('deploying to staging site...')
-                          addTestResults(true)
-                          completedStatus('SUCCESS', 'All is well')
-                          completedStatus('FAILURE', 'Something went wrong. Investigate!')
-                          completedStatus('PENDING', 'still in progress...')
-                          completedStatus('ERROR', 'Something went really wrong. Investigate!')
-                        }
-                        buildStatus {
-                          completedStatus('SUCCESS', 'There were no errors, go have a cup of coffee...')
-                          completedStatus('FAILURE', 'There were errors, for info, please see...')
-                          completedStatus('ERROR', 'There was an error in the infrastructure, please contact...')
-                        }
-                      }
                     }
                   }
                   definition {
@@ -212,3 +195,29 @@ jenkins:
                     }
                   }
                 }
+            - script: >
+                multibranchPipelineJob('github-automatic-trigger-verify2') {
+                  description('This job is triggered automatically when pull requests are opened on GITHUB.')
+                  branchSources {
+                    github {
+                      id('1') // IMPORTANT: use a constant and unique identifier
+                      repoOwner('sebdet')
+                      repository('oran-deployment')
+                      checkoutCredentialsId('github_username_pass')
+                      buildForkPRHead(false)
+                      buildForkPRMerge(false)
+                      buildOriginBranch(true)
+                      buildOriginBranchWithPR(true)
+                      buildOriginPRHead(true)
+                      buildOriginPRMerge(false)
+                    }
+                  }
+                  factory {
+
+                    workflowBranchProjectFactory {
+                      // Relative location within the checkout of your Pipeline script.
+                      scriptPath("jenkins/github/automatic-verify-pipeline")
+                    }
+                  } 
+                }
+
