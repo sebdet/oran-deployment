@@ -13,9 +13,10 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
       sh 'printenv'
       stage('Checkout') {
-        sh 'pwd'
-        sh 'ls -latr'
-        sh 'ls -latr'+env.WORKSPACE
+        environment {
+          FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
+          GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
+        }
         gitInfo = git branch: env.BRANCH_NAME, url:'https://github.com/sebdet/oran-deployment.git'
 	echo "Test: "+ env.BUILD_NUMBER
 	echo "Test: "+ env.PWD
