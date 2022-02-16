@@ -15,7 +15,7 @@ podTemplate(yaml: '''
       stage('Checkout') {
         sh 'printenv'
 
-        gitInfo =  url:'https://github.com/sebdet/oran-deployment.git'
+        gitInfo =  git url:'https://github.com/sebdet/oran-deployment.git'
         echo "Test: "+ gitInfo
 	echo "Test: "+ gitInfo.GIT_COMMIT
         githubNotify description:'SMO Package verify job starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
