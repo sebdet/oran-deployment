@@ -24,3 +24,9 @@ https://192.168.1.46:32080/configuration-as-code
 Job DSL schema thruth (local)
 http://192.168.1.46:32080/plugin/job-dsl/api-viewer/index.html
 
+
+Automatic GITHUB trigger:
+ENV VAR created: https://plugins.jenkins.io/ghprb/
+https://github.com/jenkinsci/ghprb-plugin/blob/master/README.md
+
+test
