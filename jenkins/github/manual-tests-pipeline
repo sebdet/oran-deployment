@@ -12,7 +12,8 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
      stage('Checkout') {
-        git branch: env.BRANCH, url:'https://github.com/sebdet/oran-deployment.git'
+       sh 'printenv' 
+       git branch: env.BRANCH, url:'https://github.com/sebdet/oran-deployment.git'
       }
       container('jenkins-ubuntu') {
         stage('Setup tools') {
