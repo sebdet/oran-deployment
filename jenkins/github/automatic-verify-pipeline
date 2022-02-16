@@ -13,7 +13,9 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
       sh 'printenv'
       stage('Checkout') {
+        sh 'pwd'
         sh 'ls -latr'
+        sh 'ls -latr'+env.WORKSPACE
         gitInfo = git branch: env.BRANCH_NAME, url:'https://github.com/sebdet/oran-deployment.git'
 	echo "Test: "+ env.BUILD_NUMBER
 	echo "Test: "+ env.PWD
