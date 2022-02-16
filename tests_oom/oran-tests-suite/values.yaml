@@ -198,12 +198,15 @@ jenkins:
             - script: >
                 multibranchPipelineJob('github-automatic-trigger-verify2') {
                   description('This job is triggered automatically when pull requests are opened on GITHUB.')
+                  triggers {
+                    periodic(3)
+                  }
                   branchSources {
                     github {
                       id('1') // IMPORTANT: use a constant and unique identifier
                       repoOwner('sebdet')
                       repository('oran-deployment')
-                      checkoutCredentialsId('github_username_pass')
+                      scanCredentialsId('github_username_pass')
                       buildForkPRHead(false)
                       buildForkPRMerge(false)
                       buildOriginBranch(true)
