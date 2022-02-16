@@ -13,15 +13,9 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
       sh 'printenv'
       stage('Checkout') {
-        FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
-        GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
-        echo "Test:" +FULL_PATH_BRANCH
-        echo "Test:" +GIT_BRANCH
         sh 'printenv'
 
-        gitInfo = git branch: $GIT_NAME, url:'https://github.com/sebdet/oran-deployment.git'
-	echo "Test: "+ env.BUILD_NUMBER
-	echo "Test: "+ env.PWD
+        gitInfo =  url:'https://github.com/sebdet/oran-deployment.git'
         echo "Test: "+ gitInfo
 	echo "Test: "+ gitInfo.GIT_COMMIT
         githubNotify description:'SMO Package verify job starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
