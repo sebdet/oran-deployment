@@ -1,0 +1,22 @@
+{
+  "o-ran-sc-du-hello-world:radio-resource-management-policy-ratio": [
+    {
+      "id": "rrm-pol-2",
+      "operational-state": "enabled",
+      "radio-resource-management-policy-max-ratio": 20,
+      "radio-resource-management-policy-members": [
+        {
+          "mobile-country-code": "310",
+          "mobile-network-code": "150",
+          "slice-differentiator": 1,
+          "slice-service-type": 1
+        }
+      ],
+      "radio-resource-management-policy-min-ratio": 10,
+      "user-label": "rrm-pol-2",
+      "resource-type": "prb",
+      "radio-resource-management-policy-dedicated-ratio": 15,
+      "administrative-state": "locked"
+    }
+  ]
+}
