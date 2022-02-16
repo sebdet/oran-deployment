@@ -17,3 +17,7 @@ oranTests:
   name: orantests1
   flag: true
   commitId: c85a33c9d868ada16362576bfeca622837d15ee4
+
+github:
+  username: "username"
+  password: "token_api"

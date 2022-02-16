@@ -16,17 +16,18 @@ testsSuite:
   jenkins: true
   tests: false
 
-oran-tests:
+oranTests:
   name: orantests1
   flag: true
   commitId: 7b4b4007db003d28ee347e3d373e8ac605581cb5
 
 github:
-  username: test
-  password: test
+  username: testuser
+  password: api-token
 
 jenkins:
   controller:
+    imagePullPolicy: "IfNotPresent"
     nodePort: 32080
     serviceType: NodePort
     additionalExistingSecrets:
@@ -38,6 +39,7 @@ jenkins:
     additionalPlugins: 
       - job-dsl:1.77
       - pipeline-githubnotify-step:1.0.5
+      - ghprb:1.42.2
     JCasC:
       securityRealm: |-
         local:
@@ -102,12 +104,13 @@ jenkins:
                     stringParam('BRANCH',"*/main","Branch or Commit ID")
                   }
                   concurrentBuild(false)
+                  description('This job is triggered manually to execute the SMO tests on the RUNNING SMO in the K8S cluster')
                   definition {
                     cpsScm {
                       scm {
                         git {
                           remote {
-                            url('https://github.com/sebdet/oran-deployment.git')
+                            github('sebdet/oran-deployment')
                           }
                           branch('$BRANCH')
                           extensions { 
@@ -125,6 +128,7 @@ jenkins:
                   parameters {
                     stringParam('BRANCH',"*/main","Branch or Commit ID")
                   }
+                  description('This job is triggered manually to start SMO in the K8S cluster')
                   concurrentBuild(false)
                   definition {
                     cpsScm {
@@ -146,6 +150,7 @@ jenkins:
             - script: >
                 pipelineJob('github-manual-stop-smo') {
                   concurrentBuild(false)
+                  description('This job is triggered manually to stop the running SMO in the K8S cluster')
                   definition {
                     cpsScm {
                       scm {
@@ -163,17 +168,44 @@ jenkins:
             - script: >
                 pipelineJob('github-automatic-trigger-verify') {
                   concurrentBuild(false)
+                  description('This job is triggered automatically when pull requests are opened on GITHUB.')
                   triggers {
-                    scm("* * * * *")
+                    githubPullRequest {
+                      cron('* * * * *')
+                      triggerPhrase('test this please')
+                      onlyTriggerPhrase()
+                      userWhitelist(['sebdet'])
+                      whiteListTargetBranches(['main'])
+                      displayBuildErrorsOnDownstreamBuilds()
+                      extensions {
+                        commitStatus {
+                          context('deploy to staging site')
+                          triggeredStatus('starting deployment to staging site...')
+                          startedStatus('deploying to staging site...')
+                          addTestResults(true)
+                          completedStatus('SUCCESS', 'All is well')
+                          completedStatus('FAILURE', 'Something went wrong. Investigate!')
+                          completedStatus('PENDING', 'still in progress...')
+                          completedStatus('ERROR', 'Something went really wrong. Investigate!')
+                        }
+                        buildStatus {
+                          completedStatus('SUCCESS', 'There were no errors, go have a cup of coffee...')
+                          completedStatus('FAILURE', 'There were errors, for info, please see...')
+                          completedStatus('ERROR', 'There was an error in the infrastructure, please contact...')
+                        }
+                      }
+                    }
                   }
                   definition {
                     cpsScm {
                       scm {
                         git {
                           remote {
-                            url('https://github.com/sebdet/oran-deployment.git')
+                            name('origin')
+                            github('sebdet/oran-deployment')
+                            refspec('+refs/pull/*:refs/remotes/origin/pr/*')
                           }
-                          branch('*/main')
+                          branch('${ghprbActualCommit}')
                         }
                       }
                       scriptPath("jenkins/github/automatic-verify-pipeline")
