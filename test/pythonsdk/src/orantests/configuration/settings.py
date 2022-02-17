@@ -96,7 +96,7 @@ DMAAP_TOPIC_FAULT = "unauthenticated.SEC_FAULT_OUTPUT"
 DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '"}'
 
 ### Number of pods left in completed state for ONAP namespace
-ONAP_PODS_WHEN_READY = 11
+ONAP_PODS_WHEN_READY = 9
 SMO_CHECK_RETRY = 10
 SMO_CHECK_TIMEOUT = 600
 SDNC_CHECK_RETRY = 10
