@@ -34,9 +34,11 @@ if [ -z "$1" ]
     FLAVOUR="default"
 fi
 
+timestamp=$(date +%s)
+
 echo "Starting ONAP & NONRTRIC namespaces ..."
-../sub-scripts/install-onap.sh ../../helm-override/$FLAVOUR/onap-override.yaml
-../sub-scripts/install-nonrtric.sh ../../helm-override/$FLAVOUR/oran-override.yaml
+../sub-scripts/install-onap.sh ../../helm-override/$FLAVOUR/onap-override.yaml $timestamp
+../sub-scripts/install-nonrtric.sh ../../helm-override/$FLAVOUR/oran-override.yaml $timestamp
 
 kubectl get pods -n onap
 kubectl get pods -n nonrtric

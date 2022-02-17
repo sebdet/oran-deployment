@@ -33,10 +33,11 @@ if [ -z "$1" ]
     echo "No helm override flavour supplied, going to default"
     FLAVOUR="default"
 fi
+timestamp=$(date +%s)
 
 echo "Starting NONRTRIC namespace..."
 
-../sub-scripts/install-nonrtric.sh ../../helm-override/$FLAVOUR/oran-override.yaml
+../sub-scripts/install-nonrtric.sh ../../helm-override/$FLAVOUR/oran-override.yaml $timestamp
 
 kubectl get pods -n nonrtric
 kubectl get namespaces
