@@ -1,4 +1,4 @@
-lock('smo-verify') {
+lock('smo') {
 podTemplate(yaml: '''
               apiVersion: v1
               kind: Pod
