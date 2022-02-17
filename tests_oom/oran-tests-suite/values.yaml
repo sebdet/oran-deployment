@@ -39,6 +39,7 @@ jenkins:
     additionalPlugins: 
       - job-dsl:1.77
       - pipeline-githubnotify-step:1.0.5
+      - lockable-resources:2.14
     JCasC:
       securityRealm: |-
         local:

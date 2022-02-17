@@ -1,3 +1,4 @@
+lock('smo-verify') {
 podTemplate(yaml: '''
               apiVersion: v1
               kind: Pod
@@ -78,4 +79,5 @@ podTemplate(yaml: '''
       }
    
   }
+}
 }
