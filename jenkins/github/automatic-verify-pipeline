@@ -15,9 +15,8 @@ podTemplate(yaml: '''
       stage('Checkout') {
         sh 'printenv'
 
-        gitInfo =  checkout([$class: 'GitSCM', branches: [[name: 'pr/'+env.CHANGE_ID]], extensions: [], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/pull/*/head:refs/remotes/origin/pr/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
+        gitInfo =  checkout([$class: 'GitSCM', branches: [[name: 'pr/'+env.CHANGE_ID]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/pull/*/head:refs/remotes/origin/pr/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
         echo "Test: "+ gitInfo
-	echo "Test: "+ gitInfo.GIT_COMMIT
         githubNotify description:'SMO Package verify job starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
 
       }
@@ -34,8 +33,17 @@ podTemplate(yaml: '''
             sh './scripts/layer-0/0-setup-charts-museum.sh'
             sh './scripts/layer-0/0-setup-helm3.sh'
         }
-        stage('Build tests charts') {
+        stage('Build ONAP charts') {
+            sh './scripts/sub-scripts/build-onap.sh'
+        }
+        stage('Build ORAN charts') {
+            sh './scripts/sub-scripts/build-oran.sh'
+        }
+        stage('Build ONAP charts') {
             sh './scripts/sub-scripts/build-tests.sh'
+        }
+        stage('Start SMO') {
+            sh './scripts/layer-2/2-install-oran.sh pythonsdk-tests'
         }
         stage('Test ORAN') {
             dir("test/pythonsdk") {
@@ -48,6 +56,10 @@ podTemplate(yaml: '''
                 githubNotify description:'SMO Package verify job FAILED, TOX tests crashed', repo:'oran-deployment', account: 'sebdet', status:'FAILURE', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
               }
             }
+        }
+        stage('Stop SMO') {
+          sh './scripts/sub-scripts/uninstall-nonrtric.sh'
+          sh './scripts/sub-scripts/uninstall-onap.sh'
         }
         stage('Get Results') {
           archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log, **/reports/junit/*.xml', fingerprint: true

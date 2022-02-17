@@ -168,7 +168,7 @@ jenkins:
                 multibranchPipelineJob('github-automatic-trigger-verify') {
                   description('This job is triggered automatically when pull requests are opened on GITHUB.')
                   triggers {
-                    periodic(3)
+                    periodic(5)
                   }
                   branchSources {
                     github {
@@ -178,7 +178,7 @@ jenkins:
                       scanCredentialsId('github_username_pass')
                       buildForkPRHead(false)
                       buildForkPRMerge(false)
-                      buildOriginBranch(false)
+                      buildOriginBranch(true)
                       buildOriginBranchWithPR(false)
                       buildOriginPRHead(true)
                       buildOriginPRMerge(false)

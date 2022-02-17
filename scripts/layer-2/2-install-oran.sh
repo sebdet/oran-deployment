@@ -27,9 +27,16 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
+FLAVOUR=$1
+if [ -z "$1" ]
+  then
+    echo "No helm override flavour supplied, going to default"
+    FLAVOUR="defaut"
+fi
+
 echo "Starting ONAP & NONRTRIC namespaces ..."
-../sub-scripts/install-onap.sh ../../helm-override/onap-override.yaml
-../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml
+../sub-scripts/install-onap.sh ../../helm-override/$FLAVOUR/onap-override.yaml
+../sub-scripts/install-nonrtric.sh ../../helm-override/$FLAVOUR/oran-override.yaml
 
 kubectl get pods -n onap
 kubectl get pods -n nonrtric

@@ -97,3 +97,5 @@ DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '"}'
 
 ### Number of pods left in completed state for ONAP namespace
 ONAP_PODS_WHEN_READY = 11
+SMO_CHECK_RETRY = 10
+SMO_CHECK_TIMEOUT = 600
