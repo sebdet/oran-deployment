@@ -31,7 +31,7 @@ FLAVOUR=$1
 if [ -z "$1" ]
   then
     echo "No helm override flavour supplied, going to default"
-    FLAVOUR="defaut"
+    FLAVOUR="default"
 fi
 
 echo "Starting ONAP & NONRTRIC namespaces ..."
