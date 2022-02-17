@@ -34,7 +34,7 @@ podTemplate(yaml: '''
             sh './scripts/layer-1/1-build-all-charts.sh'
         }
         stage('Start SMO') {
-            sh './scripts/layer-2/2-install-oran.sh' + env.FLAVOR
+            sh './scripts/layer-2/2-install-oran.sh ' + env.FLAVOR
         }
       }
     
