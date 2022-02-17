@@ -29,7 +29,6 @@ podTemplate(yaml: '''
         stage('Stop SMO') {
           sh './scripts/sub-scripts/uninstall-nonrtric.sh'
           sh './scripts/sub-scripts/uninstall-onap.sh'
-          sh './scripts/sub-scripts/clean-up.sh'
         }
 
       }
