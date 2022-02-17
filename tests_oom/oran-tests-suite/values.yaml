@@ -102,6 +102,7 @@ jenkins:
                 pipelineJob('github-manual-start-test') {
                   parameters {
                     stringParam('BRANCH',"*/main","Branch or Commit ID")
+                    stringParam('FLAVOR', "pythonsdk-tests", "Helm override SMO Package flavor, it is obviously the directory in the helm-override folder")
                   }
                   concurrentBuild(false)
                   description('This job is triggered manually to execute the SMO tests on the RUNNING SMO in the K8S cluster')
@@ -127,6 +128,7 @@ jenkins:
                 pipelineJob('github-manual-start-smo') {
                   parameters {
                     stringParam('BRANCH',"*/main","Branch or Commit ID")
+                    stringParam('FLAVOR', "pythonsdk-tests", "Helm override SMO Package flavor, it is obviously the directory in the helm-override folder")
                   }
                   description('This job is triggered manually to start SMO in the K8S cluster')
                   concurrentBuild(false)
