@@ -13,9 +13,16 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
       sh 'printenv'
       stage('Checkout') {
-        sh 'printenv'
+        script {
+          if (env.BRANCH_NAME.startsWith('PR-')) {
+            echo 'PULL REQUEST case detected'
+            gitInfo =  checkout([$class: 'GitSCM', branches: [[name: 'pr/'+env.CHANGE_ID]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/pull/*/head:refs/remotes/origin/pr/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
 
-        gitInfo =  checkout([$class: 'GitSCM', branches: [[name: 'pr/'+env.CHANGE_ID]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/pull/*/head:refs/remotes/origin/pr/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
+          } else {
+            gitInfo =  checkout([$class: 'GitSCM', branches: [[name: env.CHANGE_ID]],extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/heads/*:refs/remotes/origin/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
+            echo 'BRANCH case detected'
+          }
+        }
         echo "Test: "+ gitInfo
         githubNotify description:'SMO Package verify job starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
 
