@@ -70,8 +70,8 @@ def pytest_sessionstart():
     logger.info("Check and wait for SMO to be running")
     smo.wait_for_smo_to_be_running()
     logger.info("Check and for for SDNC to be running")
-    wait(lambda: OranSdnc.get_events(settings.SDNC_BASICAUTH, "test").status_code == 200, sleep_seconds=10, timeout_seconds=300, waiting_for="SDNC to be ready")
-    wait(lambda: policy_component_ready(), sleep_seconds=10, timeout_seconds=300, waiting_for="Policy to be ready")
+    wait(lambda: policy_component_ready(), sleep_seconds=settings.POLICY_CHECK_RETRY, timeout_seconds=settings.POLICY_CHECK_TIMEOUT, waiting_for="Policy to be ready")
+    wait(lambda: OranSdnc.get_events(settings.SDNC_BASICAUTH, "test").status_code == 200, sleep_seconds=settings.SDNC_CHECK_RETRY, timeout_seconds=settings.SDNC_CHECK_TIMEOUT, waiting_for="SDNC to be ready")
     ## Just kill any simulators that could already be runnin
     network_sims.stop_network_simulators()
     ###### END of FIRST start, now we can start the sims for the real tests.

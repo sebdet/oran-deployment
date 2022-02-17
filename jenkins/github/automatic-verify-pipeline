@@ -55,12 +55,14 @@ podTemplate(yaml: '''
         stage('Test ORAN') {
             dir("test/pythonsdk") {
               try {
-                  sh 'tox'
-                  githubNotify description:'SMO Package verify job SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+                sh 'tox'
+                githubNotify description:'SMO Package verify job SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+                currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
                 githubNotify description:'SMO Package verify job FAILED, TOX tests crashed', repo:'oran-deployment', account: 'sebdet', status:'FAILURE', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+                currentBuild.result = 'FAILURE'
               }
             }
         }
@@ -71,6 +73,7 @@ podTemplate(yaml: '''
         stage('Get Results') {
           archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log, **/reports/junit/*.xml', fingerprint: true
           junit '**/reports/junit/*.xml'
+
         }
       }
    
