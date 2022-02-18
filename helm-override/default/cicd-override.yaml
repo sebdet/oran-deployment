@@ -21,7 +21,7 @@ oran-tests:
   oranTests:
     name: orantests1
     flag: true
-    commitId: d99d86250f356a6fe0ea92517e2efa5deacdd745
+    commitId: 83be1833161166e663098ab09f56551fc83b84c0
 
 github:
   username: "username"
