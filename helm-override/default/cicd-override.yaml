@@ -13,10 +13,15 @@
 # limitations under the License.
 
 # Static Defaults
-oranTests:
-  name: orantests1
-  flag: true
-  commitId: c85a33c9d868ada16362576bfeca622837d15ee4
+testsSuite:
+  jenkins: false
+  tests: true
+
+oran-tests:
+  oranTests:
+    name: orantests1
+    flag: true
+    commitId: d99d86250f356a6fe0ea92517e2efa5deacdd745
 
 github:
   username: "username"

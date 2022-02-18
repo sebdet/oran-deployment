@@ -16,10 +16,11 @@ testsSuite:
   jenkins: true
   tests: false
 
-oranTests:
-  name: orantests1
-  flag: true
-  commitId: 7b4b4007db003d28ee347e3d373e8ac605581cb5
+oran-tests:
+  oranTests:
+    name: orantests1
+    flag: true
+    commitId: 7b4b4007db003d28ee347e3d373e8ac605581cb5
 
 github:
   username: testuser
