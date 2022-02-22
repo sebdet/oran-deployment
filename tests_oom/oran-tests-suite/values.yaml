@@ -97,6 +97,7 @@ jenkins:
                 includeRegex: "github-automatic.*"
                 name: "github-automatic"
 
+        proxy: ""
         pipeline-job: | 
           jobs:
             - script: >
