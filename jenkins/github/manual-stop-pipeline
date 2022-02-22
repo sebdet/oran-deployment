@@ -28,9 +28,10 @@ podTemplate(yaml: '''
               } else if (env.http_proxy) {
                 sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
                 sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+                env.https_proxy=env.http_proxy
               }
             }
-
+            echo 'no proxy settings:'+env.no_proxy
             sh 'apt-get update -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
             sh 'apt-get install git wget sudo -y'
