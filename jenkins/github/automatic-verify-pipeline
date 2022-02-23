@@ -29,31 +29,51 @@ podTemplate(yaml: '''
 
       }
       container('jenkins-ubuntu') {
+        stage ('Proxy settings') {
+          echo 'Proxy check'
+          script {
+            if (env.http_proxy) {
+              echo 'Dump:' + env.http_proxy
+              echo 'Dump:' + env.HTTP_PROXY
+              sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              env.HTTP_PROXY=env.http_proxy
+              echo 'Dump:' + env.http_proxy
+              echo 'Dump:' + env.HTTP_PROXY
+            }
+            if (env.https_proxy) {
+              echo 'Dump1:' + env.https_proxy
+              echo 'Dump1:' + env.HTTPS_PROXY
+              sh 'echo \'Acquire::https::Proxy "' + env.https_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              env.HTTPS_PROXY=env.https_proxy
+              echo 'Dump1:' + env.https_proxy
+              echo 'Dump1:' + env.HTTPS_PROXY
+            } else if (env.http_proxy) {
+              echo 'Dump2:' + env.https_proxy
+              echo 'Dump2:' + env.HTTPS_PROXY
+              sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              env.https_proxy=env.http_proxy
+              env.HTTPS_PROXY=env.http_proxy
+              echo 'Dump2:' + env.https_proxy
+              echo 'Dump2:' + env.HTTPS_PROXY
+            }
+            if (env.no_proxy) {
+              echo 'Dump:' + env.no_proxy
+              echo 'Dump:' + env.NO_PROXY
+              env.NO_PROXY=env.no_proxy
+              echo 'set no PROXY'
+              echo 'Dump:' + env.no_proxy
+              echo 'Dump:' + env.NO_PROXY
+            }
+          }
+          echo 'Dump proxy settings'
+          sh 'printenv'
+
+        }
         stage('Setup tools') {
             echo 'Setup container'
-            sh 'printenv'
-            script {
-              if (env.http_proxy) {
-                sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
-                sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-                env.HTTP_PROXY=env.http_proxy
-              }
-              if (env.https_proxy) {
-                sh 'echo \'Acquire::https::Proxy "' + env.https_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
-                sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-                env.HTTPS_PROXY=env.https_proxy
-              } else if (env.http_proxy) {
-                sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
-                sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-                env.https_proxy=env.http_proxy
-                env.HTTPS_PROXY=env.http_proxy
-              }
-              if (env.no_proxy) {
-                env.NO_PROXY=env.no_proxy
-                echo 'set no PROXY'
-              }
-            }
-            echo 'Dump proxy settings'
             sh 'printenv'
 
             sh 'apt-get update -y'
