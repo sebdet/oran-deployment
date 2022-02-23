@@ -5,7 +5,7 @@ podTemplate(yaml: '''
               spec:
                 containers:
                 - name: jenkins-ubuntu
-                  image: ubuntu:18.04
+                  image: ubuntu:20.04
                   command:
                   - sleep
                   args: 
@@ -35,19 +35,27 @@ podTemplate(yaml: '''
             if (env.http_proxy) {
               sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+
+              sh 'echo "http_proxy = "'+env.http_proxy > ~/.wgetrc
+              sh 'cat ~/.wgetrc'
             }
             if (env.https_proxy) {
               sh 'echo \'Acquire::https::Proxy "' + env.https_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+
+              sh 'echo "https_proxy = "'+env.https_proxy >> ~/.wgetrc
+              sh 'cat ~/.wgetrc'
             } else if (env.http_proxy) {
               sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-              env.https_proxy=env.http_proxy
+              
+              sh 'echo "https_proxy = "'+env.http_proxy >> ~/.wgetrc
+              sh 'cat ~/.wgetrc'
             }
-            if (env.no_proxy) {
+/*            if (env.no_proxy) {
              echo  'Test No proxy is well set'
              echo env.no_proxy
-            }
+            }*/
           }
           sh 'printenv'
 
@@ -57,11 +65,9 @@ podTemplate(yaml: '''
             sh 'printenv'
 
             sh 'apt-get update -y'
-            sh 'apt-get upgrade -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
-            sh 'apt-get install git wget sudo curl -y'
+            sh 'apt-get install apt-transport-https git wget sudo -y'
  
-            sh 'curl --insecure -v https://10.152.183.1:443'
             sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
