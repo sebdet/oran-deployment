@@ -45,12 +45,19 @@ podTemplate(yaml: '''
 
               sh 'echo "https_proxy = "'+env.https_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
+
+              sh 'echo "https_proxy = "'+env.https_proxy+' >> ~/.bashrc'
+              sh 'cat ~/.bashrc'
             } else if (env.http_proxy) {
               sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               
               sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
+
+              sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.bashrc'
+              sh 'cat ~/.bashrc'
+
             }
 /*            if (env.no_proxy) {
              echo  'Test No proxy is well set'
