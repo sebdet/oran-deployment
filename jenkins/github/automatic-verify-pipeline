@@ -55,7 +55,6 @@ podTemplate(yaml: '''
               sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               env.https_proxy=env.http_proxy
-              env.HTTPS_PROXY=env.http_proxy
               echo 'Dump2:' + env.https_proxy
               echo 'Dump2:' + env.HTTPS_PROXY
             }
@@ -82,10 +81,11 @@ podTemplate(yaml: '''
             sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
-            sh 'kubectl version'
+
             sh './scripts/layer-0/0-setup-tests-env.sh'
             sh './scripts/layer-0/0-setup-charts-museum.sh'
             sh './scripts/layer-0/0-setup-helm3.sh'
+            sh 'kubectl version'
         }
         stage('Build ONAP charts') {
             sh './scripts/sub-scripts/build-onap.sh'
