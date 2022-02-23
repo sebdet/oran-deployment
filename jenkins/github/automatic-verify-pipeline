@@ -12,6 +12,12 @@ podTemplate(yaml: '''
                   - 99d
 ''') {
   node(POD_LABEL) {
+          environment {
+            HTTP_PROXY=env.http_proxy
+            HTTPS_PROXY=env.http_proxy
+            NO_PROXY=env.no_proxy
+          }
+
       sh 'printenv'
       stage('Checkout') {
         script {
@@ -44,11 +50,6 @@ podTemplate(yaml: '''
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               env.https_proxy=env.http_proxy
             }
-          }
-          environment {
-            HTTP_PROXY=env.http_proxy
-            HTTPS_PROXY=env.https_proxy
-            NO_PROXY=env.no_proxy
           }
           sh 'printenv'
 
