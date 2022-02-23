@@ -12,12 +12,6 @@ podTemplate(yaml: '''
                   - 99d
 ''') {
   node(POD_LABEL) {
-          environment {
-            HTTP_PROXY=env.http_proxy
-            HTTPS_PROXY=env.http_proxy
-            NO_PROXY=env.no_proxy
-          }
-
       sh 'printenv'
       stage('Checkout') {
         script {
@@ -55,6 +49,7 @@ podTemplate(yaml: '''
 
         }
         stage('Setup tools') {
+          withEnv(['HTTP_PROXY=env.http_proxy', 'HTTPS_PROXY=env.https_proxy', 'NO_PROXY=env.no_proxy']) {
             echo 'Setup container'
             sh 'printenv'
 
@@ -69,6 +64,7 @@ podTemplate(yaml: '''
             sh './scripts/layer-0/0-setup-charts-museum.sh'
             sh './scripts/layer-0/0-setup-helm3.sh'
             sh 'kubectl version'
+          }
         }
         stage('Build ONAP charts') {
             sh './scripts/sub-scripts/build-onap.sh'
