@@ -50,7 +50,7 @@ podTemplate(yaml: '''
                 env.NO_PROXY=env.no_proxy
               }
             }
-            echo 'no proxy settings:'+env.no_proxy
+            sh 'printenv'
 
             sh 'apt-get update -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
