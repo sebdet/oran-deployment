@@ -55,12 +55,13 @@ podTemplate(yaml: '''
         }
         stage('Setup tools') {
             echo 'Setup container'
-            sh 'curl -v https://10.152.183.1:443'
             sh 'printenv'
 
             sh 'apt-get update -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
-            sh 'apt-get install git wget sudo -y'
+            sh 'apt-get install git wget sudo curl -y'
+ 
+            sh 'curl --insecure -v https://10.152.183.1:443'
             sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
