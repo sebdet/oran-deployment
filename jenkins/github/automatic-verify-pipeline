@@ -36,18 +36,17 @@ podTemplate(yaml: '''
               sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
             }
-            if (env.https_proxy) {
+/*            if (env.https_proxy) {
               sh 'echo \'Acquire::https::Proxy "' + env.https_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
             } else if (env.http_proxy) {
               sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               env.https_proxy=env.http_proxy
-            }
+            }*/
             if (env.no_proxy) {
              echo  'Test No proxy is well set'
              echo env.no_proxy
-             env['no_proxy']=env.no_proxy
             }
           }
           sh 'printenv'
