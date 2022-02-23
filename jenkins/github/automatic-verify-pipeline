@@ -5,7 +5,7 @@ podTemplate(yaml: '''
               spec:
                 containers:
                 - name: jenkins-ubuntu
-                  image: ubuntu:20.04
+                  image: ubuntu:22.04
                   command:
                   - sleep
                   args: 
