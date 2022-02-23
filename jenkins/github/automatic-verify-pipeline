@@ -44,8 +44,9 @@ podTemplate(yaml: '''
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               env.https_proxy=env.http_proxy
             }
+            env['no_proxy']=env.no_proxy
+
           }
-          env['no_proxy']=env.no_proxy
           sh 'printenv'
 
         }
