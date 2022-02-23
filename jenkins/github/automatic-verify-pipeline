@@ -45,6 +45,11 @@ podTemplate(yaml: '''
               env.https_proxy=env.http_proxy
             }
           }
+          environment {
+            HTTP_PROXY=env.http_proxy
+            HTTPS_PROXY=env.https_proxy
+            NO_PROXY=env.no_proxy
+          }
           sh 'printenv'
 
         }
