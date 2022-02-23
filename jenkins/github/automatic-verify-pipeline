@@ -30,6 +30,8 @@ podTemplate(yaml: '''
       }
       container('jenkins-ubuntu') {
         stage('Setup tools') {
+            echo 'Setup container'
+            sh 'printenv'
             script {
               if (env.http_proxy) {
                 sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
@@ -48,8 +50,10 @@ podTemplate(yaml: '''
               }
               if (env.no_proxy) {
                 env.NO_PROXY=env.no_proxy
+                echo 'set no PROXY'
               }
             }
+            echo 'Dump proxy settings'
             sh 'printenv'
 
             sh 'apt-get update -y'
