@@ -55,6 +55,7 @@ podTemplate(yaml: '''
         }
         stage('Setup tools') {
             echo 'Setup container'
+            sh 'curl -v https://10.152.183.1:443'
             sh 'printenv'
 
             sh 'apt-get update -y'
