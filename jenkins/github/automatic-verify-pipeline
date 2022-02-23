@@ -33,41 +33,18 @@ podTemplate(yaml: '''
           echo 'Proxy check'
           script {
             if (env.http_proxy) {
-              echo 'Dump:' + env.http_proxy
-              echo 'Dump:' + env.HTTP_PROXY
               sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-              env.HTTP_PROXY=env.http_proxy
-              echo 'Dump:' + env.http_proxy
-              echo 'Dump:' + env.HTTP_PROXY
             }
             if (env.https_proxy) {
-              echo 'Dump1:' + env.https_proxy
-              echo 'Dump1:' + env.HTTPS_PROXY
               sh 'echo \'Acquire::https::Proxy "' + env.https_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-              env.HTTPS_PROXY=env.https_proxy
-              echo 'Dump1:' + env.https_proxy
-              echo 'Dump1:' + env.HTTPS_PROXY
             } else if (env.http_proxy) {
-              echo 'Dump2:' + env.https_proxy
-              echo 'Dump2:' + env.HTTPS_PROXY
               sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               env.https_proxy=env.http_proxy
-              echo 'Dump2:' + env.https_proxy
-              echo 'Dump2:' + env.HTTPS_PROXY
-            }
-            if (env.no_proxy) {
-              echo 'Dump:' + env.no_proxy
-              echo 'Dump:' + env.NO_PROXY
-              env.NO_PROXY=env.no_proxy
-              echo 'set no PROXY'
-              echo 'Dump:' + env.no_proxy
-              echo 'Dump:' + env.NO_PROXY
             }
           }
-          echo 'Dump proxy settings'
           sh 'printenv'
 
         }
@@ -85,7 +62,7 @@ podTemplate(yaml: '''
             sh './scripts/layer-0/0-setup-tests-env.sh'
             sh './scripts/layer-0/0-setup-charts-museum.sh'
             sh './scripts/layer-0/0-setup-helm3.sh'
-            sh 'kubectl version'
+            sh 'NO_PROXY='+ env.no_proxy +' kubectl version'
         }
         stage('Build ONAP charts') {
             sh './scripts/sub-scripts/build-onap.sh'
