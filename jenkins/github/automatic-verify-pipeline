@@ -49,7 +49,9 @@ podTemplate(yaml: '''
 
         }
         stage('Setup tools') {
-          withEnv(['HTTP_PROXY='+env.http_proxy, 'HTTPS_PROXY='+env.https_proxy, 'NO_PROXY='+env.no_proxy]) {
+            echo "Test": $HTTP_PROXY $HTTPS_PROXY $NO_PROXY
+            sh 'echo "TEST:" $HTTP_PROXY $HTTPS_PROXY $NO_PROXY'
+          withEnv(['HTTP_PROXY=${http_proxy}', 'HTTPS_PROXY={https_proxy}', 'NO_PROXY={no_proxy}']) {
             sh 'echo "TEST:" $HTTP_PROXY $HTTPS_PROXY $NO_PROXY'
             echo 'Setup container'
             sh 'printenv'
