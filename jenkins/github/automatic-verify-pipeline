@@ -45,7 +45,7 @@ podTemplate(yaml: '''
               env.https_proxy=env.http_proxy
             }
           }
-          env.no_proxy=env.no_proxy
+          env['no_proxy']=env.no_proxy
           sh 'printenv'
 
         }
