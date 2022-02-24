@@ -23,12 +23,7 @@
 ###
 """Closed Loop Apex usecase tests module."""
 # This usecase has limitations due to Clamp issue.
-# 1. manually change clamp-be settings before running the test:
-#    - run command "kubectl -n onap edit cm onap-policy-clamp-be-configmap"
-#      find variable clamp.config.controlloop.runtime.url and change http into https
-#    - run command "kubectl rollout restart deployment onap-policy-clamp-be -n onap"
-#      and wait until policy-clamp-be pod restarted successfully
-# 2. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
+# 1. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
 
 import time
 import logging
