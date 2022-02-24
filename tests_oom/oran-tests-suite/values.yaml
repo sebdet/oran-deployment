@@ -25,6 +25,9 @@ oran-tests:
 github:
   username: testuser
   password: api-token
+gerrit:
+  username: testuser
+  password: api-token
 
 jenkins:
   controller:
@@ -36,6 +39,11 @@ jenkins:
         keyName: username
       - name: github-secret-credentials
         keyName: password
+      - name: gerrit-secret-credentials
+        keyName: username
+      - name: gerrit-secret-credentials
+        keyName: password
+
 
     additionalPlugins: 
       - job-dsl:1.77
@@ -69,6 +77,13 @@ jenkins:
                     password: ${github-secret-credentials-password}
                     scope: GLOBAL
                     username: ${github-secret-credentials-username}
+                - usernamePassword:
+                    description: "gerrit access username password"
+                    id: "gerrit_username_pass"
+                    password: ${gerrit-secret-credentials-password}
+                    scope: GLOBAL
+                    username: ${gerrit-secret-credentials-username}
+
         proxy: ""
         views: |
           jenkins:
@@ -97,6 +112,18 @@ jenkins:
                 - "buildButton"
                 includeRegex: "github-automatic.*"
                 name: "github-automatic"
+            - list:
+                columns:
+                - "status"
+                - "weather"
+                - "jobName"
+                - "lastSuccess"
+                - "lastFailure"
+                - "lastDuration"
+                - "buildButton"
+                includeRegex: "gerrit-automatic.*"
+                name: "gerrit-automatic"
+
 
         proxy: ""
         pipeline-job: | 
@@ -202,4 +229,25 @@ jenkins:
                     }
                   } 
                 }
+            - script: >
+                multibranchPipelineJob('gerrit-automatic-trigger-verify') {
+                  description('This job is triggered automatically when pull requests are opened on LF GERRIT.')
+                  triggers {
+                    periodic(30)
+                  }
+                  branchSources {
+                    git {
+                      id('2') // IMPORTANT: use a constant and unique identifier
+                      credentialsId('gerrit_username_pass')
+                      includes("+refs/changes/*")
+                      remote("https://gerrit.o-ran-sc.org/r/it/dep")
+                    }
+                  }
+                  factory {
 
+                    workflowBranchProjectFactory {
+                      // Relative location within the checkout of your Pipeline script.
+                      scriptPath("jenkins/github/automatic-verify-pipeline")
+                    }
+                  }
+                }
