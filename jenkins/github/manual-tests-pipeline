@@ -45,7 +45,7 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
-            sh proxies' ./scripts/layer-0/0-setup-tests-env.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-tests-env.sh'
             sh proxies+' ./scripts/layer-0/0-setup-charts-museum.sh'
             sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'
 
