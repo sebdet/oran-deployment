@@ -55,7 +55,7 @@ podTemplate(yaml: '''
             dir("test/pythonsdk") {
               try {
                 if (env.http_proxy) {
-                  sh 'HTTPS_PROXY='+env.http_proxy+' tox'
+                  sh 'HTTPS_PROXY='+env.http_proxy+' NO_PROXY='+env.no_proxy+' tox'
                 } else {
                   sh 'tox'
                 }
