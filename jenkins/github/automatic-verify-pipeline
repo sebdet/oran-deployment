@@ -30,6 +30,7 @@ podTemplate(yaml: '''
       }
       container('jenkins-ubuntu') {
         stage ('Proxy settings') {
+          def proxies=''
           echo 'Proxy check'
           script {
             if (env.http_proxy) {
@@ -42,7 +43,8 @@ podTemplate(yaml: '''
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'         
               sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
-
+              
+              def proxies='HTTPS_PROXY='+env.http_proxy+' '
             }
           }
           sh 'printenv'
@@ -60,19 +62,19 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
 
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-tests-env.sh'
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-charts-museum.sh'
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-helm3.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-tests-env.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-charts-museum.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'
             sh 'kubectl version'
         }
         stage('Build ONAP charts') {
-            sh 'HTTPS_PROXY='+env.http_proxy+ ' ./scripts/sub-scripts/build-onap.sh'
+            sh proxies+' ./scripts/sub-scripts/build-onap.sh'
         }
         stage('Build ORAN charts') {
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-oran.sh'
+            sh proxies+' ./scripts/sub-scripts/build-oran.sh'
         }
         stage('Build TESTS charts') {
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-tests.sh'
+            sh proxies+' ./scripts/sub-scripts/build-tests.sh'
         }
         stage('Start SMO') {
             sh './scripts/layer-2/2-install-oran.sh pythonsdk-tests'
@@ -81,7 +83,7 @@ podTemplate(yaml: '''
             dir("test/pythonsdk") {
               try {
                 if (env.http_proxy) {
-                  sh 'HTTPS_PROXY='+env.http_proxy+' NO_PROXY='+env.no_proxy+' tox'
+                  sh proxies+' NO_PROXY='+env.no_proxy+' tox'
                 } else {
                   sh 'tox'
                 }
@@ -110,3 +112,5 @@ podTemplate(yaml: '''
   }
 }
 }
+
+
