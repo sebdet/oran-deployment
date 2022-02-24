@@ -54,7 +54,7 @@ podTemplate(yaml: '''
 
             sh 'apt-get update -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
-            sh 'apt-get install apt-transport-https git wget sudo -y'
+            sh 'apt-get install git wget sudo -y'
  
             sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
             sh 'mv kubectl /usr/bin'
@@ -71,7 +71,7 @@ podTemplate(yaml: '''
         stage('Build ORAN charts') {
             sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-oran.sh'
         }
-        stage('Build ONAP charts') {
+        stage('Build TESTS charts') {
             sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-tests.sh'
         }
         stage('Start SMO') {
@@ -80,7 +80,7 @@ podTemplate(yaml: '''
         stage('Test ORAN') {
             dir("test/pythonsdk") {
               try {
-                sh 'tox'
+                sh 'HTTPS_PROXY='+env.http_proxy+' tox'
                 githubNotify description:'SMO Package verify job SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'SUCCESS'
               }

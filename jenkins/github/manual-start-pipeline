@@ -18,22 +18,26 @@ podTemplate(yaml: '''
       checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/sebdet/oran-deployment.git']], branches: [[name: env.BRANCH]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
     }
       container('jenkins-ubuntu') {
-        stage('Setup tools') {
-            script {
-              if (env.http_proxy) {
-                sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
-                sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-              }
-              if (env.https_proxy) {
-                sh 'echo \'Acquire::https::Proxy "' + env.https_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
-                sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-              } else if (env.http_proxy) {
-                sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
-                sh 'cat /etc/apt/apt.conf.d/proxy.conf'
-                env.https_proxy=env.http_proxy
-              }
+        stage ('Proxy settings') {
+          echo 'Proxy check'
+          script {
+            if (env.http_proxy) {
+              sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "http_proxy = "'+env.http_proxy+' > ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
+              sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
             }
-            echo 'no proxy settings:'+env.no_proxy
+          }
+          sh 'printenv'
+        }
+
+        stage('Setup tools') {
             sh 'apt-get update -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
             sh 'apt-get install git wget sudo -y'
@@ -41,12 +45,18 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
-            sh './scripts/layer-0/0-setup-tests-env.sh'
-            sh './scripts/layer-0/0-setup-charts-museum.sh'
-            sh './scripts/layer-0/0-setup-helm3.sh'
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-tests-env.sh'
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-charts-museum.sh'
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-helm3.sh'
         }
-        stage('Build SMO charts') {
-            sh './scripts/layer-1/1-build-all-charts.sh'
+        stage('Build ONAP charts') {
+            sh 'HTTPS_PROXY='+env.http_proxy+ ' ./scripts/sub-scripts/build-onap.sh'
+        }
+        stage('Build ORAN charts') {
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-oran.sh'
+        }
+        stage('Build ONAP charts') {
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-tests.sh'
         }
         stage('Start SMO') {
             sh './scripts/layer-2/2-install-oran.sh ' + env.FLAVOR
