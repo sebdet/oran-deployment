@@ -66,13 +66,13 @@ podTemplate(yaml: '''
             sh 'kubectl version'
         }
         stage('Build ONAP charts') {
-            sh './scripts/sub-scripts/build-onap.sh'
+            sh 'HTTPS_PROXY='+env.http_proxy+ ' ./scripts/sub-scripts/build-onap.sh'
         }
         stage('Build ORAN charts') {
-            sh './scripts/sub-scripts/build-oran.sh'
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-oran.sh'
         }
         stage('Build ONAP charts') {
-            sh './scripts/sub-scripts/build-tests.sh'
+            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-tests.sh'
         }
         stage('Start SMO') {
             sh './scripts/layer-2/2-install-oran.sh pythonsdk-tests'
