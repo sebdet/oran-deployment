@@ -1,0 +1,73 @@
+# Copyright © 2021-2022 AT&T Intellectual Property
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Static Defaults
+testsSuite:
+  jenkins: false
+  tests: true
+
+oran-tests:
+  oranTests:
+    name: orantests1
+    flag: true
+    commitId: 83be1833161166e663098ab09f56551fc83b84c0
+
+proxyAddress: &proxyAddress "your.proxy"
+proxyPort: &proxyPort "8080"
+noProxy: &noProxy ".svc.cluster.local,localhost,10.152.183.1,10.1.0.0/16,10.152.183.0/24,127.0.0.1,::1"
+fullProxyAddress: &fullProxyAddress "http://your.proxy:8080"
+javaOptions: &javaOptions "-Dhttp.proxyHost=your.proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=your.proxy -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts=svc.cluster.local,localhost,10.1.0.0/16,10.152.183.0/24,10.152.183.1,127.0.0.1,::1 -Dhttps.nonProxyHosts=svc.cluster.local,localhost,10.1.0.0/16,10.152.183.0/24,10.152.183.1,127.0.0.1,::1"
+
+jenkins:
+  controller:
+    JCasC:
+      configScripts:
+        proxy: |
+          jenkins:
+              proxy:
+                name: "your.proxy"
+                noProxyHost: ".svc.cluster.local,localhost,10.152.183.1,10.1.0.0/16,10.152.183.0/24,127.0.0.1,::1"
+                port: "8080"
+    initContainerEnv:
+      - name: http_proxy
+        value: *fullProxyAddress
+      - name: https_proxy
+        value: *fullProxyAddress
+      - name: no_proxy
+        value: *noProxy
+      - name: JDK_JAVA_OPTIONS
+        value: *javaOptions
+
+    containerEnv:
+      - name: http_proxy
+        value: *fullProxyAddress
+      - name: https_proxy
+        value: *fullProxyAddress
+      - name: no_proxy
+        value: *noProxy
+      - name: JDK_JAVA_OPTIONS
+        value: *javaOptions
+
+    javaOpts: >-
+      -Dhttp.proxyHost=*proxyAddress
+      -Dhttp.proxyPort=*proxyPort
+      -Dhttps.proxyHost=*proxyAddress
+      -Dhttps.proxyPort=*proxyPort
+      -Dhttp.nonProxyHosts=*noProxy
+      -Dhttps.nonProxyHosts=*noProxy
+
+
+github:
+  username: "username"
+  password: "token_api"

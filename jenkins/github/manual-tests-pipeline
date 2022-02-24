@@ -54,7 +54,11 @@ podTemplate(yaml: '''
         stage('Test ORAN') {
             dir("test/pythonsdk") {
               try {
-                sh 'HTTPS_PROXY='+env.http_proxy+' tox'
+                if (env.http_proxy) {
+                  sh 'HTTPS_PROXY='+env.http_proxy+' tox'
+                } else {
+                  sh 'tox'
+                }
               }
               catch(exec) {
                 echo 'TOX tests crashed'

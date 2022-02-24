@@ -69,6 +69,7 @@ jenkins:
                     password: ${github-secret-credentials-password}
                     scope: GLOBAL
                     username: ${github-secret-credentials-username}
+        proxy: ""
         views: |
           jenkins:
             views:
@@ -173,7 +174,7 @@ jenkins:
                 multibranchPipelineJob('github-automatic-trigger-verify') {
                   description('This job is triggered automatically when pull requests are opened on GITHUB.')
                   triggers {
-                    periodic(5)
+                    periodic(30)
                   }
                   branchSources {
                     github {

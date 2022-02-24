@@ -14,8 +14,8 @@
 
 # Static Defaults
 testsSuite:
-  jenkins: false
-  tests: true
+  jenkins: true
+  tests: false
 
 oran-tests:
   oranTests:

@@ -80,7 +80,11 @@ podTemplate(yaml: '''
         stage('Test ORAN') {
             dir("test/pythonsdk") {
               try {
-                sh 'HTTPS_PROXY='+env.http_proxy+' tox'
+                if (env.http_proxy) {
+                  sh 'HTTPS_PROXY='+env.http_proxy+' tox'
+                } else {
+                  sh 'tox'
+                }
                 githubNotify description:'SMO Package verify job SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'SUCCESS'
               }
