@@ -45,7 +45,6 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
-            sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'            
         }
         stage('Stop SMO') {
           sh './scripts/sub-scripts/uninstall-nonrtric.sh'
