@@ -12,6 +12,8 @@ podTemplate(yaml: '''
                   - 99d
 ''') {
   node(POD_LABEL) {
+      
+      def proxies=''
       sh 'printenv'
       stage('Checkout') {
         script {
@@ -30,7 +32,6 @@ podTemplate(yaml: '''
       }
       container('jenkins-ubuntu') {
         stage ('Proxy settings') {
-          def proxies=''
           echo 'Proxy check'
           script {
             if (env.http_proxy) {
