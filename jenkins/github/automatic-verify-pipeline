@@ -44,7 +44,7 @@ podTemplate(yaml: '''
               sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
               
-              def proxies='HTTPS_PROXY='+env.http_proxy+' '
+              proxies='HTTPS_PROXY='+env.http_proxy+' '
             }
           }
           sh 'printenv'
