@@ -29,7 +29,6 @@ podTemplate(yaml: '''
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
-
             }
           }
           sh 'printenv'

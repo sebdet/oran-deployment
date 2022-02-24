@@ -154,6 +154,10 @@ jenkins:
                 }
             - script: >
                 pipelineJob('github-manual-stop-smo') {
+                  parameters {
+                    stringParam('BRANCH',"*/main","Branch or Commit ID")
+                  }
+
                   concurrentBuild(false)
                   description('This job is triggered manually to stop the running SMO in the K8S cluster')
                   definition {
@@ -163,7 +167,7 @@ jenkins:
                           remote {
                             url('https://github.com/sebdet/oran-deployment.git')
                           }
-                          branch('*/main')
+                          branch('$BRANCH')
                         }
                       }
                       scriptPath("jenkins/github/manual-stop-pipeline")
