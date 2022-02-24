@@ -12,6 +12,7 @@ podTemplate(yaml: '''
 ''') {
 
   node(POD_LABEL) {
+    def proxies=''
     stage('Checkout') {
       checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/sebdet/oran-deployment.git']], branches: [[name: '*/main']], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
     }
@@ -29,6 +30,8 @@ podTemplate(yaml: '''
               sh 'cat /etc/apt/apt.conf.d/proxy.conf'
               sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
+
+              proxies='HTTPS_PROXY='+env.http_proxy+' '
             }
           }
           sh 'printenv'
@@ -42,7 +45,7 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-helm3.sh'            
+            sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'            
         }
         stage('Stop SMO') {
           sh './scripts/sub-scripts/uninstall-nonrtric.sh'

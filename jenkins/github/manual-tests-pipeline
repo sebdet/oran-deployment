@@ -11,6 +11,7 @@ podTemplate(yaml: '''
                   - 99d
 ''') {
   node(POD_LABEL) {
+     def proxies=''
      stage('Checkout') {
        sh 'printenv' 
        git branch: env.BRANCH, url:'https://github.com/sebdet/oran-deployment.git'
@@ -30,6 +31,7 @@ podTemplate(yaml: '''
               sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
               sh 'cat ~/.wgetrc'
 
+              proxies='HTTPS_PROXY='+env.http_proxy+' '
             }
           }
           sh 'printenv'
@@ -43,19 +45,19 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-tests-env.sh'
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-charts-museum.sh'
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/layer-0/0-setup-helm3.sh'
+            sh proxies' ./scripts/layer-0/0-setup-tests-env.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-charts-museum.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'
 
         }
         stage('Build TESTS charts') {
-            sh 'HTTPS_PROXY='+env.http_proxy+' ./scripts/sub-scripts/build-tests.sh'
+            sh proxies+' ./scripts/sub-scripts/build-tests.sh'
         }
         stage('Test ORAN') {
             dir("test/pythonsdk") {
               try {
                 if (env.http_proxy) {
-                  sh 'HTTPS_PROXY='+env.http_proxy+' NO_PROXY='+env.no_proxy+' tox'
+                  sh proxies+' NO_PROXY='+env.no_proxy+' tox'
                 } else {
                   sh 'tox'
                 }
