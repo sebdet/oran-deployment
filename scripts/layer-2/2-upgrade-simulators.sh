@@ -27,8 +27,15 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
+FLAVOUR=$1
+if [ -z "$1" ]
+  then
+    echo "No helm override flavour supplied, going to default"
+    FLAVOUR="default"
+fi
+
 echo "Starting Network Simulators namespace ..."
-../sub-scripts/upgrade-simulators.sh ../../helm-override/network-simulators-override.yaml ../../helm-override/network-simulators-topology-override.yaml
+../sub-scripts/upgrade-simulators.sh ../../helm-override/$FLAVOUR/network-simulators-override.yaml ../../helm-override/$FLAVOUR/network-simulators-topology-override.yaml
 
 kubectl get pods -n network
 kubectl get namespaces

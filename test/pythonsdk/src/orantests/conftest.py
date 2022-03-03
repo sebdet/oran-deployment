@@ -25,8 +25,11 @@
 import logging
 import logging.config
 import os
+from requests import RequestException
 from onapsdk.configuration import settings
+from onapsdk.exceptions import ConnectionFailed, APIError
 from waiting import wait
+from urllib3.exceptions import NewConnectionError
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.policy import OranPolicy
 from oransdk.sdnc.sdnc import OranSdnc
@@ -50,7 +53,11 @@ policy = OranPolicy()
 def policy_component_ready():
     """Check if components are ready."""
     logger.info("Verify policy components are ready")
-    policy_ready = {"api_ready": False, "pap_ready": False, "apex_ready": False}
+    try:
+        policy_ready = {"api_ready": False, "pap_ready": False, "apex_ready": False}
+    except (RequestException, NewConnectionError, ConnectionFailed, APIError) as e:
+        logger.error(e)
+        return False
     policy_status = policy.get_components_status(settings.POLICY_BASICAUTH)
     if (policy_status["api"]["healthy"] and not policy_ready["api_ready"]):
         logger.info("Policy Api is ready")
@@ -63,6 +70,16 @@ def policy_component_ready():
         policy_ready["apex_ready"] = True
     return policy_ready["api_ready"] and policy_ready["pap_ready"] and policy_ready["apex_ready"]
 
+def sdnc_component_ready():
+    """Check if SDNC component is ready."""
+    logger.info("Verify sdnc component is ready")
+
+    try:
+        response = OranSdnc.get_events(settings.SDNC_BASICAUTH, "test")
+    except (RequestException, NewConnectionError, ConnectionFailed, APIError) as e:
+        logger.error(e)
+        return False
+    return response.status_code == 200
 
 ###### Entry points of PYTEST Session
 def pytest_sessionstart():
@@ -70,8 +87,8 @@ def pytest_sessionstart():
     logger.info("Check and wait for SMO to be running")
     smo.wait_for_smo_to_be_running()
     logger.info("Check and for for SDNC to be running")
-    wait(lambda: OranSdnc.get_events(settings.SDNC_BASICAUTH, "test").status_code == 200, sleep_seconds=10, timeout_seconds=300, waiting_for="SDNC to be ready")
-    wait(lambda: policy_component_ready(), sleep_seconds=10, timeout_seconds=300, waiting_for="Policy to be ready")
+    wait(lambda: policy_component_ready(), sleep_seconds=settings.POLICY_CHECK_RETRY, timeout_seconds=settings.POLICY_CHECK_TIMEOUT, waiting_for="Policy to be ready")
+    wait(lambda: sdnc_component_ready(), sleep_seconds=settings.SDNC_CHECK_RETRY, timeout_seconds=settings.SDNC_CHECK_TIMEOUT, waiting_for="SDNC to be ready")
     ## Just kill any simulators that could already be runnin
     network_sims.stop_network_simulators()
     ###### END of FIRST start, now we can start the sims for the real tests.

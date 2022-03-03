@@ -25,4 +25,4 @@
 
 kubectl create namespace onap
 echo '### Installing ONAP part ###'
-helm deploy --debug onap local/onap --namespace onap -f $1
+helm deploy --debug onap local/onap --namespace onap -f $1 --set global.persistence.mountPath="/dockerdata-nfs/deployment-$2" --set dmaap.message-router.message-router-zookeeper.persistence.mountPath="/dockerdata-nfs/deployment-$2" --set dmaap.message-router.message-router-kafka.persistence.mountPath="/dockerdata-nfs/deployment-$2"

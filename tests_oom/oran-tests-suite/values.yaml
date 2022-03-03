@@ -16,12 +16,16 @@ testsSuite:
   jenkins: true
   tests: false
 
-oranTests:
-  name: orantests1
-  flag: true
-  commitId: 7b4b4007db003d28ee347e3d373e8ac605581cb5
+oran-tests:
+  oranTests:
+    name: orantests1
+    flag: true
+    commitId: 7b4b4007db003d28ee347e3d373e8ac605581cb5
 
 github:
+  username: testuser
+  password: api-token
+gerrit:
   username: testuser
   password: api-token
 
@@ -35,10 +39,16 @@ jenkins:
         keyName: username
       - name: github-secret-credentials
         keyName: password
+      - name: gerrit-secret-credentials
+        keyName: username
+      - name: gerrit-secret-credentials
+        keyName: password
+
 
     additionalPlugins: 
       - job-dsl:1.77
       - pipeline-githubnotify-step:1.0.5
+      - lockable-resources:2.14
     JCasC:
       securityRealm: |-
         local:
@@ -67,6 +77,14 @@ jenkins:
                     password: ${github-secret-credentials-password}
                     scope: GLOBAL
                     username: ${github-secret-credentials-username}
+                - usernamePassword:
+                    description: "gerrit access username password"
+                    id: "gerrit_username_pass"
+                    password: ${gerrit-secret-credentials-password}
+                    scope: GLOBAL
+                    username: ${gerrit-secret-credentials-username}
+
+        proxy: ""
         views: |
           jenkins:
             views:
@@ -94,13 +112,27 @@ jenkins:
                 - "buildButton"
                 includeRegex: "github-automatic.*"
                 name: "github-automatic"
+            - list:
+                columns:
+                - "status"
+                - "weather"
+                - "jobName"
+                - "lastSuccess"
+                - "lastFailure"
+                - "lastDuration"
+                - "buildButton"
+                includeRegex: "gerrit-automatic.*"
+                name: "gerrit-automatic"
 
+
+        proxy: ""
         pipeline-job: | 
           jobs:
             - script: >
                 pipelineJob('github-manual-start-test') {
                   parameters {
                     stringParam('BRANCH',"*/main","Branch or Commit ID")
+                    stringParam('FLAVOR', "pythonsdk-tests", "Helm override SMO Package flavor, it is obviously the directory in the helm-override folder")
                   }
                   concurrentBuild(false)
                   description('This job is triggered manually to execute the SMO tests on the RUNNING SMO in the K8S cluster')
@@ -126,6 +158,7 @@ jenkins:
                 pipelineJob('github-manual-start-smo') {
                   parameters {
                     stringParam('BRANCH',"*/main","Branch or Commit ID")
+                    stringParam('FLAVOR', "pythonsdk-tests", "Helm override SMO Package flavor, it is obviously the directory in the helm-override folder")
                   }
                   description('This job is triggered manually to start SMO in the K8S cluster')
                   concurrentBuild(false)
@@ -148,6 +181,10 @@ jenkins:
                 }
             - script: >
                 pipelineJob('github-manual-stop-smo') {
+                  parameters {
+                    stringParam('BRANCH',"*/main","Branch or Commit ID")
+                  }
+
                   concurrentBuild(false)
                   description('This job is triggered manually to stop the running SMO in the K8S cluster')
                   definition {
@@ -157,7 +194,7 @@ jenkins:
                           remote {
                             url('https://github.com/sebdet/oran-deployment.git')
                           }
-                          branch('*/main')
+                          branch('$BRANCH')
                         }
                       }
                       scriptPath("jenkins/github/manual-stop-pipeline")
@@ -168,7 +205,7 @@ jenkins:
                 multibranchPipelineJob('github-automatic-trigger-verify') {
                   description('This job is triggered automatically when pull requests are opened on GITHUB.')
                   triggers {
-                    periodic(3)
+                    periodic(30)
                   }
                   branchSources {
                     github {
@@ -178,7 +215,7 @@ jenkins:
                       scanCredentialsId('github_username_pass')
                       buildForkPRHead(false)
                       buildForkPRMerge(false)
-                      buildOriginBranch(false)
+                      buildOriginBranch(true)
                       buildOriginBranchWithPR(false)
                       buildOriginPRHead(true)
                       buildOriginPRMerge(false)
@@ -192,4 +229,25 @@ jenkins:
                     }
                   } 
                 }
+            - script: >
+                multibranchPipelineJob('gerrit-automatic-trigger-verify') {
+                  description('This job is triggered automatically when pull requests are opened on LF GERRIT.')
+                  triggers {
+                    periodic(30)
+                  }
+                  branchSources {
+                    git {
+                      id('2') // IMPORTANT: use a constant and unique identifier
+                      credentialsId('gerrit_username_pass')
+                      includes("+refs/changes/*")
+                      remote("https://gerrit.o-ran-sc.org/r/it/dep")
+                    }
+                  }
+                  factory {
 
+                    workflowBranchProjectFactory {
+                      // Relative location within the checkout of your Pipeline script.
+                      scriptPath("jenkins/github/automatic-verify-pipeline")
+                    }
+                  }
+                }

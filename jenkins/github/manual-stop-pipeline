@@ -12,10 +12,31 @@ podTemplate(yaml: '''
 ''') {
 
   node(POD_LABEL) {
+    def proxies=''
     stage('Checkout') {
       checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/sebdet/oran-deployment.git']], branches: [[name: '*/main']], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
     }
       container('jenkins-ubuntu') {
+        stage ('Proxy settings') {
+          echo 'Proxy check'
+          script {
+            if (env.http_proxy) {
+              sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "http_proxy = "'+env.http_proxy+' > ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
+              sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
+              proxies='HTTPS_PROXY='+env.http_proxy+' '
+            }
+          }
+          sh 'printenv'
+        }
+
         stage('Setup tools') {
             sh 'apt-get update -y'
             sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
@@ -24,11 +45,12 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
-            sh './scripts/layer-0/0-setup-helm3.sh'
         }
         stage('Stop SMO') {
-            sh './scripts/uninstall-all.sh'
+          sh './scripts/sub-scripts/uninstall-nonrtric.sh'
+          sh './scripts/sub-scripts/uninstall-onap.sh'
         }
+
       }
     
   }

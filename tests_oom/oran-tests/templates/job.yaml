@@ -67,7 +67,6 @@ spec:
               /opt/oran-deployment/scripts/layer-0/0-setup-tests-env.sh;
               /opt/oran-deployment/scripts/layer-0/0-setup-charts-museum.sh;
               /opt/oran-deployment/scripts/layer-0/0-setup-helm3.sh;
-              /opt/oran-deployment/scripts/layer-1/1-build-all-charts.sh;
-
+              /opt/oran-deployment/scripts/sub-scripts/build-tests.sh;
               cd test/pythonsdk;
               tox;
