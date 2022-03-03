@@ -28,6 +28,7 @@ import os
 from requests import RequestException
 from onapsdk.configuration import settings
 from waiting import wait
+from urllib3.exceptions import NewConnectionError
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.policy import OranPolicy
 from oransdk.sdnc.sdnc import OranSdnc
@@ -53,7 +54,7 @@ def policy_component_ready():
     logger.info("Verify policy components are ready")
     try:
         policy_ready = {"api_ready": False, "pap_ready": False, "apex_ready": False}
-    except RequestException as e:
+    except (RequestException, NewConnectionError) as e:
         logger.error(e)
         return False
     policy_status = policy.get_components_status(settings.POLICY_BASICAUTH)
@@ -74,7 +75,7 @@ def sdnc_component_ready():
 
     try:
         response = OranSdnc.get_events(settings.SDNC_BASICAUTH, "test")
-    except RequestException as e:
+    except (RequestException, NewConnectionError) as e:
         logger.error(e)
         return False
     return response.status_code == 200
