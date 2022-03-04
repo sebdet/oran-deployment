@@ -49,6 +49,7 @@ jenkins:
       - job-dsl:1.77
       - pipeline-githubnotify-step:1.0.5
       - lockable-resources:2.14
+      - gerrit-code-review:0.4.4
     JCasC:
       securityRealm: |-
         local:
@@ -222,7 +223,6 @@ jenkins:
                     }
                   }
                   factory {
-
                     workflowBranchProjectFactory {
                       // Relative location within the checkout of your Pipeline script.
                       scriptPath("jenkins/github/automatic-verify-pipeline")
@@ -236,18 +236,26 @@ jenkins:
                     periodic(30)
                   }
                   branchSources {
-                    git {
-                      id('2') // IMPORTANT: use a constant and unique identifier
-                      credentialsId('gerrit_username_pass')
-                      includes("+refs/changes/*")
-                      remote("https://gerrit.o-ran-sc.org/r/it/dep")
+                    branchSource {
+                      source {
+                        gerrit {
+                          id('2') // IMPORTANT: use a constant and unique identifier
+                          credentialsId('gerrit_username_pass')
+                          remote("https://gerrit.o-ran-sc.org/r/a/it/dep")
+                          traits {
+                            changeDiscoveryTrait {
+                              queryString("is:open")
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                   factory {
 
                     workflowBranchProjectFactory {
                       // Relative location within the checkout of your Pipeline script.
-                      scriptPath("jenkins/github/automatic-verify-pipeline")
+                      scriptPath("smo-install/jenkins/gerrit/automatic-verify-pipeline")
                     }
                   }
                 }

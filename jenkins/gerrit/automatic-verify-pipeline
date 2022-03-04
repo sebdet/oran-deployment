@@ -1,0 +1,117 @@
+lock('smo') {
+podTemplate(yaml: '''
+              apiVersion: v1
+              kind: Pod
+              spec:
+                containers:
+                - name: jenkins-ubuntu
+                  image: ubuntu:20.04
+                  command:
+                  - sleep
+                  args: 
+                  - 99d
+''') {
+  node(POD_LABEL) {
+      
+      def proxies=''
+      sh 'printenv'
+      stage('Checkout') {
+        script {
+          if (env.BRANCH_NAME.startsWith('PR-')) {
+            echo 'PULL REQUEST case detected'
+            gitInfo =  checkout([$class: 'GitSCM', branches: [[name: 'pr/'+env.CHANGE_ID]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/pull/*/head:refs/remotes/origin/pr/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
+
+          } else {
+            echo 'BRANCH case detected'
+            gitInfo =  checkout([$class: 'GitSCM', branches: [[name: env.BRANCH_NAME]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'github_username_pass', name: 'origin', refspec: '+refs/heads/*:refs/remotes/origin/*', url: 'https://github.com/sebdet/oran-deployment.git']]])
+          }
+        }
+        echo "Test: "+ gitInfo
+        githubNotify description:'SMO Package verify job starts', repo:'oran-deployment', account: 'sebdet', status:'PENDING', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+
+      }
+      container('jenkins-ubuntu') {
+        stage ('Proxy settings') {
+          echo 'Proxy check'
+          script {
+            if (env.http_proxy) {
+              sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "http_proxy = "'+env.http_proxy+' > ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
+              sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'         
+              sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+              
+              proxies='HTTPS_PROXY='+env.http_proxy+' '
+            }
+          }
+          sh 'printenv'
+
+        }
+        stage('Setup tools') {
+            echo 'Setup container'
+            sh 'printenv'
+
+            sh 'apt-get update -y'
+            sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
+            sh 'apt-get install git wget sudo -y'
+ 
+            sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
+            sh 'mv kubectl /usr/bin'
+            sh 'chmod a+x /usr/bin/kubectl'
+
+            sh proxies+' ./scripts/layer-0/0-setup-tests-env.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-charts-museum.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'
+            sh 'kubectl version'
+        }
+        stage('Build ONAP charts') {
+            sh proxies+' ./scripts/sub-scripts/build-onap.sh'
+        }
+        stage('Build ORAN charts') {
+            sh proxies+' ./scripts/sub-scripts/build-oran.sh'
+        }
+        stage('Build TESTS charts') {
+            sh proxies+' ./scripts/sub-scripts/build-tests.sh'
+        }
+        stage('Start SMO') {
+            sh './scripts/layer-2/2-install-oran.sh pythonsdk-tests'
+        }
+        stage('Test ORAN') {
+            dir("test/pythonsdk") {
+              try {
+                if (env.http_proxy) {
+                  sh proxies+' NO_PROXY='+env.no_proxy+' tox'
+                } else {
+                  sh 'tox'
+                }
+                
+                githubNotify description:'SMO Package verify job SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+                currentBuild.result = 'SUCCESS'
+              }
+              catch(exec) {
+                echo 'TOX tests crashed'
+                githubNotify description:'SMO Package verify job FAILED, TOX tests crashed', repo:'oran-deployment', account: 'sebdet', status:'FAILURE', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+                currentBuild.result = 'FAILURE'
+              }
+            }
+        }
+        stage('Stop SMO') {
+          sh './scripts/sub-scripts/uninstall-nonrtric.sh'
+          sh './scripts/sub-scripts/uninstall-onap.sh'
+        }
+        stage('Get Results') {
+          archiveArtifacts artifacts: 'test/pythonsdk/src/orantests/pythonsdk.debug.log, **/reports/junit/*.xml', fingerprint: true
+          junit '**/reports/junit/*.xml'
+
+        }
+      }
+   
+  }
+}
+}
+
+
