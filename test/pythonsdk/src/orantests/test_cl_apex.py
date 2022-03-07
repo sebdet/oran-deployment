@@ -28,6 +28,8 @@
 import time
 import logging
 import logging.config
+import os
+import pytest
 from onapsdk.configuration import settings
 from onapsdk.exceptions import RequestError
 from waiting import wait
@@ -36,33 +38,42 @@ from oransdk.policy.policy import OranPolicy
 from oransdk.policy.clamp import ClampToscaTemplate
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
+from smo.network_simulators import NetworkSimulators
+
+# Set working dir as python script location
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Apex policy")
 dmaap = OranDmaap()
 clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
+network_simulators = NetworkSimulators("./resources")
 
-def create_topic():
-    """Create the topic in Dmaap."""
-    logger.info("Create new topic")
-    topic = '{  "topicName": "unauthenticated.SEC_FAULT_OUTPUT",  "topicDescription": "test topic",  "partitionCount": 1,  "replicationCnCount": 1,  "transactionEnabled": "false"}'
-    response = dmaap.create_topic(topic)
-    logger.info("response is: %s", response)
+@pytest.fixture(scope="module", autouse=True)
+def setup_simulators():
+    """Setup the simulators before the executing the tests."""
+    logger.info("Test class setup for Closed Loop Apex test")
 
-def verify_topic_created():
-    """Verify whether needed topic created."""
-    logger.info("Verify topic created")
-    topiclist = dmaap.get_all_topics({})
-    topic_created = False
-    for topic in topiclist:
-        if topic["topicName"] == "unauthenticated.SEC_FAULT_OUTPUT":
-            topic_created = True
-            break
+    dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
+    dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
+    # Purge the FAULT TOPIC
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
 
-    if topic_created:
-        logger.info("Topic created successfully")
-    else:
-        logger.info("Topic creation failed")
+    network_simulators.start_network_simulators()
+    network_simulators.wait_for_network_simulators_to_be_running()
+
+    # Wait enough time to have at least the SDNR notifications sent
+    logger.info("Waiting 10s that SDNR sends all registration events to VES...")
+    time.sleep(10)
+    logger.info("Test Session setup completed successfully")
+
+    ### Cleanup code
+    yield
+    network_simulators.stop_network_simulators()
+    logger.info("Test Session cleanup done")
 
 def upload_commission(tosca_template):
     """
@@ -170,8 +181,6 @@ def send_dmaap_event():
 
 def test_cl_oru_recovery():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
-    create_topic()
-    verify_topic_created()
 
     tosca_template = jinja_env().get_template("commission_apex.json.j2").render()
 
