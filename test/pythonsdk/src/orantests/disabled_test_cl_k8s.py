@@ -25,21 +25,17 @@
 # This usecase has limitations due to Clamp issue.
 # 1. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
 
-import time
 import logging
 import logging.config
-import pytest
 import subprocess
 import os
+from subprocess import check_output
+import pytest
 from waiting import wait
 from onapsdk.configuration import settings
-from onapsdk.exceptions import RequestError
 from oransdk.dmaap.dmaap import OranDmaap
-from oransdk.policy.policy import OranPolicy
 from oransdk.policy.clamp import ClampToscaTemplate
-from oransdk.sdnc.sdnc import OranSdnc
-from oransdk.utils.jinja import jinja_env
-from subprocess import check_output, run
+
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -47,7 +43,7 @@ dname = os.path.dirname(abspath)
 os.chdir(dname)
 
 logging.config.dictConfig(settings.LOG_CONFIG)
-logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Apex policy")
+logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Clamp K8S usecase")
 dmaap = OranDmaap()
 clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
 
@@ -77,7 +73,7 @@ def setup_simulators():
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm search repo -l oru-app\""
     result = check_output(cmd, shell=True).decode('utf-8')
     if result == '':
-       logger.info("Failed to update the K8s pod repo")
+        logger.info("Failed to update the K8s pod repo")
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
@@ -116,13 +112,12 @@ def is_oru_app_enabled() -> bool:
 def add_remote_repo():
     """Config the clamp k8s pod."""
     logger.info("Add remote repo to the clamp k8s pod")
-    pod_name="onap-policy-clamp-cl-k8s-ppnt-6ddb58cfbd-2m8kn"
-    ip="135.41.21.24"
-    cmd=f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo add chartmuseum {ip}:8080\""
-    cmd=f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo update\""
+    pod_name = "onap-policy-clamp-cl-k8s-ppnt-6ddb58cfbd-2m8kn"
+    ip = "135.41.21.24"
+    cmd = f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo add chartmuseum {ip}:8080\""
+    cmd = f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo update\""
     check_output(cmd, shell=True).decode('utf-8')
 
 
 def test_cl_oru_recovery():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
-
