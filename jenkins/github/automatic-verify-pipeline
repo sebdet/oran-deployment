@@ -82,24 +82,20 @@ podTemplate(yaml: '''
         }
         stage('Test ORAN') {
             dir("test/pythonsdk") {
-              def errorLog="" 
               try {
                 if (env.http_proxy) {
                   sh proxies+' NO_PROXY='+env.no_proxy+' tox'
                 } else {
                   sh 'tox'
                 }
-                errorLog = sh 'tail -20 src/orantests/pythonsdk.debug.log'
                 githubNotify context:env.HUDSON_URL, description:'SMO Package build SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
-                errorLog = sh 'tail -20 src/orantests/pythonsdk.debug.log'
                 githubNotify context:env.HUDSON_URL, description:'SMO Package build FAILED, TOX tests crashed', repo:'oran-deployment', account: 'sebdet', status:'FAILURE', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'FAILURE'
               }
-              echo "Tox log:" + errorLog
             }
         }
         stage('Stop SMO') {
