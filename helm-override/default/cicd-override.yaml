@@ -26,3 +26,7 @@ oran-tests:
 github:
   username: "username"
   password: "token_api"
+
+jenkins:
+  controller:
+    jenkinsUrl: "http://smo-jenkins:32080"

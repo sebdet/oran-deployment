@@ -111,6 +111,17 @@ jenkins:
                 - "lastFailure"
                 - "lastDuration"
                 - "buildButton"
+                includeRegex: "gerrit-manual.*"
+                name: "gerrit-manual"
+            - list:
+                columns:
+                - "status"
+                - "weather"
+                - "jobName"
+                - "lastSuccess"
+                - "lastFailure"
+                - "lastDuration"
+                - "buildButton"
                 includeRegex: "github-automatic.*"
                 name: "github-automatic"
             - list:
@@ -168,7 +179,7 @@ jenkins:
                       scm {
                         git {
                           remote {
-                            url('https://github.com/sebdet/oran-deployment.git')
+                            github('sebdet/oran-deployment')
                           }
                           branch('$BRANCH')
                           extensions {
@@ -193,7 +204,7 @@ jenkins:
                       scm {
                         git {
                           remote {
-                            url('https://github.com/sebdet/oran-deployment.git')
+                            github('sebdet/oran-deployment')
                           }
                           branch('$BRANCH')
                         }
@@ -256,6 +267,85 @@ jenkins:
                     workflowBranchProjectFactory {
                       // Relative location within the checkout of your Pipeline script.
                       scriptPath("smo-install/jenkins/gerrit/automatic-verify-pipeline")
+                    }
+                  }
+                }
+
+            - script: >
+                pipelineJob('gerrit-manual-start-test') {
+                  parameters {
+                    stringParam('BRANCH',"master","Branch or Commit ID")
+                    stringParam('FLAVOR', "pythonsdk-tests", "Helm override SMO Package flavor, it is obviously the directory in the helm-override folder")
+                  }
+                  concurrentBuild(false)
+                  description('This job is triggered manually to execute the SMO tests on the RUNNING SMO in the K8S cluster')
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                           url('https://gerrit.o-ran-sc.org/r/it/dep')
+                          }
+                          branch('$BRANCH')
+                          extensions {
+                            cleanBeforeCheckout()
+                          }
+
+                        }
+                      }
+                      scriptPath("smo-install/jenkins/gerrit/manual-tests-pipeline")
+                    }
+                  }
+                }
+
+            - script: >
+                pipelineJob('gerrit-manual-start-smo') {
+                  parameters {
+                    stringParam('BRANCH',"master","Branch or Commit ID")
+                    stringParam('FLAVOR', "pythonsdk-tests", "Helm override SMO Package flavor, it is obviously the directory in the helm-override folder")
+                  }
+                  description('This job is triggered manually to start SMO in the K8S cluster')
+                  concurrentBuild(false)
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                            url('https://gerrit.o-ran-sc.org/r/it/dep')
+                          }
+                          branch('$BRANCH')
+                          extensions {
+                            cleanBeforeCheckout()
+                          }
+                        }
+                      }
+                      scriptPath("smo-install/jenkins/gerrit/manual-start-pipeline")
+                    }
+                  }
+                }
+
+            - script: >
+                pipelineJob('gerrit-manual-stop-smo') {
+                  parameters {
+                    stringParam('BRANCH',"master","Branch or Commit ID")
+                  }
+
+                  concurrentBuild(false)
+                  description('This job is triggered manually to stop the running SMO in the K8S cluster')
+                  definition {
+                    cpsScm {
+                      scm {
+                        git {
+                          remote {
+                            url('https://gerrit.o-ran-sc.org/r/it/dep')
+                          }
+                          branch('$BRANCH')
+                          extensions {
+                            cleanBeforeCheckout()
+                          }
+                        }
+                      }
+                      scriptPath("smo-install/jenkins/gerrit/manual-stop-pipeline")
                     }
                   }
                 }

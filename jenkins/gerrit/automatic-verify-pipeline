@@ -27,7 +27,7 @@ podTemplate(yaml: '''
           }
         }
         echo "Test: "+ gitInfo
-        gerritReview labels: [Verified: 0], message: 'Testing the SMO package'
+        gerritReview labels: [Verified: 0], message: env.HUDSON_URL+': Testing the SMO package'
       }
       container('jenkins-ubuntu') {
         stage ('Proxy settings') {
@@ -87,13 +87,14 @@ podTemplate(yaml: '''
                 } else {
                   sh 'tox'
                 }
-                gerritReview labels: [Verified: 0], message:'SMO Package verified successfully'
+                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Package verified successfully ('+env.RUN_TESTS_DISPLAY_URL+')'
                 gerritCheck checks: ['SMO:checker': 'SUCCESSFUL']
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
-                gerritReview labels: [Verified: 0], message:'SMO Package verification failed, TOX tests have crashed'
+                def errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Package verification failed, TOX tests have crashed ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
                 gerritCheck checks: ['SMO:checker': 'FAILED']
                 currentBuild.result = 'FAILURE'
               }
