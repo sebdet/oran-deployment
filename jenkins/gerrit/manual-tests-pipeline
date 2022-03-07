@@ -54,7 +54,7 @@ podTemplate(yaml: '''
             sh proxies+' ./smo-install/scripts/sub-scripts/build-tests.sh'
         }
         stage('Test ORAN') {
-            dir("test/pythonsdk") {
+            dir("smo-install/test/pythonsdk") {
               try {
                 if (env.http_proxy) {
                   sh proxies+' NO_PROXY='+env.no_proxy+' tox'

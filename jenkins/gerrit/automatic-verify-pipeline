@@ -27,7 +27,7 @@ podTemplate(yaml: '''
           }
         }
         echo "Test: "+ gitInfo
-        gerritReview labels: [Verified: 0], message: env.HUDSON_URL+': Testing the SMO package'
+        gerritReview labels: [Verified: 0], message: env.HUDSON_URL+': Validating the SMO package'
       }
       container('jenkins-ubuntu') {
         stage ('Proxy settings') {
@@ -81,25 +81,27 @@ podTemplate(yaml: '''
         }
         stage('Test ORAN') {
             dir("smo-install/test/pythonsdk") {
+              def errorLog=""
               try {
                 if (env.http_proxy) {
                   sh proxies+' NO_PROXY='+env.no_proxy+' tox'
                 } else {
                   sh 'tox'
                 }
-                def errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
-                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Package verified successfully ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
+                errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build SUCCESSFUL ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
                 gerritCheck checks: ['SMO:checker': 'SUCCESSFUL']
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
-                def errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
-                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Package verification failed, TOX tests have crashed ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
+                errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build FAILED, TOX tests have crashed ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
                 gerritCheck checks: ['SMO:checker': 'FAILED']
                 currentBuild.result = 'FAILURE'
               }
             }
+            echo 'TOX logs:' + errorLog
         }
         stage('Stop SMO') {
           sh './smo-install/scripts/sub-scripts/uninstall-nonrtric.sh'
