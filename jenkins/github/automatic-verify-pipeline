@@ -89,13 +89,13 @@ podTemplate(yaml: '''
                 } else {
                   sh 'tox'
                 }
-                errorLog = sh 'tail -20 test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                errorLog = sh 'tail -20 src/orantests/pythonsdk.debug.log'
                 githubNotify context:env.HUDSON_URL, description:'SMO Package build SUCCESSFUL', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
-                errorLog = sh 'tail -20 test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                errorLog = sh 'tail -20 src/orantests/pythonsdk.debug.log'
                 githubNotify context:env.HUDSON_URL, description:'SMO Package build FAILED, TOX tests crashed', repo:'oran-deployment', account: 'sebdet', status:'FAILURE', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'FAILURE'
               }

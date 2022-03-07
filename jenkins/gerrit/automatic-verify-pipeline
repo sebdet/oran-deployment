@@ -88,14 +88,14 @@ podTemplate(yaml: '''
                 } else {
                   sh 'tox'
                 }
-                errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                errorLog = sh 'tail -20 src/orantests/pythonsdk.debug.log'
                 gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build SUCCESSFUL ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
                 gerritCheck checks: ['SMO:checker': 'SUCCESSFUL']
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
-                errorLog = sh 'tail -100 smo-install/test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                errorLog = sh 'tail -20 src/orantests/pythonsdk.debug.log'
                 gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build FAILED, TOX tests have crashed ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
                 gerritCheck checks: ['SMO:checker': 'FAILED']
                 currentBuild.result = 'FAILURE'
