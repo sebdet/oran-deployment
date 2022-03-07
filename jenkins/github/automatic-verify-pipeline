@@ -88,8 +88,8 @@ podTemplate(yaml: '''
                 } else {
                   sh 'tox'
                 }
-                
-                githubNotify description:env.HUDSON_URL +': SMO Package verify job SUCCESSFUL ('+env.RUN_TESTS_DISPLAY_URL+')', repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
+                def errorLog = sh 'tail -100 test/pythonsdk/src/orantests/pythonsdk.debug.log'
+                githubNotify description:env.HUDSON_URL +': SMO Package verify job SUCCESSFUL ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog, repo:'oran-deployment', account: 'sebdet', status:'SUCCESS', sha:gitInfo.GIT_COMMIT, credentialsId:'github_username_pass'
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
