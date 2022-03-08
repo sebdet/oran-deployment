@@ -29,10 +29,10 @@ import os
 import time
 import pytest
 from onapsdk.configuration import settings
+from waiting import wait
 from smo.network_simulators import NetworkSimulators
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.sdnc.sdnc import OranSdnc
-from waiting import wait
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -46,9 +46,6 @@ network_simulators = NetworkSimulators("./resources")
 dmaap = OranDmaap()
 test_session_timestamp = datetime.datetime.now()
 
-TOPIC_PNFREG = '{"topicName": "unauthenticated.VES_PNFREG_OUTPUT"}'
-
-TOPIC_FAULT = '{"topicName": "unauthenticated.SEC_FAULT_OUTPUT"}'
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
@@ -58,16 +55,16 @@ def setup_simulators():
     # Do a first get to register the o1test/o1test user in DMAAP
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
-    dmaap.create_topic(TOPIC_PNFREG)
-    dmaap.create_topic(TOPIC_FAULT)
-    wait(lambda: (dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
-    wait(lambda: (dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
+    dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
+    dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
     network_simulators.start_network_simulators()
     network_simulators.wait_for_network_simulators_to_be_running()
   # ADD DU RESTART just in case
     # Wait enough time to have at least the SDNR notifications sent
     logger.info("Waiting 20s that SDNR sends all registration events to VES...")
-    time.sleep(10)
+    time.sleep(20)
     logger.info("Enabling faults/events reporting on SDNR")
     network_simulators.enable_events_for_all_simulators()
 #    logger.info("Waiting 20s that the Dmaap faults topic is created...")
@@ -141,7 +138,7 @@ def test_network_devices_registration_in_dmaap():
     all_registrations = []
     events = []
 
-    while (events := dmaap.get_message_from_topic("unauthenticated.VES_PNFREG_OUTPUT", 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()) != []:
+    while (events := dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()) != []:
         logger.info("Getting a first set of event: %s", events)
         all_registrations += events
 
@@ -166,7 +163,7 @@ def test_network_devices_registration_in_dmaap():
 def test_device_faults_in_dmaap():
     """Verify that device faults are well sent to DMAAP by SDNR."""
     logger.info("Verify if SDNR forwards well the faults sent by the simulators to DMAAP")
-    events = dmaap.get_message_from_topic("unauthenticated.SEC_FAULT_OUTPUT", 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()
+    events = dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 30000, settings.DMAAP_GROUP, settings.DMAAP_USER).json()
     logger.info("Verify if faults have well been received for each device")
     assert len(events) > 0
     faults_received = create_faults_structure(events)

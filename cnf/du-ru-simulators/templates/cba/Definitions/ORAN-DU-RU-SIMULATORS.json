@@ -2,7 +2,6 @@
     "tosca_definitions_version": "controller_blueprint_1_0_0",
     "metadata": {
         "template_author": "Samuli Silvius <s.silvius@partner.samsung.com>",
-        "author-email": "sebastien.determe@intl.att.com",
         "user-groups": "ADMIN, OPERATION",
         "template_name": "ORAN-DU-RU-SIMULATORS",
         "template_version": "1.0.0",

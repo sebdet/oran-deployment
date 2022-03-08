@@ -61,7 +61,6 @@ SO_API_VERSION  = "v7"
 SO_AUTH         = "Basic SW5mcmFQb3J0YWxDbGllbnQ6cGFzc3dvcmQxJA=="
 VID_URL         = "https://vid.api.simpledemo.onap.org:30200"
 VID_API_VERSION = "/vid"
-CLAMP_URL       = "https://clamp.api.simpledemo.onap.org:30258"
 CLAMP_AUTH      = "Basic ZGVtb0BwZW9wbGUub3NhYWYub3JnOmRlbW8xMjM0NTYh"
 VES_URL         = "http://ves.api.simpledemo.onap.org:30417"
 DMAAP_URL       = "http://192.168.1.39:3904"
@@ -70,6 +69,7 @@ NBI_API_VERSION = "/nbi/api/v4"
 
 POLICY_BASICAUTH = { 'username': 'policyadmin', 'password': 'zb!XztG34' }
 SDNC_BASICAUTH = { 'username': 'admin', 'password': 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U' }
+CLAMP_BASICAUTH = { 'username': 'demo@people.osaaf.org', 'password': 'demo123456!' }
 
 DMAAP_URL = "http://"+subprocess.run("kubectl get services message-router -n onap |grep message-router | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":3904"
 
@@ -80,6 +80,7 @@ A1SIM_STD2_URL = "http://"+subprocess.run("kubectl get services a1-sim-std2-0 -n
 POLICY_PAP_URL = "https://"+subprocess.run("kubectl get services policy-pap -n onap |grep policy-pap | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":6969"
 POLICY_API_URL = "https://"+subprocess.run("kubectl get services policy-api -n onap |grep policy-api | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":6969"
 SDNC_URL = "http://"+subprocess.run("kubectl get services sdnc-oam -n onap |grep sdnc-oam | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8282"
+CLAMP_URL = "https://"+subprocess.run("kubectl get services policy-clamp-be -n onap |grep policy-clamp-be | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8443"
 
 ### Network simulators topology
 NETWORK_SIMULATORS_RU_LIST = ["o-ru-11211","o-ru-11221","o-ru-11222","o-ru-11223"]
@@ -89,3 +90,18 @@ NETWORK_SIMULATORS_DU_RU_LIST = NETWORK_SIMULATORS_DU_LIST + NETWORK_SIMULATORS_
 NETWORK_SIMULATORS_LIST = NETWORK_SIMULATORS_DU_RU_LIST + NETWORK_SIMULATORS_TOPOLOGY_SERVER
 DMAAP_GROUP = "o1test"
 DMAAP_USER = "o1test"
+DMAAP_TOPIC_PNFREG = "unauthenticated.VES_PNFREG_OUTPUT"
+DMAAP_TOPIC_PNFREG_JSON = '{"topicName": "' + DMAAP_TOPIC_PNFREG + '"}'
+DMAAP_TOPIC_FAULT = "unauthenticated.SEC_FAULT_OUTPUT"
+DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '"}'
+
+### Number of pods left in completed state for ONAP namespace
+ONAP_PODS_WHEN_READY = 9
+SMO_CHECK_RETRY = 30
+SMO_CHECK_TIMEOUT = 900
+SDNC_CHECK_RETRY = 30
+SDNC_CHECK_TIMEOUT = 900
+POLICY_CHECK_RETRY = 30
+POLICY_CHECK_TIMEOUT = 900
+CLAMP_CHECK_RETRY = 30
+CLAMP_CHECK_TIMEOUT = 900

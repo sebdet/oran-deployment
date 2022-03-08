@@ -27,7 +27,6 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
-#curl https://raw.githubusercontent.com/helm/chartmuseum/main/scripts/get-chartmuseum | bash
 cd /tmp
 wget https://get.helm.sh/chartmuseum-v0.13.1-linux-amd64.tar.gz
 tar xvfz chartmuseum-v0.13.1-linux-amd64.tar.gz

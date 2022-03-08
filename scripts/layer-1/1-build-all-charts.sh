@@ -29,3 +29,4 @@ cd $SCRIPT_PATH
 
 ../sub-scripts/build-onap.sh
 ../sub-scripts/build-oran.sh
+../sub-scripts/build-tests.sh

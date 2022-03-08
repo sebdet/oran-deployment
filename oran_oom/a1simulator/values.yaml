@@ -1,10 +1,10 @@
 # Static Defaults
 image:
-  repository: 'nexus3.o-ran-sc.org:10004/o-ran-sc'
+  repository: 'nexus3.o-ran-sc.org:10002/o-ran-sc'
   name: a1-simulator
   tag: 2.2.0
+#  pullPolicy: IfNotPresent
   pullPolicy: IfNotPresent
-
 service:
   type: ClusterIP
   ports:

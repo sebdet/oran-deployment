@@ -1,0 +1,70 @@
+lock('smo') {
+podTemplate(yaml: '''
+              apiVersion: v1
+              kind: Pod
+              spec:
+                containers:
+                - name: jenkins-ubuntu
+                  image: ubuntu:20.04
+                  command:
+                  - sleep
+                  args: 
+                  - 99d
+''') {
+
+  node(POD_LABEL) {
+    def proxies=''
+    stage('Checkout') {
+      echo 'printenv'
+      checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/sebdet/oran-deployment.git']], branches: [[name: env.BRANCH]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
+    }
+      container('jenkins-ubuntu') {
+        stage ('Proxy settings') {
+          echo 'Proxy check'
+          script {
+            if (env.http_proxy) {
+              sh 'echo \'Acquire::http::Proxy "' + env.http_proxy + '";\' > /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "http_proxy = "'+env.http_proxy+' > ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
+              sh 'echo \'Acquire::https::Proxy "' + env.http_proxy + '";\' >> /etc/apt/apt.conf.d/proxy.conf'
+              sh 'cat /etc/apt/apt.conf.d/proxy.conf'
+              sh 'echo "https_proxy = "'+env.http_proxy+' >> ~/.wgetrc'
+              sh 'cat ~/.wgetrc'
+
+              proxies='HTTPS_PROXY='+env.http_proxy+' '
+            }
+          }
+          sh 'printenv'
+        }
+
+        stage('Setup tools') {
+            sh 'apt-get update -y'
+            sh 'DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata'
+            sh 'apt-get install git wget sudo -y'
+            sh 'wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl'
+            sh 'mv kubectl /usr/bin'
+            sh 'chmod a+x /usr/bin/kubectl'
+            sh 'kubectl version'
+            sh proxies+' ./scripts/layer-0/0-setup-tests-env.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-charts-museum.sh'
+            sh proxies+' ./scripts/layer-0/0-setup-helm3.sh'
+        }
+        stage('Build ONAP charts') {
+            sh proxies+' ./scripts/sub-scripts/build-onap.sh'
+        }
+        stage('Build ORAN charts') {
+            sh proxies+' ./scripts/sub-scripts/build-oran.sh'
+        }
+        stage('Build ONAP charts') {
+            sh proxies+' ./scripts/sub-scripts/build-tests.sh'
+        }
+        stage('Start SMO') {
+            sh './scripts/layer-2/2-install-oran.sh ' + env.FLAVOR
+        }
+      }
+    
+  }
+}
+}

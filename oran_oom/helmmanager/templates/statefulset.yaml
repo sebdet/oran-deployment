@@ -48,17 +48,16 @@ spec:
         ports:
         - containerPort: {{ .Values.helmmanager.service.targetPort1 }}
           protocol: TCP
-        # readinessProbe:
-        #   tcpSocket:
-        #     port: {{ .Values.helmmanager.service.targetPort1 }}
-        #   initialDelaySeconds: {{ .Values.helmmanager.liveness.initialDelaySeconds }}
-        #   periodSeconds: {{ .Values.helmmanager.liveness.periodSeconds }}
-        # livenessProbe:
-        #   httpGet:
-        #     path: /helm/charts
-        #     port: {{ .Values.helmmanager.service.targetPort1 }}
-        #   initialDelaySeconds: {{ .Values.helmmanager.liveness.initialDelaySeconds }}
-        #   periodSeconds: {{ .Values.helmmanager.liveness.periodSeconds }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.helmmanager.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.helmmanager.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.helmmanager.liveness.periodSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.helmmanager.service.targetPort1 }}
+          initialDelaySeconds: {{ .Values.helmmanager.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.helmmanager.liveness.periodSeconds }}
         volumeMounts:
         - name: {{ include "common.name.helmmanager" . }}-vardata
           mountPath: "/var/helm-manager-service"

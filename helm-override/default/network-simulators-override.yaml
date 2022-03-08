@@ -1,5 +1,3 @@
-#!/bin/bash
-
 ###
 # ============LICENSE_START=======================================================
 # ORAN SMO Package
@@ -23,15 +21,38 @@
 # 
 ###
 
-SCRIPT=$(readlink -f "$0")
-SCRIPT_PATH=$(dirname "$SCRIPT")
-cd $SCRIPT_PATH
+##### Network Simulators #####
 
-echo "Starting ONAP CNF & NONRTRIC namespaces..."
+ru-du-simulators:
+  topologyServer: true
+  ruSimulator: true
+  duSimulator: true
 
-../sub-scripts/install-onap.sh ../../helm-override/onap-override-cnf.yaml
-../sub-scripts/install-nonrtric.sh ../../helm-override/oran-override.yaml
 
-kubectl get pods -n onap
-kubectl get pods -n nonrtric
-kubectl get namespaces
+x-ntsimNg: &ntsimConfig
+  sdnControllerUsername: admin
+  sdnControllerPassword: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+
+  vesEndpointUsername: sample1
+  vesEndpointPassword: sample1
+
+ru-simulator: 
+  ntsimNg:
+    <<: *ntsimConfig
+    ipV6Enabled: false
+    sshConnections: 0
+    tlsConnections: 1
+
+du-simulator:
+  ntsimNg:
+    <<: *ntsimConfig
+    ipV6Enabled: false
+    sshConnections: 1
+    tlsConnections: 0
+
+topology-server:
+  ntsimNg:  
+    <<: *ntsimConfig
+    ipV6Enabled: false
+    sshConnections: 0
+    tlsConnections: 1

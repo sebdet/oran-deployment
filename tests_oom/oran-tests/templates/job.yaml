@@ -1,0 +1,72 @@
+# Copyright © 2021-2022 AT&T Intellectual Property
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.oranTests.name }}
+  labels:
+    tests-name: {{ .Values.oranTests.name }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
+spec:
+  manualSelector: true
+  selector:
+    matchLabels:
+      tests-name: {{ .Values.oranTests.name }}
+  template:
+    metadata:
+      labels:
+        tests-name: {{ .Values.oranTests.name }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}
+      annotations:
+        checksum/config: {{ print .Values | sha256sum }}
+    spec:    
+      hostname: "{{ .Values.oranTests.name }}"
+      restartPolicy: Never
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name}}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.oranTests.name }}-configmapenv
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_PTRACE
+          command: ["/bin/sh", "-c"]
+          args:
+            - apt-get update -y;
+              DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata;
+              apt-get install git wget sudo -y;
+              wget https://dl.k8s.io/release/v1.22.0/bin/linux/amd64/kubectl;
+              mv kubectl /usr/bin;
+              chmod a+x /usr/bin/kubectl;
+              kubectl version;
+
+              cd /opt;
+              git clone --recursive "https://github.com/sebdet/oran-deployment.git";
+              cd /opt/oran-deployment;
+              git reset --hard {{ .Values.oranTests.commitId }};
+              /opt/oran-deployment/scripts/layer-0/0-setup-tests-env.sh;
+              /opt/oran-deployment/scripts/layer-0/0-setup-charts-museum.sh;
+              /opt/oran-deployment/scripts/layer-0/0-setup-helm3.sh;
+              /opt/oran-deployment/scripts/sub-scripts/build-tests.sh;
+              cd test/pythonsdk;
+              tox;

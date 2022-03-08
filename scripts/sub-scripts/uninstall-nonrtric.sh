@@ -27,3 +27,4 @@ kubectl delete namespace nonrtric
 kubectl delete pv nonrtric-pv2
 kubectl delete pv nonrtric-pv1
 kubectl delete pv nonrtric-pv3
+kubectl get pv | grep Released | awk '$1 {print$1}' | while read vol; do kubectl delete pv/${vol}; done

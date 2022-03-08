@@ -302,15 +302,16 @@ policy:
   policy-distribution:
     enabled: false
   policy-clamp-be:
-    enabled: false
+    enabled: true
+    image: onap/policy-clamp-backend:6.2-SNAPSHOT-latest
   policy-clamp-fe:
-    enabled: false
+    enabled: true
   policy-clamp-cl-runtime:
     enabled: true
   policy-clamp-cl-k8s-ppnt:
     enabled: true
   policy-gui:
-    enabled: false
+    enabled: true
   policy-nexus:
     enabled: false
   policy-clamp-cl-pf-ppnt:
@@ -392,7 +393,7 @@ sdnc:
 sniro-emulator:
   enabled: false
 so: 
-  enabled: false 
+  enabled: false
   so-catalog-db-adapter:
     config:
       openStackUserName: "the username"
