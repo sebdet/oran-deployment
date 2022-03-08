@@ -53,12 +53,12 @@ def setup_simulators():
     logger.info("Test class setup for Closed Loop tests")
 
     # Stop ORU App pod
-    logger.info("Disable Oru-app")
+    logger.info("Disable Nonrtric Gateway")
     resources_path = "./resources/cl-test-oran-overrides"
-    cmd = f"helm upgrade --debug oran-nonrtric local/nonrtric --namespace nonrtric -f {resources_path}/oran-override-disable-oru-app.yaml"
+    cmd = f"helm upgrade --debug oran-nonrtric local/nonrtric --namespace nonrtric -f {resources_path}/oran-override-disable-nonrtricgateway.yaml"
     check_output(cmd, shell=True).decode('utf-8')
 
-    wait(lambda: is_oru_app_disabled(), sleep_seconds=10, timeout_seconds=60, waiting_for="Oru-app is disabled")
+    wait(lambda: is_nonrtricgateway_disabled(), sleep_seconds=10, timeout_seconds=60, waiting_for="Oru-app is disabled")
 
     # Add the remote repo to Clamp k8s pod
     logger.info("Add the remote repo to Clamp k8s pod")
@@ -78,35 +78,35 @@ def setup_simulators():
 
     ### Cleanup code
     yield
-    logger.info("Restart Oru-app")
+    logger.info("Restart Nonrtric Gateway")
     cmd = f"helm upgrade --debug oran-nonrtric local/nonrtric --namespace nonrtric -f {resources_path}/oran-override.yaml"
     check_output(cmd, shell=True).decode('utf-8')
-    wait(lambda: is_oru_app_enabled(), sleep_seconds=10, timeout_seconds=60, waiting_for="Oru-app is restarted")
+    wait(lambda: is_nonrtricgateway_enabled(), sleep_seconds=10, timeout_seconds=60, waiting_for="Oru-app is restarted")
 
     # Remove the remote repo to Clamp k8s pod
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
     logger.info("Test Session cleanup done")
 
-def is_oru_app_disabled() -> bool:
-    """Check if the oru-app is stopped."""
-    result = check_output("kubectl get pods -n nonrtric | grep oru-app | wc -l", shell=True)
-    logger.info("Checking if oru-app is stopped: %s", result)
+def is_nonrtricgateway_disabled() -> bool:
+    """Check if the nonrtricgateway is stopped."""
+    result = check_output("kubectl get pods -n nonrtric | grep nonrtricgateway | wc -l", shell=True)
+    logger.info("Checking if nonrtricgateway_disabled is stopped: %s", result)
     if result == b'0\n':
-        logger.info("oru-app is stopped")
+        logger.info("nonrtricgateway is stopped")
         return True
-    logger.info("oru-app is still running")
+    logger.info("nonrtricgateway is still running")
     return False
 
-def is_oru_app_enabled() -> bool:
-    """Check if the oru-app is restarted."""
-    cmd = "kubectl get pods --field-selector status.phase=Running -n nonrtric | grep oru-app | wc -l"
+def is_nonrtricgateway_disabled_enabled() -> bool:
+    """Check if the nonrtricgateway_disabled is restarted."""
+    cmd = "kubectl get pods --field-selector status.phase=Running -n nonrtric | grep nonrtricgateway | wc -l"
     result = check_output(cmd, shell=True)
-    logger.info("Checking if oru-app is restarted: %s", result)
+    logger.info("Checking if nonrtricgateway_disabled is restarted: %s", result)
     if result == b'1\n':
-        logger.info("oru-app is running")
+        logger.info("nonrtricgateway is running")
         return True
-    logger.info("oru-app is not running")
+    logger.info("nonrtricgateway is not running")
     return False
 
 def add_remote_repo():
