@@ -27,6 +27,10 @@ github:
   username: "username"
   password: "token_api"
 
+gerrit:
+  username: "username"
+  password: "token_api"
+
 jenkins:
   controller:
     jenkinsUrl: "http://smo-jenkins:32080"
