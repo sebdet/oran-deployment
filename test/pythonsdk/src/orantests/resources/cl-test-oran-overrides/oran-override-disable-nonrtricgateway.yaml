@@ -1,5 +1,5 @@
 # Copyright © 2017 Amdocs, Bell Canada
-# Mofification Copyright © 2022 AT&T
+# Mofification Copyright © 2021 AT&T
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,16 +24,16 @@
 
 ######### NONRTRIC #########
 
-nonrtric:
+nonrtric: 
   installPms: false
   installA1controller: false
   installA1simulator: true
   installControlpanel: true
   installInformationservice: true
   installRappcatalogueservice: true
-  installNonrtricgateway: true
+  installNonrtricgateway: false
   installKong: true
-  installORUApp: false
+  installORUApp: true
   installTopology: true
   installDmaapadapterservice: true
   installDmaapmediatorservice: true
@@ -42,21 +42,21 @@ nonrtric:
   # referenced by persistent volumes and log files
   persistence:
     mountPath: /dockerdata-nfs
-  volume1:
-    # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning)
-    size: 2Gi
-    storageClassName: pms-storage
-  volume2:
-    # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning)
-    size: 2Gi
-    storageClassName: ics-storage
+  volume1: 
+    # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
+    size: 2Gi 
+    storageClassName: pms-storage 
+  volume2: 
+     # Set the size to 0 if you do not need the volume (if you are using Dynamic Volume Provisioning) 
+    size: 2Gi 
+    storageClassName: ics-storage 
   volume3:
     size: 1Gi
-    storageClassName: helmmanager-storage
+    storageClassName: helmmanager-storage 
 
-common:
-  releasePrefix: r3-dev-nonrtric
-  ingressClassName: kong
+common: 
+  releasePrefix: r3-dev-nonrtric 
+  ingressClassName: kong 
 
 informationservice:
   informationservice:
@@ -68,21 +68,21 @@ informationservice:
     ingress:
       enabled: true
 
-
-# Need to check the external port Availability
-policymanagementservice:
-  policymanagementservice:
-    persistence:
-      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same.
-      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available)
-      size: 2Gi
-      storageClassName: pms-storage
+ 
+# Need to check the external port Availability 
+policymanagementservice: 
+  policymanagementservice: 
+    persistence: 
+      # Either refer to a volume created under the nonrtric by storageClassName. Then the claimed size should be the same. 
+      # The alternative use a dynamic volume provisioner in the cluster. Storage class can then be fon instance 'standard' or 'gluster-fs' (depeneds on which classes that are available) 
+      size: 2Gi 
+      storageClassName: pms-storage 
   ingress:
     enabled: true
 
 kong:
   ingressController:
-    installCRDs: false
+    installCRDs: false 
   admin:
     enabled: true
 
