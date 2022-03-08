@@ -24,7 +24,7 @@
 """Closed Loop Apex usecase tests module."""
 # This usecase has limitations due to Clamp issue.
 # 1. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
-
+import time
 import logging
 import logging.config
 import subprocess
@@ -33,8 +33,7 @@ from subprocess import check_output
 import pytest
 from waiting import wait
 from onapsdk.configuration import settings
-from oransdk.dmaap.dmaap import OranDmaap
-from oransdk.policy.clamp import ClampToscaTemplate
+from smo.nonrtric import NonRTRic
 
 
 # Set working dir as python script location
@@ -44,29 +43,22 @@ os.chdir(dname)
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Clamp K8S usecase")
-dmaap = OranDmaap()
-clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
+nonrtric = NonRTRic()
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
     """Prepare the test environment before the executing the tests."""
     logger.info("Test class setup for Closed Loop tests")
 
-    # Stop ORU App pod
-    logger.info("Disable Nonrtric Gateway")
-    resources_path = "./resources/cl-test-oran-overrides"
-    cmd = f"helm upgrade --debug oran-nonrtric local/nonrtric --namespace nonrtric -f {resources_path}/oran-override-disable-nonrtricgateway.yaml"
-    check_output(cmd, shell=True).decode('utf-8')
-
-    wait(lambda: is_nonrtricgateway_disabled(), sleep_seconds=10, timeout_seconds=60, waiting_for="Oru-app is disabled")
+    deploy_chartmuseum ()
 
     # Add the remote repo to Clamp k8s pod
     logger.info("Add the remote repo to Clamp k8s pod")
     k8s_pod = subprocess.run("kubectl get pods -n onap | grep k8s | awk '{print $1}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-    repo_host = subprocess.run("hostname -I | awk '{print $1}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-    repo_port = 8080
-    logger.info("k8s: %s, repo_host:%s", k8s_pod, repo_host)
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo add chartmuseum http://{repo_host}:{repo_port}\""
+
+    repo_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
+    logger.info("k8s: %s, repo_url:%s", k8s_pod, repo_url)
+    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo add chartmuseum http://{repo_url}\""
     check_output(cmd, shell=True).decode('utf-8')
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo update\""
     check_output(cmd, shell=True).decode('utf-8')
@@ -78,36 +70,42 @@ def setup_simulators():
 
     ### Cleanup code
     yield
-    logger.info("Restart Nonrtric Gateway")
-    cmd = f"helm upgrade --debug oran-nonrtric local/nonrtric --namespace nonrtric -f {resources_path}/oran-override.yaml"
-    check_output(cmd, shell=True).decode('utf-8')
-    wait(lambda: is_nonrtricgateway_enabled(), sleep_seconds=10, timeout_seconds=60, waiting_for="Oru-app is restarted")
-
     # Remove the remote repo to Clamp k8s pod
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
+    cmd = "kubectl delete namespace test"
+    check_output(cmd, shell=True).decode('utf-8')
+    cmd = "helm repo remove test"
+    check_output(cmd, shell=True).decode('utf-8')
     logger.info("Test Session cleanup done")
 
-def is_nonrtricgateway_disabled() -> bool:
-    """Check if the nonrtricgateway is stopped."""
-    result = check_output("kubectl get pods -n nonrtric | grep nonrtricgateway | wc -l", shell=True)
-    logger.info("Checking if nonrtricgateway_disabled is stopped: %s", result)
-    if result == b'0\n':
-        logger.info("nonrtricgateway is stopped")
-        return True
-    logger.info("nonrtricgateway is still running")
-    return False
+def deploy_chartmuseum():
+    """Start chartmuseum pod and populate with the nedded helm chart."""
+    logger.info("Start to deploy chartmuseum")
+    cmd = "helm repo add test https://chartmuseum.github.io/charts"
+    check_output(cmd, shell=True).decode('utf-8')
+    cmd = "kubectl create namespace test"
+    check_output(cmd, shell=True).decode('utf-8')
 
-def is_nonrtricgateway_disabled_enabled() -> bool:
-    """Check if the nonrtricgateway_disabled is restarted."""
-    cmd = "kubectl get pods --field-selector status.phase=Running -n nonrtric | grep nonrtricgateway | wc -l"
-    result = check_output(cmd, shell=True)
-    logger.info("Checking if nonrtricgateway_disabled is restarted: %s", result)
-    if result == b'1\n':
-        logger.info("nonrtricgateway is running")
+    cmd = "helm install test test/chartmuseum --version 3.1.0 --namespace test --set env.open.DISABLE_API=false"
+    check_output(cmd, shell=True).decode('utf-8')
+    wait(lambda: is_chartmuseum_up(), sleep_seconds=10, timeout_seconds=60, waiting_for="chartmuseum to be ready")
+
+    chartmuseum_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
+    cmd = f"curl -X POST --data-binary @{dname}/resources/cl-test-helm-chart/oru-app-1.0.0.tgz http://{chartmuseum_url}/api/charts"
+    check_output(cmd, shell=True).decode('utf-8')
+
+def is_chartmuseum_up() -> bool:
+        """Check if the chartmuseum is up."""
+        cmd = "kubectl get pods --field-selector status.phase=Running -n test"
+        result = check_output(cmd, shell=True).decode('utf-8')
+        logger.info("Checking if chartmuseum is UP: %s", result)
+        if result == '':
+            logger.info("chartmuseum is Down")
+            return False
+        logger.info("chartmuseum is Up")
         return True
-    logger.info("nonrtricgateway is not running")
-    return False
+
 
 def add_remote_repo():
     """Config the clamp k8s pod."""
@@ -115,6 +113,7 @@ def add_remote_repo():
     pod_name = "onap-policy-clamp-cl-k8s-ppnt-6ddb58cfbd-2m8kn"
     ip = "135.41.21.24"
     cmd = f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo add chartmuseum {ip}:8080\""
+    check_output(cmd, shell=True).decode('utf-8')
     cmd = f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo update\""
     check_output(cmd, shell=True).decode('utf-8')
 
