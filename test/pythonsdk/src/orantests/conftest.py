@@ -65,7 +65,7 @@ def policy_component_ready():
     if (policy_status["pap"]["healthy"] and not policy_ready["pap_ready"]):
         logger.info("Policy Pap is ready")
         policy_ready["pap_ready"] = True
-    if (policy_status["pdps"]["apex"][0]["healthy"] == "HEALTHY" and not policy_ready["apex_ready"]):
+    if (len(policy_status["pdps"]["apex"]) > 0 and policy_status["pdps"]["apex"][0]["healthy"] == "HEALTHY" and not policy_ready["apex_ready"]):
         logger.info("Policy Apex is ready")
         policy_ready["apex_ready"] = True
     return policy_ready["api_ready"] and policy_ready["pap_ready"] and policy_ready["apex_ready"]

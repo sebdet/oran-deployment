@@ -27,10 +27,7 @@ podTemplate(yaml: '''
             gitInfo =  checkout([$class: 'GitSCM', branches: [[name: env.BRANCH_NAME]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]], userRemoteConfigs: [[credentialsId: 'gerrit_username_pass', name: 'origin', refspec: '+refs/heads/*:refs/remotes/origin/*', url: 'https://gerrit.o-ran-sc.org/r/a/it/dep']]])          
           }
         }
-        echo "Test: "+ gitInfo
-        toxLog = readFile 'README.md'
-        echo toxLog 
-
+        echo "Git: "+ gitInfo
         gerritReview labels: [Verified: 0], message: env.HUDSON_URL+': Validating the SMO package ' + env.BUILD_URL
       }
       container('jenkins-ubuntu') {
@@ -84,26 +81,29 @@ podTemplate(yaml: '''
             sh './smo-install/scripts/layer-2/2-install-oran.sh pythonsdk-tests'
         }
         stage('Test ORAN') {
-            def toxLog=""
             dir("smo-install/test/pythonsdk") {
               echo 'Executing TOX tests'
               try {
                 if (env.http_proxy) {
                   sh script: proxies+' NO_PROXY='+env.no_proxy+' tox > tox.log'
-                  //errorLog = sh script: proxies+' NO_PROXY='+env.no_proxy+' tox', returnStdout: true
                 } else {
                   sh script: 'tox > tox.log'
-                  //errorLog = sh script: 'tox', returnStdout: true
                 }
+		echo 'TOX tests SUCCESS'
                 toxLog = readFile 'tox.log'
                 echo toxLog
-
+                toxLog = sh script: 'tail -40 tox.log',returnStdout: true
+                
                 gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build SUCCESSFUL ('+env.BUILD_URL+')\r\n\r\n'+toxLog
                 //gerritCheck checks: ['SMO:checker': 'SUCCESSFUL']
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
-                echo 'TOX tests crashed'
+                echo 'TOX tests FAILURE'
+                toxLog = readFile 'tox.log'
+                echo toxLog
+                toxLog = sh script: 'tail -40 tox.log',returnStdout: true
+
                 gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build FAILED, TOX tests have crashed ('+env.BUILD_URL+')\r\n\r\n'+toxLog
                 //gerritCheck checks: ['SMO:checker': 'FAILED']
                 currentBuild.result = 'FAILURE'
