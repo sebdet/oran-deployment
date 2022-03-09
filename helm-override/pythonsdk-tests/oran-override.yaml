@@ -33,7 +33,7 @@ nonrtric:
   installRappcatalogueservice: true
   installNonrtricgateway: true
   installKong: true
-  installORUApp: true
+  installORUApp: false
   installTopology: true
   installDmaapadapterservice: true
   installDmaapmediatorservice: true
