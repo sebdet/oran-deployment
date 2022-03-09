@@ -80,6 +80,7 @@ podTemplate(yaml: '''
             sh './smo-install/scripts/layer-2/2-install-oran.sh pythonsdk-tests'
         }
         stage('Test ORAN') {
+            def toxLog=""
             dir("smo-install/test/pythonsdk") {
               echo 'Executing TOX tests'
               try {
@@ -91,7 +92,7 @@ podTemplate(yaml: '''
                   //errorLog = sh script: 'tox', returnStdout: true
                 }
                 script {
-                  def toxLog = readFile(file: 'tox.log')
+                  toxLog = readFile(file: 'tox.log')
                   println(toxLog)
                 }
 
