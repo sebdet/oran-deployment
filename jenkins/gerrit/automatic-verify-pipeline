@@ -27,7 +27,7 @@ podTemplate(yaml: '''
           }
         }
         echo "Test: "+ gitInfo
-        gerritReview labels: [Verified: 0], message: env.HUDSON_URL+': Validating the SMO package'
+        gerritReview labels: [Verified: 0], message: env.HUDSON_URL+': Validating the SMO package ' + env.BUILD_URL
       }
       container('jenkins-ubuntu') {
         stage ('Proxy settings') {
