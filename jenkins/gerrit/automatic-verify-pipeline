@@ -90,8 +90,10 @@ podTemplate(yaml: '''
                   sh script: 'tox > tox.log'
                   //errorLog = sh script: 'tox', returnStdout: true
                 }
-                def toxLog = readFile(file: 'tox.log')
-                println(toxLog)
+                script {
+                  def toxLog = readFile(file: 'tox.log')
+                  println(toxLog)
+                }
 
                 gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build SUCCESSFUL ('+env.BUILD_URL+')\r\n\r\n'+toxLog
                 //gerritCheck checks: ['SMO:checker': 'SUCCESSFUL']
