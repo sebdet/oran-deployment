@@ -81,20 +81,25 @@ podTemplate(yaml: '''
         }
         stage('Test ORAN') {
             dir("smo-install/test/pythonsdk") {
-              def errorLog=""
+              echo 'Executing TOX tests'
               try {
                 if (env.http_proxy) {
-                  errorLog = sh script: proxies+' NO_PROXY='+env.no_proxy+' tox', returnStdout: true
+                  sh script: proxies+' NO_PROXY='+env.no_proxy+' tox > tox.log'
+                  //errorLog = sh script: proxies+' NO_PROXY='+env.no_proxy+' tox', returnStdout: true
                 } else {
-                  errorLog = sh script: 'tox', returnStdout: true
+                  sh script: 'tox > tox.log'
+                  //errorLog = sh script: 'tox', returnStdout: true
                 }
-                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build SUCCESSFUL ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
+                def toxLog = readFile(file: 'tox.log')
+                println(toxLog)
+
+                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build SUCCESSFUL ('+env.BUILD_URL+')\r\n\r\n'+toxLog
                 //gerritCheck checks: ['SMO:checker': 'SUCCESSFUL']
                 currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
-                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build FAILED, TOX tests have crashed ('+env.RUN_TESTS_DISPLAY_URL+')\r\n\r\n'+errorLog
+                gerritReview labels: [Verified: 0], message:env.HUDSON_URL+': SMO Build FAILED, TOX tests have crashed ('+env.BUILD_URL+')\r\n\r\n'+toxLog
                 //gerritCheck checks: ['SMO:checker': 'FAILED']
                 currentBuild.result = 'FAILURE'
               }
