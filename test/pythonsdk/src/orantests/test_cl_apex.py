@@ -113,7 +113,7 @@ def test_cl_apex():
     logger.info("Verify clamp component is ready")
     wait(lambda: clamp.clamp_component_ready(), sleep_seconds=settings.CLAMP_CHECK_RETRY, timeout_seconds=settings.CLAMP_CHECK_TIMEOUT, waiting_for="Clamp to be ready")
 
-    logger.info("Verify clamp component is ready")
+    logger.info("Upload tosca to commissioning")
     tosca_template = jinja_env().get_template("commission_apex.json.j2").render()
     response = clamp.upload_commission(tosca_template)
     assert response["errorDetails"] is None
