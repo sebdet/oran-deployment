@@ -24,11 +24,8 @@
 """Onap Policy Clamp Tosca Template module."""
 import time
 from typing import Dict
-from requests import RequestException
 from onapsdk.clamp.clamp_element import Clamp
-from onapsdk.exceptions import ConnectionFailed, APIError, RequestError
-from urllib3.exceptions import NewConnectionError
-
+from onapsdk.exceptions import RequestError
 
 class ClampToscaTemplate(Clamp):
     """Onap Policy Clamp Tosca Template class."""
@@ -45,15 +42,6 @@ class ClampToscaTemplate(Clamp):
         """
         super().__init__()
         self.basic_auth = basic_auth
-
-    def clamp_component_ready(self):
-        """Check if Clamp component is ready."""
-        try:
-            response = self.get_template_instance()
-        except (RequestException, NewConnectionError, ConnectionFailed, APIError) as e:
-            self._logger.error(e)
-            return False
-        return response["controlLoopList"] is not None
 
     def get_template_instance(self) -> dict:
         """
