@@ -22,9 +22,13 @@
 #
 ###
 """Onap Policy Clamp Tosca Template module."""
-
+import time
 from typing import Dict
+from requests import RequestException
 from onapsdk.clamp.clamp_element import Clamp
+from onapsdk.exceptions import ConnectionFailed, APIError, RequestError
+from urllib3.exceptions import NewConnectionError
+
 
 class ClampToscaTemplate(Clamp):
     """Onap Policy Clamp Tosca Template class."""
@@ -41,6 +45,15 @@ class ClampToscaTemplate(Clamp):
         """
         super().__init__()
         self.basic_auth = basic_auth
+
+    def clamp_component_ready(self):
+        """Check if Clamp component is ready."""
+        try:
+            response = self.get_template_instance()
+        except (RequestException, NewConnectionError, ConnectionFailed, APIError) as e:
+            self._logger.error(e)
+            return False
+        return response["controlLoopList"] is not None
 
     def get_template_instance(self) -> dict:
         """
@@ -112,7 +125,7 @@ class ClampToscaTemplate(Clamp):
 
         return template_instance
 
-    def change_instance_status(self, new_status, name, version) -> dict:
+    def change_instance_status(self, new_status, name, version) -> str:
         """
         Update tosca instance status.
 
@@ -125,13 +138,35 @@ class ClampToscaTemplate(Clamp):
         """
         body = '{"orderedState":"' + new_status + '","controlLoopIdentifierList":[{"name":"' + name + '","version":"' + version + '"}]}'
         url = f"{self.base_url()}/toscaControlLoop/putToscaInstantiationStateChange"
-        response = self.send_message_json('PUT',
-                                          'Update tosca instance status',
-                                          url,
-                                          data=body,
-                                          headers=self.header,
-                                          basic_auth=self.basic_auth)
-        return response
+        try:
+            response = self.send_message_json('PUT',
+                                              'Update tosca instance status',
+                                              url,
+                                              data=body,
+                                              headers=self.header,
+                                              basic_auth=self.basic_auth)
+        except RequestError:
+            self._logger.error("Change Instance Status request returned failed. Will query the instance status to double check whether the request is successful or not.")
+
+        # There's a bug in Clamp code, sometimes it returned 500, but actually the status has been changed successfully
+        # Thus we verify the status to determine whether it was successful or not
+        time.sleep(2)
+        response = self.get_template_instance()
+        return response["controlLoopList"][0]["orderedState"]
+
+    def verify_instance_status(self, new_status):
+        """
+        Verify whether the instance changed to the new status.
+
+        Args:
+            new_status : the new status of the instance
+        Returns:
+            the boolean value indicating whether status changed successfully
+        """
+        response = self.get_template_instance()
+        if response["controlLoopList"][0]["state"] == new_status:
+            return True
+        return False
 
     def delete_template_instance(self, name: str, version: str) -> dict:
         """
