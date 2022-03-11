@@ -56,8 +56,10 @@ def setup_simulators():
     logger.info("Test class setup for Closed Loop Apex test")
 
     dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
+    dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
     # Purge the FAULT TOPIC
-    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
 
     network_simulators.start_network_simulators()
     network_simulators.wait_for_network_simulators_to_be_running()
@@ -69,6 +71,13 @@ def setup_simulators():
 
     ### Cleanup code
     yield
+    cl_commissioning.change_instance_status("PASSIVE")
+    wait(lambda: cl_commissioning.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
+    cl_commissioning.change_instance_status("UNINITIALISED")
+    wait(lambda: cl_commissioning.verify_instance_status("UNINITIALISED"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to UNINITIALISED")
+
+    cl_commissioning.delete_template_instance()
+    cl_commissioning.decommission_tosca()
     network_simulators.stop_network_simulators()
     logger.info("Test Session cleanup done")
 
@@ -85,7 +94,8 @@ def verify_apex_policy_created():
 
     for status in policy_status_list:
         logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"])
-        if (status["policy"]["name"] == "operational.apex.linkmonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"]):
+        if (status["policy"]["name"] == "operational.apex.linkmonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"] and status["state"] == "SUCCESS"):
+            logger.info("Policy deployement OK")
             return True
 
     logger.info("Failed to deploy Apex policy")
@@ -96,7 +106,7 @@ def send_dmaap_event():
     event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
     dmaap.send_link_failure_event(event)
 
-def test_cl_oru_recovery():
+def test_cl_apex():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     wait(lambda: cl_commissioning.clamp_component_ready(), sleep_seconds=settings.CLAMP_CHECK_RETRY, timeout_seconds=settings.CLAMP_CHECK_TIMEOUT, waiting_for="Clamp to be ready")
 
@@ -109,11 +119,9 @@ def test_cl_oru_recovery():
     assert response["errorDetails"] is None
 
     response = cl_commissioning.change_instance_status("PASSIVE")
-    assert response == "PASSIVE"
     wait(lambda: cl_commissioning.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
 
     response = cl_commissioning.change_instance_status("RUNNING")
-    assert response == "RUNNING"
     wait(lambda: cl_commissioning.verify_instance_status("RUNNING"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to RUNNING")
 
     sdnc = OranSdnc()
@@ -122,23 +130,9 @@ def test_cl_oru_recovery():
 
     send_dmaap_event()
 
-    assert verify_apex_policy_created()
+    wait(lambda: verify_apex_policy_created(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy Deployment to be OK")
 
     time.sleep(30)
     logger.info("Check O-du/O-ru status again")
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"
-
-    response = cl_commissioning.change_instance_status("PASSIVE")
-    assert response == "PASSIVE"
-    wait(lambda: cl_commissioning.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
-
-    response = cl_commissioning.change_instance_status("UNINITIALISED")
-    assert response == "UNINITIALISED"
-    wait(lambda: cl_commissioning.verify_instance_status("UNINITIALISED"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to UNINITIALISED")
-
-    response = cl_commissioning.delete_template_instance()
-    assert response["errorDetails"] is None
-
-    response = cl_commissioning.decommission_tosca()
-    assert response["errorDetails"] is None
