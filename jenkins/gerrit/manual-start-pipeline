@@ -1,3 +1,4 @@
+lock('smo') {
 podTemplate(yaml: '''
               apiVersion: v1
               kind: Pod
@@ -14,7 +15,8 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
     def proxies=''
     stage('Checkout') {
-      checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/sebdet/oran-deployment.git']], branches: [[name: env.BRANCH]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
+      echo 'printenv'
+      checkout scm: [$class: 'GitSCM', userRemoteConfigs: [[url: 'https://gerrit.o-ran-sc.org/r/it/dep']], branches: [[name: env.BRANCH]], extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]], poll: false
     }
       container('jenkins-ubuntu') {
         stage ('Proxy settings') {
@@ -45,13 +47,24 @@ podTemplate(yaml: '''
             sh 'mv kubectl /usr/bin'
             sh 'chmod a+x /usr/bin/kubectl'
             sh 'kubectl version'
+            sh proxies+' ./smo-install/scripts/layer-0/0-setup-tests-env.sh'
+            sh proxies+' ./smo-install/scripts/layer-0/0-setup-charts-museum.sh'
+            sh proxies+' ./smo-install/scripts/layer-0/0-setup-helm3.sh'
         }
-        stage('Stop SMO') {
-          sh './scripts/sub-scripts/uninstall-nonrtric.sh'
-          sh './scripts/sub-scripts/uninstall-onap.sh'
+        stage('Build ONAP charts') {
+            sh proxies+' ./smo-install/scripts/sub-scripts/build-onap.sh'
         }
-
+        stage('Build ORAN charts') {
+            sh proxies+' ./smo-install/scripts/sub-scripts/build-oran.sh'
+        }
+        stage('Build ONAP charts') {
+            sh proxies+' ./smo-install/scripts/sub-scripts/build-tests.sh'
+        }
+        stage('Start SMO') {
+            sh './smo-install/scripts/layer-2/2-install-oran.sh ' + env.FLAVOR
+        }
       }
     
   }
+}
 }

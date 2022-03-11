@@ -23,6 +23,14 @@ oran-tests:
     flag: true
     commitId: 83be1833161166e663098ab09f56551fc83b84c0
 
+github:
+  username: "username"
+  password: "token_api"
+
+gerrit:
+  username: "username"
+  password: "token_api"
+
 proxyAddress: &proxyAddress "your.proxy"
 proxyPort: &proxyPort "8080"
 noProxy: &noProxy ".svc.cluster.local,localhost,10.152.183.1,10.1.0.0/16,10.152.183.0/24,127.0.0.1,::1"
@@ -31,6 +39,7 @@ javaOptions: &javaOptions "-Dhttp.proxyHost=your.proxy -Dhttp.proxyPort=8080 -Dh
 
 jenkins:
   controller:
+    jenkinsUrl: "http://smo-jenkins:32080"
     JCasC:
       configScripts:
         proxy: |
@@ -59,15 +68,4 @@ jenkins:
       - name: JDK_JAVA_OPTIONS
         value: *javaOptions
 
-    javaOpts: >-
-      -Dhttp.proxyHost=*proxyAddress
-      -Dhttp.proxyPort=*proxyPort
-      -Dhttps.proxyHost=*proxyAddress
-      -Dhttps.proxyPort=*proxyPort
-      -Dhttp.nonProxyHosts=*noProxy
-      -Dhttps.nonProxyHosts=*noProxy
-
-
-github:
-  username: "username"
-  password: "token_api"
+    javaOpts: *javaOptions
