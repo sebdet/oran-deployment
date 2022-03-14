@@ -303,7 +303,7 @@ policy:
     enabled: false
   policy-clamp-be:
     enabled: true
-    image: onap/policy-clamp-backend:6.2-SNAPSHOT-latest
+    image: onap/policy-clamp-backend:6.2.1
   policy-clamp-fe:
     enabled: true
   policy-clamp-cl-runtime:
