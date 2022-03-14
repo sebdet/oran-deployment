@@ -48,6 +48,5 @@ def jinja_env() -> Environment:
                            PackageLoader("oransdk.a1sim"),
                            PackageLoader("oransdk.dmaap"),
                            PackageLoader("oransdk.enrichmentservice"),
-                           PackageLoader("oransdk.policy"),
-                           PackageLoader("oransdk.clamp")
+                           PackageLoader("oransdk.policy")
                        ]))
