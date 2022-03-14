@@ -34,9 +34,6 @@ import pytest
 from waiting import wait
 from onapsdk.configuration import settings
 from smo.nonrtric import NonRTRic
-from oransdk.utils.jinja import jinja_env
-from oransdk.policy.clamp import ClampToscaTemplate
-
 
 
 # Set working dir as python script location
@@ -47,20 +44,13 @@ os.chdir(dname)
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Clamp K8S usecase")
 nonrtric = NonRTRic()
-clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
-
-chartmuseum_ip = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
-chartmuseum_port = "8080"
-chart_version = "1.0.0"
-chart_name = "oru-app"
-release_name = "oru-app"
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
     """Prepare the test environment before the executing the tests."""
     logger.info("Test class setup for Closed Loop tests")
 
-    deploy_chartmuseum()
+    deploy_chartmuseum ()
 
     # Add the remote repo to Clamp k8s pod
     logger.info("Add the remote repo to Clamp k8s pod")
@@ -78,22 +68,8 @@ def setup_simulators():
         logger.info("Failed to update the K8s pod repo")
     logger.info("Test Session setup completed successfully")
 
-
-
-
-
     ### Cleanup code
     yield
-    # Finish and delete the cl instance
-    clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
-    clamp.change_instance_status("UNINITIALISED", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("UNINITIALISED"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to UNINITIALISED")
-
-    logger.info("Delete Instance")
-    clamp.delete_template_instance("PMSH_Instance1", "1.2.3")
-    logger.info("Decommission tosca")
-    clamp.decommission_template("ToscaServiceTemplateSimple", "1.0.0")
     # Remove the remote repo to Clamp k8s pod
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
@@ -102,7 +78,6 @@ def setup_simulators():
     cmd = "helm repo remove test"
     check_output(cmd, shell=True).decode('utf-8')
     logger.info("Test Session cleanup done")
-
 
 def deploy_chartmuseum():
     """Start chartmuseum pod and populate with the nedded helm chart."""
@@ -117,20 +92,19 @@ def deploy_chartmuseum():
     wait(lambda: is_chartmuseum_up(), sleep_seconds=10, timeout_seconds=60, waiting_for="chartmuseum to be ready")
 
     chartmuseum_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
-    cmd = f"curl --noproxy '*' -X POST --data-binary @{dname}/resources/cl-test-helm-chart/oru-app-1.0.0.tgz http://{chartmuseum_url}/api/charts"
+    cmd = f"curl -X POST --data-binary @{dname}/resources/cl-test-helm-chart/oru-app-1.0.0.tgz http://{chartmuseum_url}/api/charts"
     check_output(cmd, shell=True).decode('utf-8')
 
-
 def is_chartmuseum_up() -> bool:
-    """Check if the chartmuseum is up."""
-    cmd = "kubectl get pods --field-selector status.phase=Running -n test"
-    result = check_output(cmd, shell=True).decode('utf-8')
-    logger.info("Checking if chartmuseum is UP: %s", result)
-    if result == '':
-        logger.info("chartmuseum is Down")
-        return False
-    logger.info("chartmuseum is Up")
-    return True
+        """Check if the chartmuseum is up."""
+        cmd = "kubectl get pods --field-selector status.phase=Running -n test"
+        result = check_output(cmd, shell=True).decode('utf-8')
+        logger.info("Checking if chartmuseum is UP: %s", result)
+        if result == '':
+            logger.info("chartmuseum is Down")
+            return False
+        logger.info("chartmuseum is Up")
+        return True
 
 
 def add_remote_repo():
@@ -144,43 +118,5 @@ def add_remote_repo():
     check_output(cmd, shell=True).decode('utf-8')
 
 
-def is_oru_app_up() -> bool:
-    """Check if the oru-app is up."""
-    cmd = "kubectl get pods --field-selector status.phase!=Running -n test"
-    result = check_output(cmd, shell=True).decode('utf-8')
-    logger.info("Checking if oru-app is up :%s", result)
-    if result == '':
-        logger.info("ORU-APP is Up")
-        return True
-
-    logger.info("ORU-APP is Down")
-    return False
-
-
-def test_cl_oru_app_deploy():
+def test_cl_oru_recovery():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
-
-    logger.info("Upload tosca to commissioning")
-    tosca_template = jinja_env().get_template("commission_k8s.json.j2").render(chartmuseumIp=chartmuseum_ip, chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name)
-    response = clamp.upload_commission(tosca_template)
-    assert response["errorDetails"] is None
-
-    logger.info("Create Instance")
-    response = clamp.create_instance(tosca_template)
-    assert response["errorDetails"] is None
-
-    logger.info("Change Instance Status to PASSIVE")
-    response = clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
-
-    logger.info("Change Instance Status to RUNNING")
-    response = clamp.change_instance_status("RUNNING", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("RUNNING"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to RUNNING")
-
-    logger.info("Check if oru-app is up")
-    response = is_oru_app_up()
-    wait(lambda:is_oru_app_up(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app to be up")
-
-
-
-
