@@ -95,6 +95,7 @@ def deploy_chartmuseum():
     cmd = f"curl -X POST --data-binary @{dname}/resources/cl-test-helm-chart/oru-app-1.0.0.tgz http://{chartmuseum_url}/api/charts"
     check_output(cmd, shell=True).decode('utf-8')
 
+
 def is_chartmuseum_up() -> bool:
         """Check if the chartmuseum is up."""
         cmd = "kubectl get pods --field-selector status.phase=Running -n test"
