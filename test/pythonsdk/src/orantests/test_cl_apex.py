@@ -95,7 +95,7 @@ def verify_apex_policy_created():
     policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
 
     for status in policy_status_list:
-        logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"])
+        logger.info("the status %s,%s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"], status["state"])
         if (status["policy"]["name"] == "operational.apex.linkmonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"] and status["state"] == "SUCCESS"):
             logger.info("Policy deployement OK")
             return True
@@ -111,7 +111,7 @@ def send_dmaap_event():
 def test_cl_apex():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     logger.info("Upload tosca to commissioning")
-    tosca_template = jinja_env().get_template("commission_apex.json.j2").render()
+    tosca_template = jinja_env().get_template("commission_apex.json.j2").render(dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
     response = clamp.upload_commission(tosca_template)
     assert response["errorDetails"] is None
 
@@ -135,7 +135,7 @@ def test_cl_apex():
 
     wait(lambda: verify_apex_policy_created(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy Deployment to be OK")
 
-    time.sleep(30)
+    time.sleep(10)
     logger.info("Check O-du/O-ru status again")
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"
