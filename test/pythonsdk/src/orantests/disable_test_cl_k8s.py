@@ -24,7 +24,7 @@
 """Closed Loop Apex usecase tests module."""
 # This usecase has limitations due to Clamp issue.
 # 1. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
-import time
+#import time
 import logging
 import logging.config
 import subprocess
@@ -50,7 +50,7 @@ def setup_simulators():
     """Prepare the test environment before the executing the tests."""
     logger.info("Test class setup for Closed Loop tests")
 
-    deploy_chartmuseum ()
+    deploy_chartmuseum()
 
     # Add the remote repo to Clamp k8s pod
     logger.info("Add the remote repo to Clamp k8s pod")
@@ -96,16 +96,15 @@ def deploy_chartmuseum():
     check_output(cmd, shell=True).decode('utf-8')
 
 def is_chartmuseum_up() -> bool:
-        """Check if the chartmuseum is up."""
-        cmd = "kubectl get pods --field-selector status.phase=Running -n test"
-        result = check_output(cmd, shell=True).decode('utf-8')
-        logger.info("Checking if chartmuseum is UP: %s", result)
-        if result == '':
-            logger.info("chartmuseum is Down")
-            return False
-        logger.info("chartmuseum is Up")
-        return True
-
+    """Check if the chartmuseum is up."""
+    cmd = "kubectl get pods --field-selector status.phase=Running -n test"
+    result = check_output(cmd, shell=True).decode('utf-8')
+    logger.info("Checking if chartmuseum is UP: %s", result)
+    if result == '':
+        logger.info("chartmuseum is Down")
+        return False
+    logger.info("chartmuseum is Up")
+    return True
 
 def add_remote_repo():
     """Config the clamp k8s pod."""
