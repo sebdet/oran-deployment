@@ -26,6 +26,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape, ChoiceLoader
 
 
 def jinja_env() -> Environment:
+
     """Create Jinja environment.
 
     jinja_env allow to fetch simply jinja templates where they are.
