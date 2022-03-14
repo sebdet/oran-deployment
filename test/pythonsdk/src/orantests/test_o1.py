@@ -29,8 +29,8 @@ import os
 import time
 import pytest
 from onapsdk.configuration import settings
-from waiting import wait
 from smo.network_simulators import NetworkSimulators
+from smo.dmaap import DmaapUtils
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.sdnc.sdnc import OranSdnc
 
@@ -44,6 +44,7 @@ logger = logging.getLogger("Test O1")
 
 network_simulators = NetworkSimulators("./resources")
 dmaap = OranDmaap()
+dmaap_utils = DmaapUtils()
 test_session_timestamp = datetime.datetime.now()
 
 
@@ -55,12 +56,10 @@ def setup_simulators():
     # Do a first get to register the o1test/o1test user in DMAAP
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
-    dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
-    dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
-    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
-    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.SEC_FAULT_OUTPUT to be empty")
-    network_simulators.start_network_simulators()
-    network_simulators.wait_for_network_simulators_to_be_running()
+
+    dmaap_utils.clean_dmaap()
+
+    network_simulators.start_and_wait_network_simulators()
   # ADD DU RESTART just in case
     # Wait enough time to have at least the SDNR notifications sent
     logger.info("Waiting 20s that SDNR sends all registration events to VES...")
