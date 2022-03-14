@@ -50,7 +50,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the tosca template instance
         """
-        url = f"{self.base_url()}/toscaControlLoop/getToscaInstantiation"
+        url = f"{self.base_url()}/acm/getToscaInstantiation"
         template_instance = self.send_message_json('GET',
                                                    'Get tosca template instance',
                                                    url,
@@ -68,7 +68,7 @@ class ClampToscaTemplate(Clamp):
             the response of the uploading action
 
         """
-        url = f"{self.base_url()}/toscaControlLoop/commissionToscaTemplate"
+        url = f"{self.base_url()}/acm/commissionToscaTemplate"
         response = self.send_message_json('POST',
                                           'Upload Tosca to commissioning',
                                           url,
@@ -86,7 +86,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the response of the creation action
         """
-        url = f"{self.base_url()}/toscaControlLoop/postToscaInstanceProperties"
+        url = f"{self.base_url()}/acm/postToscaInstanceProperties"
         response = self.send_message_json('POST',
                                           'Create Tosca instance',
                                           url,
@@ -105,7 +105,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the template instance
         """
-        url = f"{self.base_url()}/toscaControlLoop/getInstantiationOrderState?name={name}&version={version}"
+        url = f"{self.base_url()}/acm/getInstantiationOrderState?name={name}&version={version}"
         template_instance = self.send_message_json('GET',
                                                    'Get tosca template instance',
                                                    url,
@@ -125,7 +125,7 @@ class ClampToscaTemplate(Clamp):
             the updated template instance
         """
         body = '{"orderedState":"' + new_status + '","controlLoopIdentifierList":[{"name":"' + name + '","version":"' + version + '"}]}'
-        url = f"{self.base_url()}/toscaControlLoop/putToscaInstantiationStateChange"
+        url = f"{self.base_url()}/acm/putToscaInstantiationStateChange"
         try:
             response = self.send_message_json('PUT',
                                               'Update tosca instance status',
@@ -166,7 +166,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the response of the deletion action
         """
-        url = f"{self.base_url()}/toscaControlLoop/deleteToscaInstanceProperties?name={name}&version={version}"
+        url = f"{self.base_url()}/acm/deleteToscaInstanceProperties?name={name}&version={version}"
         response = self.send_message_json('DELETE',
                                           'Delete the tosca instance',
                                           url,
@@ -184,7 +184,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the response of the decommission action
         """
-        url = f"{self.base_url()}/toscaControlLoop/decommissionToscaTemplate?name={name}&version={version}"
+        url = f"{self.base_url()}/acm/decommissionToscaTemplate?name={name}&version={version}"
         response = self.send_message_json('DELETE',
                                           'Decommission the tosca template',
                                           url,
