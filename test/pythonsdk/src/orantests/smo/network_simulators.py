@@ -114,4 +114,4 @@ class NetworkSimulators():
     @staticmethod
     def wait_for_network_simulators_to_be_running():
         """Check and wait for the network sims to be running."""
-        wait(lambda: NetworkSimulators.is_network_simulators_up(), sleep_seconds=10, timeout_seconds=60, waiting_for="Network simulators to be ready")
+        wait(lambda: NetworkSimulators.is_network_simulators_up(), sleep_seconds=settings.NETWORK_SIMULATOR_CHECK_RETRY, timeout_seconds=settings.NETWORK_SIMULATOR_CHECK_TIMEOUT, waiting_for="Network simulators to be ready")
