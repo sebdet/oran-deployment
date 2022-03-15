@@ -51,5 +51,3 @@ def jinja_env() -> Environment:
                            PackageLoader("oransdk.policy"),
                            PackageLoader("oransdk.clamp")
                        ]))
-
-

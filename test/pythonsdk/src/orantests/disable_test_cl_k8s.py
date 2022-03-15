@@ -34,6 +34,7 @@ from onapsdk.configuration import settings
 from smo.nonrtric import NonRTRic
 from oransdk.utils.jinja import jinja_env
 from oransdk.policy.clamp import ClampToscaTemplate
+from smo.cl_usecase import ClCommissioningUtils
 
 
 
@@ -44,6 +45,7 @@ os.chdir(dname)
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Clamp K8S usecase")
+clcommissioning_utils = ClCommissioningUtils()
 nonrtric = NonRTRic()
 clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
 
@@ -79,15 +81,7 @@ def setup_simulators():
     ### Cleanup code
     yield
     # Finish and delete the cl instance
-    clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
-    clamp.change_instance_status("UNINITIALISED", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("UNINITIALISED"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to UNINITIALISED")
-
-    logger.info("Delete Instance")
-    clamp.delete_template_instance("PMSH_Instance1", "1.2.3")
-    logger.info("Decommission tosca")
-    clamp.decommission_template("ToscaServiceTemplateSimple", "1.0.0")
+    clcommissioning_utils.clean_instance()
     # Remove the remote repo to Clamp k8s pod
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
@@ -153,24 +147,8 @@ def is_oru_app_up() -> bool:
 
 def test_cl_oru_app_deploy():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
-
     logger.info("Upload tosca to commissioning")
     tosca_template = jinja_env().get_template("commission_k8s.json.j2").render(chartmuseumIp=chartmuseum_ip, chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name)
-    response = clamp.upload_commission(tosca_template)
-    assert response["errorDetails"] is None
-
-    logger.info("Create Instance")
-    response = clamp.create_instance(tosca_template)
-    assert response["errorDetails"] is None
-
-    logger.info("Change Instance Status to PASSIVE")
-    response = clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
-
-    logger.info("Change Instance Status to RUNNING")
-    response = clamp.change_instance_status("RUNNING", "PMSH_Instance1", "1.2.3")
-    wait(lambda: clamp.verify_instance_status("RUNNING"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to RUNNING")
-
+    clcommissioning_utils.create_instance(tosca_template)
     logger.info("Check if oru-app is up")
-    response = is_oru_app_up()
     wait(lambda: is_oru_app_up(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app to be up")
