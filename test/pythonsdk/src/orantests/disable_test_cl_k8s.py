@@ -31,12 +31,10 @@ from subprocess import check_output
 import pytest
 from waiting import wait
 from onapsdk.configuration import settings
-from smo.nonrtric import NonRTRic
 from oransdk.utils.jinja import jinja_env
 from oransdk.policy.clamp import ClampToscaTemplate
 from smo.cl_usecase import ClCommissioningUtils
-
-
+from smo.nonrtric import NonRTRic
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
