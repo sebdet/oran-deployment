@@ -34,7 +34,6 @@ from onapsdk.configuration import settings
 from oransdk.utils.jinja import jinja_env
 from oransdk.policy.clamp import ClampToscaTemplate
 from smo.cl_usecase import ClCommissioningUtils
-from smo.nonrtric import NonRTRic
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -44,7 +43,6 @@ os.chdir(dname)
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Clamp K8S usecase")
 clcommissioning_utils = ClCommissioningUtils()
-nonrtric = NonRTRic()
 clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
 
 chartmuseum_ip = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
@@ -117,17 +115,6 @@ def is_chartmuseum_up() -> bool:
         return False
     logger.info("chartmuseum is Up")
     return True
-
-
-def add_remote_repo():
-    """Config the clamp k8s pod."""
-    logger.info("Add remote repo to the clamp k8s pod")
-    pod_name = "onap-policy-clamp-cl-k8s-ppnt-6ddb58cfbd-2m8kn"
-    ip = "135.41.21.24"
-    cmd = f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo add chartmuseum {ip}:8080\""
-    check_output(cmd, shell=True).decode('utf-8')
-    cmd = f"kubectl exec -it -n onap {pod_name} -- sh -c \"helm repo update\""
-    check_output(cmd, shell=True).decode('utf-8')
 
 
 def is_oru_app_up() -> bool:

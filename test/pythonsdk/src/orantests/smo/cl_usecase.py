@@ -29,10 +29,10 @@ from waiting import wait
 from onapsdk.configuration import settings
 from oransdk.policy.clamp import ClampToscaTemplate
 
-
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("Cl usecae utils")
 clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
+
 
 class ClCommissioningUtils():
     """Can be used to have cl usecase utils methods."""
@@ -41,9 +41,11 @@ class ClCommissioningUtils():
     def clean_instance(cls):
         """Clean template instance."""
         clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
-        wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
+        wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60,
+             waiting_for="Clamp instance switches to PASSIVE")
         clamp.change_instance_status("UNINITIALISED", "PMSH_Instance1", "1.2.3")
-        wait(lambda: clamp.verify_instance_status("UNINITIALISED"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to UNINITIALISED")
+        wait(lambda: clamp.verify_instance_status("UNINITIALISED"), sleep_seconds=5, timeout_seconds=60,
+             waiting_for="Clamp instance switches to UNINITIALISED")
 
         logger.info("Delete Instance")
         clamp.delete_template_instance("PMSH_Instance1", "1.2.3")
@@ -52,18 +54,22 @@ class ClCommissioningUtils():
 
     @classmethod
     def create_instance(cls, tosca_template):
-        """Create templace instance."""
+        """Create template instance."""
         response = clamp.upload_commission(tosca_template)
-        assert response["errorDetails"] is None
+        if response["errorDetails"] is not None:
+            response = False
 
         logger.info("Create Instance")
         response = clamp.create_instance(tosca_template)
-        assert response["errorDetails"] is None
+        if response["errorDetails"] is not None:
+            response = False
 
         logger.info("Change Instance Status to PASSIVE")
-        response = clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
-        wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to PASSIVE")
+        clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
+        wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60,
+             waiting_for="Clamp instance switches to PASSIVE")
 
         logger.info("Change Instance Status to RUNNING")
-        response = clamp.change_instance_status("RUNNING", "PMSH_Instance1", "1.2.3")
-        wait(lambda: clamp.verify_instance_status("RUNNING"), sleep_seconds=5, timeout_seconds=60, waiting_for="Clamp instance switches to RUNNING")
+        clamp.change_instance_status("RUNNING", "PMSH_Instance1", "1.2.3")
+        wait(lambda: clamp.verify_instance_status("RUNNING"), sleep_seconds=5, timeout_seconds=60,
+             waiting_for="Clamp instance switches to RUNNING")
