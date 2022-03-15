@@ -3,7 +3,7 @@
 """Test Clamp module."""
 
 from unittest import mock
-from oransdk.clamp.clamp import OranClamp
+from oransdk.policy.clamp import OranClamp
 
 
 HEADER={"accept": "application/json", "Content-Type": "application/json"}
