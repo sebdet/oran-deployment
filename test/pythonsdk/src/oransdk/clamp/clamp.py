@@ -23,8 +23,8 @@
 ###
 """Onap Clamp module."""
 
-from oransdk.configuration import settings
 from onapsdk.clamp.clamp_element import Clamp
+from oransdk.configuration import settings
 
 
 class OranClamp(Clamp):
@@ -36,31 +36,38 @@ class OranClamp(Clamp):
     @classmethod
     def upload_commission(cls, basic_auth):
         """
-        Upload commission
+        Upload commission.
+
         :param basic_auth:
         :return:
+
         """
         url = f"{cls.base_url}/clamp/restservices/clds/v2/toscaControlLoop/commissionToscaTemplate"
         return cls.send_message('POST', 'Upload commission', url, basic_auth=basic_auth)
 
+
     @classmethod
-    def create_instance(cls, clamp_data, basic_auth: [str, str]) -> None :
+    def create_instance(cls, clamp_data, basic_auth: [str, str]) -> None:
         """
-          Create instance
-          :param basic_auth
-          Args:
-              clamp_data : the clamp to be created in binary format
+        Create instance.
+
+        :param basic_auth
+        Args:
+            clamp_data : the clamp to be created in binary format
+
         """
-        url =f"{cls.base_url}/restservices/clds/v2/toscaControlLoop/postToscaInstanceProperties"
+        url = f"{cls.base_url}/restservices/clds/v2/toscaControlLoop/postToscaInstanceProperties"
         cls.send_message('POST', 'Create Instance', url, data=clamp_data, headers=cls.header, basic_auth=basic_auth)
 
 
     @classmethod
     def change_instance_status(cls, clamp_data):
         """
-          Change instance
-          :param cls:
-          :param clamp_data
+        Change instance.
+
+        :param cls:
+        :param clamp_data
+
         """
         url = f"{cls.base_url}/restservices/clds/v2/toscaControlLoop/putToscaInstantiationStateChange"
         cls.send_message('PUT', 'Change instance', url, data=clamp_data, headers=cls.header)
@@ -68,8 +75,10 @@ class OranClamp(Clamp):
     @classmethod
     def delete_instance(cls):
         """
-        Delete instance
+        Delete instance.
+
         :return:
+
         """
         url = f"{cls.base_url}/restservices/clds/v2/toscaControlLoop/deleteToscaInstanceProperties?name=PMSH_Instance1&version=1.2.3"
         cls.send_message('DELETE', 'Delete instance', url, headers=cls.header)
@@ -77,8 +86,10 @@ class OranClamp(Clamp):
     @classmethod
     def decommission_template(cls):
         """
-        Decommision template
+        Decommision template.
+
         :return:
+
         """
         url = f"{cls.base_url}/restservices/clds/v2/toscaControlLoop/decommissionToscaTemplate?name=ToscaServiceTemplateSimple&version=1.0.0"
         cls.send_message('DELETE', 'Decommision template', url, headers=cls.header)
