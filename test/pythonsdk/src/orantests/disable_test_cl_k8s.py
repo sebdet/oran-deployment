@@ -107,6 +107,7 @@ def is_chartmuseum_up() -> bool:
     logger.info("chartmuseum is Up")
     return True
 
+
 def add_remote_repo():
     """Config the clamp k8s pod."""
     logger.info("Add remote repo to the clamp k8s pod")
