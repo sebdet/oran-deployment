@@ -14,27 +14,11 @@
 
 # Static Defaults
 testsSuite:
-  jenkins: true
-  tests: false
+  jenkins: false
+  tests: true
 
-github:
-  username: "username"
-  password: "token_api"
-
-gerrit:
-  username: "username"
-  password: "token_api"
-
-jenkins:
-  controller:
-    jenkinsUrl: "http://smo-jenkins:32080"
-    JCasC:
-      securityRealm: |-
-        local:
-          allowsSignup: false
-          enableCaptcha: false
-          users:
-          - id: "test"
-            name: "Jenkins Admin"
-            password: "testos"
+oran-tests:
+  oranTests:
+    name: orantests1
+    commitId: origin/main
 
