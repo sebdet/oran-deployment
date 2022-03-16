@@ -1,50 +1,85 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
 """Test Clamp module."""
-
 from unittest import mock
 from oransdk.policy.clamp import ClampToscaTemplate
 
 
-HEADER={"accept": "application/json", "Content-Type": "application/json"}
+HEADER = {"Accept": "application/json", "Content-Type": "application/json"}
 BASIC_AUTH = {'username': 'dcae@dcae.onap.org', 'password': 'demo123456!'}
 BASE_URL = "http://localhost:8084"
+CLAMP = ClampToscaTemplate(BASIC_AUTH)
+
 
 def test_initialization():
     """Class initialization test."""
-    clamp = ClampToscaTemplate()
+    clamp = ClampToscaTemplate(BASIC_AUTH)
     assert isinstance(clamp, ClampToscaTemplate)
+
+
+@mock.patch.object(ClampToscaTemplate, 'send_message')
+def test_get_template_instance(mock_send_message):
+    """Test Clamp's class method."""
+    ClampToscaTemplate.get_template_instance(CLAMP)
+    url = f"{CLAMP.base_url()}/toscaControlLoop/getToscaInstantiation"
+    mock_send_message.assert_called_with('GET',
+                                         'Get tosca template instance',
+                                         url,
+                                         basic_auth=BASIC_AUTH)
+
 
 @mock.patch.object(ClampToscaTemplate, 'send_message')
 def test_upload_commission(mock_send_message):
     """Test Clamp's class method."""
-    ClampToscaTemplate.upload_commission(BASIC_AUTH)
-    url = f"{BASE_URL}/clamp/restservices/clds/v2/toscaControlLoop/commissionToscaTemplate"
-    mock_send_message.assert_called_once_with('POST', 'Upload commission', url, basic_auth=BASIC_AUTH)
+    tosca_template = {}
+    ClampToscaTemplate.upload_commission(CLAMP, tosca_template)
+    url = f"{CLAMP.base_url()}/toscaControlLoop/commissionToscaTemplate"
+    mock_send_message.assert_called_with('POST',
+                                         'Upload Tosca to commissioning',
+                                         url,
+                                         data=tosca_template,
+                                         headers=HEADER,
+                                         basic_auth=BASIC_AUTH)
+
 
 @mock.patch.object(ClampToscaTemplate, 'send_message')
 def test_create_instance(mock_send_message):
     """Test Clamp's class method."""
-    dataclamp = {}
-    ClampToscaTemplate.create_instance(dataclamp, BASIC_AUTH)
-    url = f"{BASE_URL}/restservices/clds/v2/toscaControlLoop/postToscaInstanceProperties"
-    mock_send_message.assert_called_once_with('POST', 'Create Instance', url, data=dataclamp, headers=HEADER, basic_auth=BASIC_AUTH)
+    tosca_instance_properties = {}
+    ClampToscaTemplate.create_instance(CLAMP, tosca_instance_properties)
+    url = f"{CLAMP.base_url()}/toscaControlLoop/postToscaInstanceProperties"
+    mock_send_message.assert_called_once_with('POST', 'Create Tosca instance', url, data=tosca_instance_properties,
+                                              headers=HEADER, basic_auth=BASIC_AUTH)
+
+
+@mock.patch.object(ClampToscaTemplate,'send_message')
+def test_get_template_instance_status(mock_send_message):
+    """Test Clamp's class method."""
+    name = ""
+    version = ""
+    ClampToscaTemplate.get_template_instance_status(CLAMP, name, version)
+    url = f"{CLAMP.base_url()}/toscaControlLoop/getInstantiationOrderState?name={name}&version={version}"
+    mock_send_message.assert_called_with('GET',
+                                         'Get tosca template instance',
+                                         url,
+                                         basic_auth=BASIC_AUTH)
+
 
 @mock.patch.object(ClampToscaTemplate, 'send_message')
-def test_change_instance_status(mock_send_message):
-    dataclamp={}
-    ClampToscaTemplate.change_instance_status(dataclamp)
-    url = f"{BASE_URL}/restservices/clds/v2/toscaControlLoop/putToscaInstantiationStateChange"
-    mock_send_message.assert_called_once_with('PUT', 'Change instance', url, data=dataclamp, headers=HEADER)
+def test_delete_template_instance(mock_send_message):
+    name = ""
+    version = ""
+    ClampToscaTemplate.delete_template_instance(CLAMP, name, version)
+    url = f"{CLAMP.base_url()}/toscaControlLoop/deleteToscaInstanceProperties?name={name}&version={version}"
+    mock_send_message.assert_called_with('DELETE', 'Delete the tosca instance', url, headers=HEADER,
+                                         basic_auth=BASIC_AUTH)
 
-@mock.patch.object(ClampToscaTemplate, 'send_message')
-def test_delete_instance(mock_send_message):
-    ClampToscaTemplate.delete_instance()
-    url = f"{BASE_URL}/restservices/clds/v2/toscaControlLoop/deleteToscaInstanceProperties?name=PMSH_Instance1&version=1.2.3"
-    mock_send_message.assert_called_with('DELETE', 'Delete instance', url, headers=HEADER)
 
 @mock.patch.object(ClampToscaTemplate, 'send_message')
 def test_decommission_template(mock_send_message):
-    ClampToscaTemplate.decommission_template()
-    url = f"{BASE_URL}/restservices/clds/v2/toscaControlLoop/decommissionToscaTemplate?name=ToscaServiceTemplateSimple&version=1.0.0"
-    mock_send_message.assert_called_with('DELETE', 'Decommision template', url, headers=HEADER)
+    name = ""
+    version = ""
+    ClampToscaTemplate.decommission_template(CLAMP, name, version)
+    url = f"{CLAMP.base_url()}/toscaControlLoop/decommissionToscaTemplate?name={name}&version={version}"
+    mock_send_message.assert_called_with('DELETE', 'Decommission the tosca template', url, headers=HEADER,
+                                         basic_auth=BASIC_AUTH)
