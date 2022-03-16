@@ -17,12 +17,6 @@ testsSuite:
   jenkins: true
   tests: false
 
-oran-tests:
-  oranTests:
-    name: orantests1
-    flag: true
-    commitId: 83be1833161166e663098ab09f56551fc83b84c0
-
 github:
   username: "username"
   password: "token_api"
@@ -34,3 +28,13 @@ gerrit:
 jenkins:
   controller:
     jenkinsUrl: "http://smo-jenkins:32080"
+    JCasC:
+      securityRealm: |-
+        local:
+          allowsSignup: false
+          enableCaptcha: false
+          users:
+          - id: "test"
+            name: "Jenkins Admin"
+            password: "testos"
+
