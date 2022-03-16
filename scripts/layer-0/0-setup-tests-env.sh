@@ -28,5 +28,6 @@ sudo apt-get update
 sudo apt-get install maven -y
 sudo apt-get install python3.8 -y
 sudo apt-get install python3-pip -y
+sudo apt-get install curl -y
 
 pip3 install tox
