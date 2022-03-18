@@ -128,7 +128,6 @@ def is_oru_app_up() -> bool:
     if int(result) == 1:
         logger.info("ORU-APP is Up")
         return True
-
     logger.info("ORU-APP is Down")
     return False
 
