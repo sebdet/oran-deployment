@@ -24,6 +24,7 @@
 """Closed Loop Apex usecase tests module."""
 # This usecase has limitations due to Clamp issue.
 # 1. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
+import time
 import logging.config
 import subprocess
 import os
