@@ -149,4 +149,3 @@ def test_cl_oru_app_deploy():
 
     logger.info("Check if oru-app is up")
     wait(lambda: is_oru_app_up(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app to be up")
-
