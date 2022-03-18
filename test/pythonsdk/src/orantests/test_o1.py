@@ -70,8 +70,8 @@ def setup_simulators():
 #    time.sleep(20)
     # Preparing the DMaap to cache all the events for the fault topics.
     # If it exists already it clears all cached events.
-    logger.info("Waiting 180s to have registration and faults events in DMaap")
-    time.sleep(180)
+    logger.info("Waiting 300s to have registration and faults events in DMaap")
+    time.sleep(300)
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
