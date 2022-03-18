@@ -78,6 +78,7 @@ def setup_simulators():
     yield
     # Finish and delete the cl instance
     clcommissioning_utils.clean_instance()
+    wait(lambda: is_oru_app_down(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app is down")
     # Remove the remote repo to Clamp k8s pod
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
@@ -119,21 +120,32 @@ def is_chartmuseum_up() -> bool:
 
 def is_oru_app_up() -> bool:
     """Check if the oru-app is up."""
-    cmd = "kubectl get pods --field-selector status.phase!=Running -n test"
+    cmd = "kubectl get pods -n nonrtric | grep oru-app | wc -l"
     result = check_output(cmd, shell=True).decode('utf-8')
     logger.info("Checking if oru-app is up :%s", result)
-    if result == '':
+    if int(result) == 1:
         logger.info("ORU-APP is Up")
         return True
 
     logger.info("ORU-APP is Down")
     return False
 
+def is_oru_app_down() -> bool:
+    """Check if the oru-app is down."""
+    cmd = "kubectl get pods -n nonrtric | grep oru-app | wc -l"
+    result = check_output(cmd, shell=True).decode('utf-8')
+    logger.info("Checking if oru-app is down :%s", result)
+    if int(result) == 0:
+        logger.info("ORU-APP is Down")
+        return True
+    logger.info("ORU-APP is Up")
+    return False
 
 def test_cl_oru_app_deploy():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     logger.info("Upload tosca to commissioning")
     tosca_template = jinja_env().get_template("commission_k8s.json.j2").render(chartmuseumIp=chartmuseum_ip, chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name)
-    clcommissioning_utils.create_instance(tosca_template)
+    assert clcommissioning_utils.create_instance(tosca_template) is True
+
     logger.info("Check if oru-app is up")
     wait(lambda: is_oru_app_up(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app to be up")
