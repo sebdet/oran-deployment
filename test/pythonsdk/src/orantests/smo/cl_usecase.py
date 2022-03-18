@@ -53,16 +53,16 @@ class ClCommissioningUtils():
         clamp.decommission_template("ToscaServiceTemplateSimple", "1.0.0")
 
     @classmethod
-    def create_instance(cls, tosca_template):
+    def create_instance(cls, tosca_template) -> bool:
         """Create template instance."""
         response = clamp.upload_commission(tosca_template)
         if response["errorDetails"] is not None:
-            response = False
+            return False
 
         logger.info("Create Instance")
         response = clamp.create_instance(tosca_template)
         if response["errorDetails"] is not None:
-            response = False
+            return False
 
         logger.info("Change Instance Status to PASSIVE")
         clamp.change_instance_status("PASSIVE", "PMSH_Instance1", "1.2.3")
@@ -73,3 +73,5 @@ class ClCommissioningUtils():
         clamp.change_instance_status("RUNNING", "PMSH_Instance1", "1.2.3")
         wait(lambda: clamp.verify_instance_status("RUNNING"), sleep_seconds=5, timeout_seconds=60,
              waiting_for="Clamp instance switches to RUNNING")
+
+        return True

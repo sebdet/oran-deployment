@@ -30,10 +30,11 @@ import logging.config
 import os
 import pytest
 from onapsdk.configuration import settings
+from onapsdk.exceptions import ResourceNotFound
 from waiting import wait
 from oransdk.dmaap.dmaap import OranDmaap
 from oransdk.policy.clamp import ClampToscaTemplate
-from oransdk.policy.policy import OranPolicy
+from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
 from smo.network_simulators import NetworkSimulators
@@ -53,13 +54,14 @@ dmaap_utils = DmaapUtils()
 clcommissioning_utils = ClCommissioningUtils()
 network_simulators = NetworkSimulators("./resources")
 clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
+policy = OranPolicy()
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
     """Setup the simulators before the executing the tests."""
     logger.info("Test class setup for Closed Loop Apex test")
 
-    dmaap_utils.clean_dmaap()
+    dmaap_utils.clean_dmaap(settings.DMAAP_CL_GROUP, settings.DMAAP_CL_USER)
 
     network_simulators.start_and_wait_network_simulators()
 
@@ -73,7 +75,17 @@ def setup_simulators():
     # Finish and delete the cl instance
     clcommissioning_utils.clean_instance()
 
+    try:
+        policy.undeploy_policy("operational.apex.linkmonitor", "1.0.0", settings.POLICY_BASICAUTH)
+    except ResourceNotFound:
+        logger.info("Policy already undeployed")
+        try:
+            policy.delete_policy(PolicyType(type="onap.policies.controlloop.operational.common.Apex", version="1.0.0"), "operational.apex.linkmonitor", "1.0.0", settings.POLICY_BASICAUTH)
+        except ResourceNotFound:
+            logger.info("Policy already deleted")
+
     network_simulators.stop_network_simulators()
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 def verify_apex_policy_created():
@@ -84,7 +96,6 @@ def verify_apex_policy_created():
         the boolean value indicating whether policy deployed successfully
     """
     logger.info("Verify Apex policy is deployed")
-    policy = OranPolicy()
     policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
 
     for status in policy_status_list:
@@ -104,8 +115,8 @@ def send_dmaap_event():
 def test_cl_apex():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     logger.info("Upload tosca to commissioning")
-    tosca_template = jinja_env().get_template("commission_apex.json.j2").render(dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
-    clcommissioning_utils.create_instance(tosca_template)
+    tosca_template = jinja_env().get_template("commission_apex.json.j2").render(dmaapGroup=settings.DMAAP_CL_GROUP, dmaapUser=settings.DMAAP_CL_USER)
+    assert clcommissioning_utils.create_instance(tosca_template) is True
 
     sdnc = OranSdnc()
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)

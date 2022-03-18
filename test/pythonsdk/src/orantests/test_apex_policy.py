@@ -63,7 +63,7 @@ deployment_port = "12345"
 def setup_simulators():
     """Setup the simulators before the executing the tests."""
     logger.info("Test class setup for Apex tests")
-    dmaap_utils.clean_dmaap()
+    dmaap_utils.clean_dmaap(settings.DMAAP_GROUP, settings.DMAAP_USER)
     network_simulators.start_and_wait_network_simulators()
 
     # Wait enough time to have at least the SDNR notifications sent
@@ -77,6 +77,7 @@ def setup_simulators():
     network_simulators.stop_network_simulators()
     policy.undeploy_policy(policy_id, policy_version, settings.POLICY_BASICAUTH)
     policy.delete_policy(policy_type, policy_id, policy_version, settings.POLICY_BASICAUTH)
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 def create_policy():

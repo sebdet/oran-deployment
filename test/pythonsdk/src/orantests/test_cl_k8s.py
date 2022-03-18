@@ -24,6 +24,7 @@
 """Closed Loop Apex usecase tests module."""
 # This usecase has limitations due to Clamp issue.
 # 1. make sure using the policy-clamp-be version 6.2.0-snapshot-latest at this the moment
+import time
 import logging.config
 import subprocess
 import os
@@ -86,6 +87,7 @@ def setup_simulators():
     check_output(cmd, shell=True).decode('utf-8')
     cmd = "helm repo remove test"
     check_output(cmd, shell=True).decode('utf-8')
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 
