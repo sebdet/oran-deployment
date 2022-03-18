@@ -85,6 +85,7 @@ def setup_simulators():
             logger.info("Policy already deleted")
 
     network_simulators.stop_network_simulators()
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 def verify_apex_policy_created():

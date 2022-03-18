@@ -77,6 +77,7 @@ def setup_simulators():
     network_simulators.stop_network_simulators()
     policy.undeploy_policy(policy_id, policy_version, settings.POLICY_BASICAUTH)
     policy.delete_policy(policy_type, policy_id, policy_version, settings.POLICY_BASICAUTH)
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 def create_policy():

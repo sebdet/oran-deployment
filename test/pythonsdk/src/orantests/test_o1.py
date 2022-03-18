@@ -70,13 +70,14 @@ def setup_simulators():
 #    time.sleep(20)
     # Preparing the DMaap to cache all the events for the fault topics.
     # If it exists already it clears all cached events.
-    logger.info("Waiting 120s to have registration and faults events in DMaap")
-    time.sleep(120)
+    logger.info("Waiting 180s to have registration and faults events in DMaap")
+    time.sleep(180)
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
     yield
     network_simulators.stop_network_simulators()
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 def create_registration_structure(events):

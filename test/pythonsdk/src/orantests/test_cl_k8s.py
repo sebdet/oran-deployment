@@ -86,6 +86,7 @@ def setup_simulators():
     check_output(cmd, shell=True).decode('utf-8')
     cmd = "helm repo remove test"
     check_output(cmd, shell=True).decode('utf-8')
+    time.sleep(10)
     logger.info("Test Session cleanup done")
 
 
