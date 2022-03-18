@@ -57,7 +57,7 @@ def setup_simulators():
     # all registration messages will then be stored for the registration tests.
     # If it exists already it clears all cached events.
 
-    dmaap_utils.clean_dmaap()
+    dmaap_utils.clean_dmaap(settings.DMAAP_GROUP, settings.DMAAP_USER)
 
     network_simulators.start_and_wait_network_simulators()
   # ADD DU RESTART just in case

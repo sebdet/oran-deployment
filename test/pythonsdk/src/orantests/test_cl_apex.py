@@ -61,7 +61,7 @@ def setup_simulators():
     """Setup the simulators before the executing the tests."""
     logger.info("Test class setup for Closed Loop Apex test")
 
-    dmaap_utils.clean_dmaap()
+    dmaap_utils.clean_dmaap(settings.DMAAP_CL_GROUP, settings.DMAAP_CL_USER)
 
     network_simulators.start_and_wait_network_simulators()
 
@@ -114,7 +114,7 @@ def send_dmaap_event():
 def test_cl_apex():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     logger.info("Upload tosca to commissioning")
-    tosca_template = jinja_env().get_template("commission_apex.json.j2").render(dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
+    tosca_template = jinja_env().get_template("commission_apex.json.j2").render(dmaapGroup=settings.DMAAP_CL_GROUP, dmaapUser=settings.DMAAP_CL_USER)
     assert clcommissioning_utils.create_instance(tosca_template) is True
 
     sdnc = OranSdnc()

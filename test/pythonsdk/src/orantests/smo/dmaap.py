@@ -37,10 +37,10 @@ class DmaapUtils():
     """Can be used to have dmaap utils methods."""
 
     @classmethod
-    def clean_dmaap(cls):
+    def clean_dmaap(cls, dmaap_group, dmaap_user):
         """Clean DMAAP useful topics."""
     dmaap.create_topic(settings.DMAAP_TOPIC_FAULT_JSON)
     dmaap.create_topic(settings.DMAAP_TOPIC_PNFREG_JSON)
     # Purge the FAULT TOPIC
-    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic SEC_FAULT_OUTPUT to be empty")
-    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, settings.DMAAP_GROUP, settings.DMAAP_USER).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_FAULT, 5000, dmaap_group, dmaap_user).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic SEC_FAULT_OUTPUT to be empty")
+    wait(lambda: (dmaap.get_message_from_topic(settings.DMAAP_TOPIC_PNFREG, 5000, dmaap_group, dmaap_user).json() == []), sleep_seconds=10, timeout_seconds=60, waiting_for="DMaap topic unauthenticated.VES_PNFREG_OUTPUT to be empty")
