@@ -21,7 +21,7 @@ def test_initialization():
 def test_get_template_instance(mock_send_message):
     """Test Clamp's class method."""
     ClampToscaTemplate.get_template_instance(CLAMP)
-    url = f"{CLAMP.base_url()}/toscaControlLoop/getToscaInstantiation"
+    url = f"{CLAMP.base_url()}/acm/getToscaInstantiation"
     mock_send_message.assert_called_with('GET',
                                          'Get tosca template instance',
                                          url,
@@ -33,7 +33,7 @@ def test_upload_commission(mock_send_message):
     """Test Clamp's class method."""
     tosca_template = {}
     ClampToscaTemplate.upload_commission(CLAMP, tosca_template)
-    url = f"{CLAMP.base_url()}/toscaControlLoop/commissionToscaTemplate"
+    url = f"{CLAMP.base_url()}/acm/commissionToscaTemplate"
     mock_send_message.assert_called_with('POST',
                                          'Upload Tosca to commissioning',
                                          url,
@@ -47,7 +47,7 @@ def test_create_instance(mock_send_message):
     """Test Clamp's class method."""
     tosca_instance_properties = {}
     ClampToscaTemplate.create_instance(CLAMP, tosca_instance_properties)
-    url = f"{CLAMP.base_url()}/toscaControlLoop/postToscaInstanceProperties"
+    url = f"{CLAMP.base_url()}/acm/postToscaInstanceProperties"
     mock_send_message.assert_called_once_with('POST', 'Create Tosca instance', url, data=tosca_instance_properties,
                                               headers=HEADER, basic_auth=BASIC_AUTH)
 
@@ -58,7 +58,7 @@ def test_get_template_instance_status(mock_send_message):
     name = ""
     version = ""
     ClampToscaTemplate.get_template_instance_status(CLAMP, name, version)
-    url = f"{CLAMP.base_url()}/toscaControlLoop/getInstantiationOrderState?name={name}&version={version}"
+    url = f"{CLAMP.base_url()}/acm/getInstantiationOrderState?name={name}&version={version}"
     mock_send_message.assert_called_with('GET',
                                          'Get tosca template instance',
                                          url,
@@ -70,7 +70,7 @@ def test_delete_template_instance(mock_send_message):
     name = ""
     version = ""
     ClampToscaTemplate.delete_template_instance(CLAMP, name, version)
-    url = f"{CLAMP.base_url()}/toscaControlLoop/deleteToscaInstanceProperties?name={name}&version={version}"
+    url = f"{CLAMP.base_url()}/acm/deleteToscaInstanceProperties?name={name}&version={version}"
     mock_send_message.assert_called_with('DELETE', 'Delete the tosca instance', url, headers=HEADER,
                                          basic_auth=BASIC_AUTH)
 
@@ -80,6 +80,6 @@ def test_decommission_template(mock_send_message):
     name = ""
     version = ""
     ClampToscaTemplate.decommission_template(CLAMP, name, version)
-    url = f"{CLAMP.base_url()}/toscaControlLoop/decommissionToscaTemplate?name={name}&version={version}"
+    url = f"{CLAMP.base_url()}/acm/decommissionToscaTemplate?name={name}&version={version}"
     mock_send_message.assert_called_with('DELETE', 'Decommission the tosca template', url, headers=HEADER,
                                          basic_auth=BASIC_AUTH)
