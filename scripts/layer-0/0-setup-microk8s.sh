@@ -36,7 +36,7 @@ ufw allow in on cni0 && sudo ufw allow out on cni0
 ufw default allow routed
 
 ## Enable required features for K8S
-microk8s enable dns storage
+microk8s enable dns storage prometheus
 
 ## Setup kubectl
 cd
