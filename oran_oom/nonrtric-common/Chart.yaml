@@ -14,7 +14,7 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-apiVersion: v1
+apiVersion: v2
 description: NONRTRIC Common templates for inclusion in other charts
 name: nonrtric-common
 version: 2.0.0
