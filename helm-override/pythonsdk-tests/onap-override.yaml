@@ -239,6 +239,9 @@ dcaegen2-services:
     enabled: true
   dcae-ves-mapper:
     enabled: false
+  dcae-ves-openapi-manager:
+    enabled: false
+
 dcaemod: 
   enabled: false 
 holmes: 
