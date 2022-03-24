@@ -306,7 +306,6 @@ policy:
     enabled: false
   policy-clamp-be:
     enabled: true
-    image: onap/policy-clamp-backend:6.2-SNAPSHOT-20220215T154528Z
   policy-clamp-fe:
     enabled: true
   policy-clamp-cl-runtime:
