@@ -140,7 +140,7 @@ class ClampToscaTemplate(Clamp):
         # Thus we verify the status to determine whether it was successful or not
         time.sleep(2)
         response = self.get_template_instance()
-        return response["controlLoopList"][0]["orderedState"]
+        return response["automationCompositionList"][0]["orderedState"]
 
     def verify_instance_status(self, new_status):
         """
@@ -152,7 +152,7 @@ class ClampToscaTemplate(Clamp):
             the boolean value indicating whether status changed successfully
         """
         response = self.get_template_instance()
-        if response["controlLoopList"][0]["state"] == new_status:
+        if response["automationCompositionList"][0]["state"] == new_status:
             return True
         return False
 

@@ -85,12 +85,13 @@ def sdnc_component_ready():
 
 def clamp_component_ready():
     """Check if Clamp component is ready."""
+    logger.info("Verify Clamp component is ready")
     try:
         response = clamp.get_template_instance()
     except (RequestException, NewConnectionError, ConnectionFailed, APIError) as e:
         logger.error(e)
         return False
-    return response["controlLoopList"] is not None
+    return response["automationCompositionList"] is not None
 
 ###### Entry points of PYTEST Session
 def pytest_sessionstart():
