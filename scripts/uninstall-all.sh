@@ -31,4 +31,5 @@ cd $SCRIPT_PATH
 ./sub-scripts/uninstall-nonrtric.sh
 ./sub-scripts/uninstall-simulators.sh
 ./sub-scripts/uninstall-cicd.sh
+./sub-script/uninstall-security.sh
 ./sub-scripts/clean-up.sh

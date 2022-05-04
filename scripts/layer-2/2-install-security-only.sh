@@ -33,15 +33,11 @@ if [ -z "$1" ]
     echo "No helm override flavour supplied, going to default"
     FLAVOUR="default"
 fi
-
 timestamp=$(date +%s)
 
-echo "Starting ONAP & NONRTRIC namespaces ..."
-../sub-scripts/install-onap.sh ../../helm-override/$FLAVOUR/onap-override.yaml $timestamp
-../sub-scripts/install-nonrtric.sh ../../helm-override/$FLAVOUR/oran-override.yaml $timestamp
+echo "Starting SECURITY namespace..."
+
 ../sub-scripts/install-security.sh ../../helm-override/$FLAVOUR/security-override.yaml $timestamp
 
-kubectl get pods -n onap
-kubectl get pods -n nonrtric
 kubectl get pods -n security
 kubectl get namespaces

@@ -1,0 +1,15 @@
+dependencies:
+- name: common
+  repository: http://localhost:18080
+  version: 10.0.0
+- name: certInitializer
+  repository: http://localhost:18080
+  version: 10.0.0
+- name: repositoryGenerator
+  repository: http://localhost:18080
+  version: 10.0.0
+- name: serviceAccount
+  repository: http://localhost:18080
+  version: 10.0.0
+digest: sha256:61c67a67b2b807606cfa6e8bb93aef0d5199c7786a27da3bd18c1a091184c7dc
+generated: "2022-05-04T08:48:19.210924433Z"

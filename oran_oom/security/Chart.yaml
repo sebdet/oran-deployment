@@ -1,0 +1,15 @@
+apiVersion: v2
+name: security
+version: 1.0.0
+appVersion: test
+description: Open Radio Access Network (ORAN)
+home: https://www.o-ran.org/
+sources:
+- https://gerrit.o-ran-sc.org/r/#/admin/projects/
+kubeVersion: ">=1.19.0-0"
+
+dependencies:
+  - name: keycloak
+    version: 18.1.1
+    repository: https://codecentric.github.io/helm-charts
+    condition: nonrtric.installKeycloak

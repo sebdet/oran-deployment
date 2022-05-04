@@ -14,38 +14,14 @@
 #   limitations under the License.                                             #
 ################################################################################
 
-nonrtric:
-  persistence:
-    mountPath: /dockerdata-nfs
-  installPms: true
-  installA1controller: true
-  installA1simulator: true
-  installControlpanel: true
-  installInformationservice: true
-  installRappcatalogueservice: true
-  installNonrtricgateway: true
-  installORUApp: true
-  installTopology: true
-  installKong: true
-  installDmaapadapterservice: true
-  installDmaapmediatorservice: true
-  installHelmmanager: true
+common:
+  installKeycloak: true
 
-  volume1:
-    size: 1Gi
-    storageClassName: volume1
-  volume2:
-    size: 1Gi
-    storageClassName: volume2
-  volume3:
-    size: 1Gi
-    storageClassName: volume3
-
-kong:
-  ingressController:
-    installCRDs: false 
-  admin:
-    enabled: true
-cert-wrapper:
-  enabled: true
-
+keycloak:
+  postgresql:
+    enabled: false
+  extraEnv: |
+    - name: KEYCLOAK_USER
+      value: test
+    - name: KEYCLOAK_PASSWORD
+      value: test
