@@ -1,0 +1,510 @@
+{
+  "data_types": {
+    "onap.datatypes.ToscaConceptIdentifier": {
+      "key": {
+        "version": "0.0.0",
+        "name": "onap.datatypes.ToscaConceptIdentifier"
+      },
+      "derived_from": "tosca.datatypes.Root",
+      "properties": {
+        "version": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "version",
+          "default_value": null
+        },
+        "name": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "name",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "constraints": [],
+      "description": null,
+      "version": "0.0.0",
+      "type_version": null,
+      "defined_name": "onap.datatypes.ToscaConceptIdentifier",
+      "defined_version": null,
+      "type": null,
+      "name": "onap.datatypes.ToscaConceptIdentifier"
+    }
+  },
+  "topology_template": {
+    "policies_as_map": {},
+    "policies": null,
+    "description": null,
+    "node_templates": {
+      "org.onap.domain.database.PMSH_K8SMicroserviceAutomationCompositionElement": {
+        "type_identifier": {
+          "version": "1.0.0",
+          "name": "org.onap.policy.clamp.acm.K8SMicroserviceAutomationCompositionElement"
+        },
+        "key": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.database.PMSH_K8SMicroserviceAutomationCompositionElement"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.database.PMSH_K8SMicroserviceAutomationCompositionElement"
+        },
+        "properties": {
+          "participantType": {
+            "version": "2.3.4",
+            "name": "org.onap.policy.clamp.acm.KubernetesParticipant"
+          },
+          "participant_id": {
+            "version": "1.0.0",
+            "name": "K8sParticipant0"
+          },
+          "provider": "ONAP",
+          "chart": "{\"chartId\":{\"name\":\"{{chartName}}\",\"version\":\"{{chartVersion}}\"},\"namespace\":\"nonrtric\",\"releaseName\":\"{{releaseName}}\",\"repository\":{\"repoName\":\"chartmuseum\",\"address\":\"{{chartmuseumIp}}\",\"protocol\":\"http\",\"port\":{{chartmuseumPort}}}}"
+        },
+        "metadata": {},
+        "description": "Automation composition element for the K8S microservice for PMSH",
+        "requirements": null,
+        "version": "1.2.3",
+        "type_version": "1.0.0",
+        "capabilities": null,
+        "defined_name": "org.onap.domain.database.PMSH_K8SMicroserviceAutomationCompositionElement",
+        "defined_version": "1.2.3",
+        "type": "org.onap.policy.clamp.acm.K8SMicroserviceAutomationCompositionElement",
+        "name": "org.onap.domain.database.PMSH_K8SMicroserviceAutomationCompositionElement"
+      },
+      "org.onap.policy.clamp.acm.KubernetesParticipant": {
+        "type_identifier": {
+          "version": "1.0.1",
+          "name": "org.onap.policy.clamp.acm.Participant"
+        },
+        "key": {
+          "version": "2.3.4",
+          "name": "org.onap.policy.clamp.acm.KubernetesParticipant"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "2.3.4",
+          "name": "org.onap.policy.clamp.acm.KubernetesParticipant"
+        },
+        "properties": {
+          "provider": "Ericsson"
+        },
+        "metadata": {},
+        "description": "Participant for K8S",
+        "requirements": null,
+        "version": "2.3.4",
+        "type_version": "1.0.1",
+        "capabilities": null,
+        "defined_name": "org.onap.policy.clamp.acm.KubernetesParticipant",
+        "defined_version": "2.3.4",
+        "type": "org.onap.policy.clamp.acm.Participant",
+        "name": "org.onap.policy.clamp.acm.KubernetesParticipant"
+      },
+      "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition": {
+        "type_identifier": {
+          "version": "1.0.1",
+          "name": "org.onap.policy.clamp.acm.AutomationComposition"
+        },
+        "key": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition"
+        },
+        "properties": {
+          "elements": [
+            {
+              "version": "1.2.3",
+              "name": "org.onap.domain.database.PMSH_K8SMicroserviceAutomationCompositionElement"
+            }],
+          "provider": "ONAP"
+        },
+        "metadata": {},
+        "description": "Automation composition for Hello World",
+        "requirements": null,
+        "version": "1.2.3",
+        "type_version": "1.0.1",
+        "capabilities": null,
+        "defined_name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition",
+        "defined_version": "1.2.3",
+        "type": "org.onap.policy.clamp.acm.AutomationComposition",
+        "name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition"
+      }
+    },
+    "inputs": {}
+  },
+  "policy_types": null,
+  "tosca_definitions_version": "tosca_simple_yaml_1_3",
+  "name": "{{instanceName}}",
+  "node_types": {
+    "org.onap.policy.clamp.acm.AutomationComposition": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.AutomationComposition"
+      },
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "elements": {
+          "required": true,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": {
+            "constraints": null,
+            "description": null,
+            "type_version": "0.0.0",
+            "type": "onap.datatypes.ToscaConceptIdentifier",
+            "name": null
+          },
+          "constraints": null,
+          "description": "Specifies a list of automation composition element definitions that make up this automation composition definition",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "list",
+          "name": "elements",
+          "default_value": null
+        },
+        "provider": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Specifies the organization that provides the automation composition element",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "provider",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.AutomationComposition",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.AutomationComposition"
+    },
+    "org.onap.policy.clamp.acm.AutomationCompositionElement": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.AutomationCompositionElement"
+      },
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "runningToPassiveTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from running to passive",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "runningToPassiveTimeout",
+          "default_value": 60
+        },
+        "participantType": {
+          "required": true,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The identity of the participant type that hosts this type of Automation Composition Element",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatypes.ToscaConceptIdentifier",
+          "name": "participantType",
+          "default_value": null
+        },
+        "startPhase": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "A value indicating the start phase in which this automation composition element will be started, the first start phase is zero. Automation Composition Elements are started in their start_phase order and stopped in reverse start phase order. Automation Composition Elements with the same start phase are started and stopped simultaneously",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "startPhase",
+          "default_value": null
+        },
+        "passiveToUninitializedTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from passive to uninitialized",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "passiveToUninitializedTimeout",
+          "default_value": 60
+        },
+        "uninitializedToPassiveTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from uninitialized to passive",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "uninitializedToPassiveTimeout",
+          "default_value": 60
+        },
+        "participant_id": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatypes.ToscaConceptIdentifier",
+          "name": "participant_id",
+          "default_value": null
+        },
+        "provider": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Specifies the organization that provides the automation composition element",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "provider",
+          "default_value": null
+        },
+        "passiveToRunningTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from passive to running",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "passiveToRunningTimeout",
+          "default_value": 60
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.AutomationCompositionElement",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.AutomationCompositionElement"
+    },
+    "org.onap.policy.clamp.acm.K8SMicroserviceAutomationCompositionElement": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.K8SMicroserviceAutomationCompositionElement"
+      },
+      "derived_from": "org.onap.policy.clamp.acm.AutomationCompositionElement",
+      "properties": {
+        "templates": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "list",
+          "name": "templates",
+          "default_value": null
+        },
+        "requirements": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "requirements",
+          "default_value": null
+        },
+        "values": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "values",
+          "default_value": null
+        },
+        "configs": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "list",
+          "name": "configs",
+          "default_value": null
+        },
+        "chart": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "chart",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.K8SMicroserviceAutomationCompositionElement",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.K8SMicroserviceAutomationCompositionElement"
+    },
+    "org.onap.policy.clamp.acm.Participant": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.Participant"
+      },
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "provider": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "provider",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.Participant",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.Participant"
+    }
+  }
+}
