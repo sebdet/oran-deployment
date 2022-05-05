@@ -124,7 +124,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the updated template instance
         """
-        body = '{"orderedState":"' + new_status + '","controlLoopIdentifierList":[{"name":"' + name + '","version":"' + version + '"}]}'
+        body = '{"orderedState":"' + new_status + '","automationCompositionIdentifierList":[{"name":"' + name + '","version":"' + version + '"}]}'
         url = f"{self.base_url()}/acm/putToscaInstantiationStateChange"
         try:
             response = self.send_message_json('PUT',
