@@ -115,7 +115,7 @@ def validate_faults_timestamp(faults):
     """Extract only the faults returned by SDNC that have been raised during this test."""
     valid_faults = []
     for fault in faults['data-provider:output']['data']:
-        converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%SZ")
         logger.info("Comparing fault timestamp %s (%s) to session test timestamp %s", converted_fault_timestamp, fault['timestamp'], test_session_timestamp)
         if converted_fault_timestamp > test_session_timestamp:
             valid_faults.append(fault)
