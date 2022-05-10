@@ -26,6 +26,8 @@ gerrit:
   password: "token_api"
 
 jenkins:
+  persistence:
+    enabled: false
   controller:
     jenkinsUrl: "http://smo-jenkins:32080"
     JCasC:
