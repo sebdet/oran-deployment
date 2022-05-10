@@ -1,0 +1,146 @@
+{
+  "data_types": {
+    "onap.datatypes.ToscaConceptIdentifier": {
+      "derived_from": "tosca.datatypes.Root",
+      "properties": {
+        "version": {
+          "required": true,
+          "type": "string"
+        },
+        "name": {
+          "required": true,
+          "type": "string"
+        }
+      }
+    }
+  },
+  "topology_template": {
+    "node_templates": {
+      "org.onap.k8s.controlloop.K8SControlLoopParticipant": {
+        "properties": {
+          "provider": "ONAP"
+        },
+        "description": "Participant for k8s",
+        "version": "2.3.4",
+        "type_version": "1.0.1",
+        "type": "org.onap.policy.clamp.controlloop.Participant"
+      },
+      "org.onap.domain.linkmonitor.LinkMonitorControlLoopDefinition1": {
+        "properties": {
+          "elements": [
+            {
+              "version": "1.2.3",
+              "name": "org.onap.domain.linkmonitor.OruAppK8SMicroserviceControlLoopElement"
+            }],
+          "provider": "Ericsson"
+        },
+        "description": "Control loop for Link Monitor",
+        "version": "1.2.3",
+        "type_version": "1.0.1",
+        "type": "org.onap.policy.clamp.controlloop.ControlLoop"
+      },
+      "org.onap.domain.linkmonitor.OruAppK8SMicroserviceControlLoopElement": {
+        "properties": {
+          "participantType": {
+            "version": "2.3.4",
+            "name": "org.onap.k8s.controlloop.K8SControlLoopParticipant"
+          },
+          "participant_id": {
+            "version": "1.0.0",
+            "name": "K8sParticipant0"
+          },
+          "provider": "ONAP",
+          "chart": {
+            "repository": {
+              "address": "{{chartmuseumIp}}",
+              "repoName": "chartmuseum",
+              "port": {{chartmuseumPort}},
+              "protocol": "http"
+            },
+            "namespace": "nonrtric",
+            "chartId": {
+              "version": "{{chartVersion}}",
+              "name": "{{chartName}}"
+            },
+            "releaseName": "{{releaseName}}"
+          }
+        },
+        "description": "Deploy {{chartName}}",
+        "version": "1.2.3",
+        "type_version": "1.0.1",
+        "type": "org.onap.policy.clamp.controlloop.K8SMicroserviceControlLoopElement"
+      }
+    }
+  },
+  "tosca_definitions_version": "tosca_simple_yaml_1_1_0",
+  "node_types": {
+    "org.onap.policy.clamp.controlloop.ControlLoop": {
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "elements": {
+          "required": true,
+          "entry_schema": {
+            "type": "onap.datatypes.ToscaConceptIdentifier"
+          },
+          "type": "list"
+        },
+        "provider": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "version": "1.0.1"
+    },
+    "org.onap.policy.clamp.controlloop.K8SMicroserviceControlLoopElement": {
+      "derived_from": "org.onap.policy.clamp.controlloop.ControlLoopElement",
+      "properties": {
+        "templates": {
+          "required": false,
+          "entry_schema": null,
+          "type": "list"
+        },
+        "requirements": {
+          "required": false,
+          "type": "string"
+        },
+        "values": {
+          "required": true,
+          "type": "string"
+        },
+        "configs": {
+          "required": false,
+          "type": "list"
+        },
+        "chart": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "version": "1.0.1"
+    },
+    "org.onap.policy.clamp.controlloop.Participant": {
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "provider": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "version": "1.0.1"
+    },
+    "org.onap.policy.clamp.controlloop.ControlLoopElement": {
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "participant_id": {
+          "required": true,
+          "type": "onap.datatypes.ToscaConceptIdentifier"
+        },
+        "provider": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "version": "1.0.1"
+    }
+  }
+}

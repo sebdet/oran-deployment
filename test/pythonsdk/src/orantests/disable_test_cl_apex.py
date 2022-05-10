@@ -3,7 +3,7 @@
 # ============LICENSE_START=======================================================
 # ORAN SMO PACKAGE - PYTHONSDK TESTS
 # ================================================================================
-# Copyright (C) 2021-2022 AT&T Intellectual Property. All rights
+# Copyright (C) 2022 AT&T Intellectual Property. All rights
 #                             reserved.
 # ================================================================================
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,93 +21,90 @@
 # ===================================================================
 #
 ###
-"""Apex policy tests module."""
+"""Closed Loop Apex usecase tests module."""
+
 import time
+
 import logging
 import logging.config
 import os
 import pytest
-from waiting import wait
 from onapsdk.configuration import settings
+from onapsdk.exceptions import ResourceNotFound
+from waiting import wait
 from oransdk.dmaap.dmaap import OranDmaap
+from oransdk.policy.clamp import ClampToscaTemplate
 from oransdk.policy.policy import OranPolicy, PolicyType
 from oransdk.sdnc.sdnc import OranSdnc
 from oransdk.utils.jinja import jinja_env
-from smo.dmaap import DmaapUtils
 from smo.network_simulators import NetworkSimulators
+from smo.dmaap import DmaapUtils
+from smo.cl_usecase import ClCommissioningUtils
+
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-
 logging.config.dictConfig(settings.LOG_CONFIG)
-logger = logging.getLogger("test APEX policy")
+logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Apex policy")
 dmaap = OranDmaap()
 dmaap_utils = DmaapUtils()
-policy = OranPolicy()
+clcommissioning_utils = ClCommissioningUtils()
 network_simulators = NetworkSimulators("./resources")
-
-policy_id = "onap.policies.native.apex.LinkMonitor"
-policy_version = "1.0.0"
-policy_type_id = "onap.policies.native.Apex"
-policy_type_version = "1.0.0"
-policy_type = PolicyType(type=policy_type_id, version=policy_type_version)
-engine_name = "LinkMonitorApexEngine"
-engine_version = "0.0.1"
-engine_id = "101"
-deployment_port = "12345"
+clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
+policy = OranPolicy()
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
-    """Setup the simulators before the executing the tests."""
-    logger.info("Test class setup for Apex tests")
-    dmaap_utils.clean_dmaap(settings.DMAAP_GROUP, settings.DMAAP_USER)
+    """Prepare the test environment before the executing the tests."""
+    logger.info("Test class setup for Closed Loop Apex test")
+
+    dmaap_utils.clean_dmaap(settings.DMAAP_CL_GROUP, settings.DMAAP_CL_USER)
+
     network_simulators.start_and_wait_network_simulators()
 
     # Wait enough time to have at least the SDNR notifications sent
-
     logger.info("Waiting 10s that SDNR sends all registration events to VES...")
     time.sleep(10)
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
     yield
+    # Finish and delete the cl instance
+    clcommissioning_utils.clean_instance()
+
+    try:
+        policy.undeploy_policy("operational.apex.linkmonitor", "1.0.0", settings.POLICY_BASICAUTH)
+    except ResourceNotFound:
+        logger.info("Policy already undeployed")
+        try:
+            policy.delete_policy(PolicyType(type="onap.policies.controlloop.operational.common.Apex", version="1.0.0"), "operational.apex.linkmonitor", "1.0.0", settings.POLICY_BASICAUTH)
+        except ResourceNotFound:
+            logger.info("Policy already deleted")
+
     network_simulators.stop_network_simulators()
-    policy.undeploy_policy(policy_id, policy_version, settings.POLICY_BASICAUTH)
-    policy.delete_policy(policy_type, policy_id, policy_version, settings.POLICY_BASICAUTH)
     time.sleep(10)
     logger.info("Test Session cleanup done")
 
-def create_policy():
-    """Create the policy."""
-    logger.info("Create policy")
-    policy_data = jinja_env().get_template("ToscaPolicy.json.j2").render(policyId=policy_id, policyVersion=policy_version, policyTypeId=policy_type_id, policyTypeVersion=policy_type_version, engineName=engine_name, engineVersion=engine_version, engineId=engine_id, deploymentPort=deployment_port, dmaapGroup=settings.DMAAP_GROUP, dmaapUser=settings.DMAAP_USER)
-    policy.create_policy(policy_type, policy_data, settings.POLICY_BASICAUTH)
+def verify_apex_policy_created():
+    """
+    Verify whether the Apex policy has deployed successfully.
 
-    logger.info("Verify whether policy created successfully")
-    assert policy.get_policy(policy_type, policy_id, policy_version, settings.POLICY_BASICAUTH).status_code == 200
-
-
-def deploy_policy():
-    """Deploy the policy."""
-    logger.info("Deploy policy")
-    policy_to_deploy = jinja_env().get_template("DeployPolicyPAP.json.j2").render(policyId=policy_id, policyVersion=policy_version)
-    policy.deploy_policy(policy_to_deploy, settings.POLICY_BASICAUTH)
-    wait(lambda: check_policy_deployment(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy Deployment to be OK")
-
-def check_policy_deployment():
-    """Verify the policy deployment."""
-    logger.info("Verify if the policy is deployed")
+    Returns:
+        the boolean value indicating whether policy deployed successfully
+    """
+    logger.info("Verify Apex policy is deployed")
     policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
 
     for status in policy_status_list:
-        logger.info("the status %s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"])
-        if (status["policy"]["name"] == policy_id and status["policy"]["version"] == policy_version and status["deploy"] and status["state"] == "SUCCESS"):
+        logger.info("the status %s,%s,%s,%s:", status["policy"]["name"], status["policy"]["version"], status["deploy"], status["state"])
+        if (status["policy"]["name"] == "operational.apex.linkmonitor" and status["policy"]["version"] == "1.0.0" and status["deploy"] and status["state"] == "SUCCESS"):
             logger.info("Policy deployement OK")
             return True
-    logger.info("Policy deployement not yet OK")
+
+    logger.info("Failed to deploy Apex policy")
     return False
 
 def send_dmaap_event():
@@ -115,17 +112,21 @@ def send_dmaap_event():
     event = jinja_env().get_template("LinkFailureEvent.json.j2").render()
     dmaap.send_link_failure_event(event)
 
-def test_apex_policy():
-    """Test the apex policy."""
-    logger.info("Check O-du/O-ru status")
+def test_cl_apex():
+    """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
+    logger.info("Upload tosca to commissioning")
+    tosca_template = jinja_env().get_template("commission_apex.json.j2").render(dmaapGroup=settings.DMAAP_CL_GROUP, dmaapUser=settings.DMAAP_CL_USER)
+    assert clcommissioning_utils.create_instance(tosca_template) is True
+
     sdnc = OranSdnc()
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "locked"
-    send_dmaap_event()
-    create_policy()
-    deploy_policy()
-    time.sleep(10)
 
+    send_dmaap_event()
+
+    wait(lambda: verify_apex_policy_created(), sleep_seconds=10, timeout_seconds=60, waiting_for="Policy Deployment to be OK")
+
+    time.sleep(20)
     logger.info("Check O-du/O-ru status again")
     status = sdnc.get_odu_oru_status("o-du-1122", "rrm-pol-2", settings.SDNC_BASICAUTH)
     assert status["o-ran-sc-du-hello-world:radio-resource-management-policy-ratio"][0]["administrative-state"] == "unlocked"

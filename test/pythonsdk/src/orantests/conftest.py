@@ -31,6 +31,7 @@ from onapsdk.exceptions import ConnectionFailed, APIError
 from waiting import wait
 from urllib3.exceptions import NewConnectionError
 from oransdk.dmaap.dmaap import OranDmaap
+from oransdk.policy.clamp import ClampToscaTemplate
 from oransdk.policy.policy import OranPolicy
 from oransdk.sdnc.sdnc import OranSdnc
 from smo.smo import Smo
@@ -46,6 +47,7 @@ logger = logging.getLogger("Test Session setup")
 
 network_sims = NetworkSimulators("./resources")
 smo = Smo()
+clamp = ClampToscaTemplate(settings.CLAMP_BASICAUTH)
 dmaap = OranDmaap()
 sdnc = OranSdnc()
 policy = OranPolicy()
@@ -81,6 +83,16 @@ def sdnc_component_ready():
         return False
     return response.status_code == 200
 
+def clamp_component_ready():
+    """Check if Clamp component is ready."""
+    logger.info("Verify Clamp component is ready")
+    try:
+        response = clamp.get_template_instance()
+    except (RequestException, NewConnectionError, ConnectionFailed, APIError) as e:
+        logger.error(e)
+        return False
+    return response["automationCompositionList"] is not None
+
 ###### Entry points of PYTEST Session
 def pytest_sessionstart():
     """Pytest calls it when starting a test session."""
@@ -89,6 +101,9 @@ def pytest_sessionstart():
     logger.info("Check and for for SDNC to be running")
     wait(lambda: policy_component_ready(), sleep_seconds=settings.POLICY_CHECK_RETRY, timeout_seconds=settings.POLICY_CHECK_TIMEOUT, waiting_for="Policy to be ready")
     wait(lambda: sdnc_component_ready(), sleep_seconds=settings.SDNC_CHECK_RETRY, timeout_seconds=settings.SDNC_CHECK_TIMEOUT, waiting_for="SDNC to be ready")
+    # disable for now, until policy/clamp issue has been fixed
+    ##wait(lambda: clamp_component_ready(), sleep_seconds=settings.CLAMP_CHECK_RETRY, timeout_seconds=settings.CLAMP_CHECK_TIMEOUT, waiting_for="Clamp to be ready")
+
     ## Just kill any simulators that could already be runnin
     network_sims.stop_network_simulators()
     ###### END of FIRST start, now we can start the sims for the real tests.

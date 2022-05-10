@@ -158,7 +158,7 @@ entity that generated the ONSET event will be the target.
               "DMaaPConsumer": {
                 "carrierTechnologyParameters": {
                   "parameters": {
-                    "url": "http://message-router:3904/events/unauthenticated.SEC_FAULT_OUTPUT/users/link-monitor-nonrtric?timeout=15000&limit=100"
+                    "url": "http://message-router:3904/events/unauthenticated.SEC_FAULT_OUTPUT/{{dmaapGroup}}/{{dmaapUser}}?timeout=15000&limit=100"
                   },
                   "carrierTechnology": "RESTCLIENT",
                   "parameterClassName": "org.onap.policy.apex.plugins.event.carrier.restclient.RestClientCarrierTechnologyParameters"

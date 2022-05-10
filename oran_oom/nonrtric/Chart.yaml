@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: nonrtric
 version: 1.0.0
 appVersion: test
@@ -7,3 +7,78 @@ home: https://www.o-ran.org/
 sources:
 - https://gerrit.o-ran-sc.org/r/#/admin/projects/
 kubeVersion: ">=1.19.0-0"
+
+dependencies:
+  - name: a1controller
+    version: ~2.0.0
+    repository: "@local"
+    condition: nonrtric.installA1controller
+
+  - name: a1simulator
+    version: ~2.1.0
+    repository: "@local"
+    condition: nonrtric.installA1simulator
+
+  - name: controlpanel
+    version: ~2.0.0
+    repository: "@local"
+    condition: nonrtric.installControlpanel
+
+  - name: policymanagementservice
+    version: ~2.0.0
+    repository: "@local"
+    condition: nonrtric.installPms
+
+  - name: informationservice
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installInformationservice
+
+  - name: nonrtric-common
+    version: ^2.0.0
+    repository: "@local"
+
+  - name: rappcatalogueservice
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installRappcatalogueservice
+
+  - name: nonrtricgateway
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installNonrtricgateway
+
+  - name: oru-app
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installORUApp
+
+  - name: topology
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installTopology
+
+  - name: dmaapmediatorservice
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installDmaapmediatorservice
+
+  - name: helmmanager
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installHelmmanager
+
+  - name: kong
+    version: ~2.4.0
+    repository: https://nexus3.o-ran-sc.org/repository/helm-konghq/
+    condition: nonrtric.installKong
+
+  - name: dmaapadapterservice
+    version: ~1.0.0
+    repository: "@local"
+    condition: nonrtric.installDmaapadapterservice
+
+  - name: cert-wrapper
+    version: ~10.x-0
+    repository: '@local'
+    condition: cert-wrapper.enabled

@@ -239,6 +239,9 @@ dcaegen2-services:
     enabled: true
   dcae-ves-mapper:
     enabled: false
+  dcae-ves-openapi-manager:
+    enabled: false
+
 dcaemod: 
   enabled: false 
 holmes: 
@@ -287,7 +290,7 @@ oof:
   enabled: false
 platform:
   enabled: true
-policy: 
+policy:
   enabled: true
   policy-api:
     enabled: true
@@ -303,20 +306,17 @@ policy:
     enabled: false
   policy-clamp-be:
     enabled: true
-    image: onap/policy-clamp-backend:6.2-SNAPSHOT-latest
-  policy-clamp-fe:
+  policy-clamp-runtime-acm:
     enabled: true
-  policy-clamp-cl-runtime:
-    enabled: true
-  policy-clamp-cl-k8s-ppnt:
+  policy-clamp-ac-k8s-ppnt:
     enabled: true
   policy-gui:
     enabled: true
   policy-nexus:
     enabled: false
-  policy-clamp-cl-pf-ppnt:
+  policy-clamp-ac-pf-ppnt:
     enabled: true
-  policy-clamp-cl-http-ppnt:
+  policy-clamp-ac-http-ppnt:
     enabled: true
 
 pomba:

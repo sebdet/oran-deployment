@@ -22,9 +22,10 @@
 #
 ###
 """Onap Policy Clamp Tosca Template module."""
-
+import time
 from typing import Dict
 from onapsdk.clamp.clamp_element import Clamp
+from onapsdk.exceptions import RequestError
 
 class ClampToscaTemplate(Clamp):
     """Onap Policy Clamp Tosca Template class."""
@@ -49,7 +50,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the tosca template instance
         """
-        url = f"{self.base_url()}/toscaControlLoop/getToscaInstantiation"
+        url = f"{self.base_url()}/acm/getToscaInstantiation"
         template_instance = self.send_message_json('GET',
                                                    'Get tosca template instance',
                                                    url,
@@ -67,7 +68,7 @@ class ClampToscaTemplate(Clamp):
             the response of the uploading action
 
         """
-        url = f"{self.base_url()}/toscaControlLoop/commissionToscaTemplate"
+        url = f"{self.base_url()}/acm/commissionToscaTemplate"
         response = self.send_message_json('POST',
                                           'Upload Tosca to commissioning',
                                           url,
@@ -85,7 +86,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the response of the creation action
         """
-        url = f"{self.base_url()}/toscaControlLoop/postToscaInstanceProperties"
+        url = f"{self.base_url()}/acm/postToscaInstanceProperties"
         response = self.send_message_json('POST',
                                           'Create Tosca instance',
                                           url,
@@ -104,7 +105,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the template instance
         """
-        url = f"{self.base_url()}/toscaControlLoop/getInstantiationOrderState?name={name}&version={version}"
+        url = f"{self.base_url()}/acm/getInstantiationOrderState?name={name}&version={version}"
         template_instance = self.send_message_json('GET',
                                                    'Get tosca template instance',
                                                    url,
@@ -112,7 +113,7 @@ class ClampToscaTemplate(Clamp):
 
         return template_instance
 
-    def change_instance_status(self, new_status, name, version) -> dict:
+    def change_instance_status(self, new_status, name, version) -> str:
         """
         Update tosca instance status.
 
@@ -124,14 +125,36 @@ class ClampToscaTemplate(Clamp):
             the updated template instance
         """
         body = '{"orderedState":"' + new_status + '","controlLoopIdentifierList":[{"name":"' + name + '","version":"' + version + '"}]}'
-        url = f"{self.base_url()}/toscaControlLoop/putToscaInstantiationStateChange"
-        response = self.send_message_json('PUT',
-                                          'Update tosca instance status',
-                                          url,
-                                          data=body,
-                                          headers=self.header,
-                                          basic_auth=self.basic_auth)
-        return response
+        url = f"{self.base_url()}/acm/putToscaInstantiationStateChange"
+        try:
+            response = self.send_message_json('PUT',
+                                              'Update tosca instance status',
+                                              url,
+                                              data=body,
+                                              headers=self.header,
+                                              basic_auth=self.basic_auth)
+        except RequestError:
+            self._logger.error("Change Instance Status request returned failed. Will query the instance status to double check whether the request is successful or not.")
+
+        # There's a bug in Clamp code, sometimes it returned 500, but actually the status has been changed successfully
+        # Thus we verify the status to determine whether it was successful or not
+        time.sleep(2)
+        response = self.get_template_instance()
+        return response["automationCompositionList"][0]["orderedState"]
+
+    def verify_instance_status(self, new_status):
+        """
+        Verify whether the instance changed to the new status.
+
+        Args:
+            new_status : the new status of the instance
+        Returns:
+            the boolean value indicating whether status changed successfully
+        """
+        response = self.get_template_instance()
+        if response["automationCompositionList"][0]["state"] == new_status:
+            return True
+        return False
 
     def delete_template_instance(self, name: str, version: str) -> dict:
         """
@@ -143,7 +166,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the response of the deletion action
         """
-        url = f"{self.base_url()}/toscaControlLoop/deleteToscaInstanceProperties?name={name}&version={version}"
+        url = f"{self.base_url()}/acm/deleteToscaInstanceProperties?name={name}&version={version}"
         response = self.send_message_json('DELETE',
                                           'Delete the tosca instance',
                                           url,
@@ -161,7 +184,7 @@ class ClampToscaTemplate(Clamp):
         Returns:
             the response of the decommission action
         """
-        url = f"{self.base_url()}/toscaControlLoop/decommissionToscaTemplate?name={name}&version={version}"
+        url = f"{self.base_url()}/acm/decommissionToscaTemplate?name={name}&version={version}"
         response = self.send_message_json('DELETE',
                                           'Decommission the tosca template',
                                           url,

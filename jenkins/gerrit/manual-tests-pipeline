@@ -61,9 +61,11 @@ podTemplate(yaml: '''
                 } else {
                   sh 'tox'
                 }
+                currentBuild.result = 'SUCCESS'
               }
               catch(exec) {
                 echo 'TOX tests crashed'
+                currentBuild.result = 'FAILURE'
               }
             }
         }

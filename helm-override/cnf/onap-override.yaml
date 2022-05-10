@@ -289,7 +289,7 @@ oof:
   enabled: false
 platform:
   enabled: true
-policy: 
+policy:
   enabled: true
   policy-api:
     enabled: true
@@ -304,21 +304,19 @@ policy:
   policy-distribution:
     enabled: false
   policy-clamp-be:
-    enabled: false
-  policy-clamp-fe:
-    enabled: false
-  policy-clamp-cl-runtime:
-    enabled: false
-  policy-clamp-cl-k8s-ppnt:
-    enabled: false
+    enabled: true
+  policy-clamp-runtime-acm:
+    enabled: true
+  policy-clamp-ac-k8s-ppnt:
+    enabled: true
   policy-gui:
-    enabled: false
+    enabled: true
   policy-nexus:
     enabled: false
-  policy-clamp-cl-pf-ppnt:
-    enabled: false
-  policy-clamp-cl-http-ppnt:
-    enabled: false
+  policy-clamp-ac-pf-ppnt:
+    enabled: true
+  policy-clamp-ac-http-ppnt:
+    enabled: true
 pomba:
   enabled: false
 portal:

@@ -1,5 +1,19 @@
-apiVersion: v1
+apiVersion: v2
 appVersion: "1.0.0"
 description: A Helm chart to deploy oru-app
 name: oru-app
 version: 1.0.0
+
+dependencies:
+  - name: common
+    version: ~10.x-0
+    repository: '@local'
+  - name: certInitializer
+    version: ~10.x-0
+    repository: '@local'
+  - name: repositoryGenerator
+    version: ~10.x-0
+    repository: '@local'
+  - name: serviceAccount
+    version: ~10.x-0
+    repository: '@local'
