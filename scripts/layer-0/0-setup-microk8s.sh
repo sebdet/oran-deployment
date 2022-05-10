@@ -24,6 +24,7 @@
 ###
 
 ## Microk8S part
+sudo apt-get update
 sudo swapoff -a
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 snap remove microk8s
@@ -40,7 +41,7 @@ microk8s enable dns storage prometheus
 
 ## Setup kubectl
 cd
-mkdir .kube
+mkdir -p .kube
 cd .kube
 sudo microk8s.config > config
 chmod 700 config

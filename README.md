@@ -11,9 +11,10 @@ It has been created out of the ONAP vfirewall usecase.
 ## Quick Installation on blank node
 * Setup a VM with 20GB Memory, 6VCPU, 60GB of diskspace. 
 * Install an ubuntu live server 20.04 LTS (https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso)
+* Install snap and restart the shell session: sudo apt-get install snapd -y
 * Execute the following commands being logged as root:
 
-	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
+	```git clone --recursive git@github.com:sebdet/oran-deployment.git```
 
 	```./oran-deployment/scripts/layer-0/0-setup-microk8s.sh```
 
