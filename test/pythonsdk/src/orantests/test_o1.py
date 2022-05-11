@@ -45,7 +45,7 @@ logger = logging.getLogger("Test O1")
 network_simulators = NetworkSimulators("./resources")
 dmaap = OranDmaap()
 dmaap_utils = DmaapUtils()
-test_session_timestamp = datetime.datetime.now()
+test_session_timestamp = datetime.datetime.utcnow()
 
 
 @pytest.fixture(scope="module", autouse=True)
