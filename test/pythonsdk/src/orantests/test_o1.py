@@ -45,7 +45,7 @@ logger = logging.getLogger("Test O1")
 network_simulators = NetworkSimulators("./resources")
 dmaap = OranDmaap()
 dmaap_utils = DmaapUtils()
-test_session_timestamp = datetime.datetime.now()
+test_session_timestamp = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -115,7 +115,10 @@ def validate_faults_timestamp(faults):
     """Extract only the faults returned by SDNC that have been raised during this test."""
     valid_faults = []
     for fault in faults['data-provider:output']['data']:
-        converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        try:
+            converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S.%f%z")
+        except ValueError:
+            converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S%z")
         logger.info("Comparing fault timestamp %s (%s) to session test timestamp %s", converted_fault_timestamp, fault['timestamp'], test_session_timestamp)
         if converted_fault_timestamp > test_session_timestamp:
             valid_faults.append(fault)
