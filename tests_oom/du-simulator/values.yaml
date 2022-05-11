@@ -14,9 +14,9 @@
 
 # Static Defaults
 image:
-  repository: 'nexus3.o-ran-sc.org:10001/o-ran-sc'
+  repository: 'nexus3.o-ran-sc.org:10004/o-ran-sc'
   name: nts-ng-o-ran-du 
-  tag: 1.4.3
+  tag: 1.4.5
   pullPolicy: IfNotPresent
 
 service:

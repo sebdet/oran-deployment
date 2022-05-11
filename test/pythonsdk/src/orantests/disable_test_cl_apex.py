@@ -58,7 +58,7 @@ policy = OranPolicy()
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_simulators():
-    """Setup the simulators before the executing the tests."""
+    """Prepare the test environment before the executing the tests."""
     logger.info("Test class setup for Closed Loop Apex test")
 
     dmaap_utils.clean_dmaap(settings.DMAAP_CL_GROUP, settings.DMAAP_CL_USER)
