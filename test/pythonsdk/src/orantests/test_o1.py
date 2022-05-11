@@ -116,9 +116,9 @@ def validate_faults_timestamp(faults):
     valid_faults = []
     for fault in faults['data-provider:output']['data']:
         try:
-          converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S.%f%z")
-        except:
-          converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S%z")
+            converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S.%f%z")
+        except ValueError:
+            converted_fault_timestamp = datetime.datetime.strptime(fault['timestamp'], "%Y-%m-%dT%H:%M:%S%z")
         logger.info("Comparing fault timestamp %s (%s) to session test timestamp %s", converted_fault_timestamp, fault['timestamp'], test_session_timestamp)
         if converted_fault_timestamp > test_session_timestamp:
             valid_faults.append(fault)
