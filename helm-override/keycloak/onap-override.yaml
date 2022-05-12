@@ -96,8 +96,8 @@ a1policymanagement:
       managedElementIds:
         - kista_1
         - kista_2
-aaf: 
-  enabled: true 
+aaf:
+  enabled: true
   aaf-service:
     readiness:
       initialDelaySeconds: 150
@@ -246,8 +246,8 @@ dcaemod:
   enabled: false 
 holmes: 
   enabled: false 
-dmaap: 
-  enabled: true 
+dmaap:
+  enabled: true
   message-router:
     message-router-zookeeper:
       replicaCount: 1
@@ -396,8 +396,7 @@ sdnc:
         tokenIssuer: ONAP SDNC
         tokenSecret: secret
         supportOdlusers: true
-        redirectUri: https://192.168.1.46:30205/odlux/index.html#/oauth?token=
-        publicUrl: https://192.168.1.46:30205/odlux/index.html
+        publicUrl: https://10.0.0.13:30205
         odluxRbac:
           enabled: true
         # example definition for a oauth provider
@@ -406,11 +405,14 @@ sdnc:
         providers:
         - id: keycloak
           type: KEYCLOAK
-          host: http://keycloak-http.security:80
+          url: http://10.0.0.13:32080
+          internalUrl: http://keycloak-http.security:80
           clientId: odlux.app
-          secret: WVWkvxS9jTOezfysNpV8ZqKbwcPC8ZWj
+          secret: d5xvK837z6pb14T6Cj83avhOdl9d68KE
           scope: openid
           title: ONAP Keycloak Provider
+          realmName: master
+          trustAll: true
           roleMapping:
             mykeycloak: admin
 
