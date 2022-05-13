@@ -312,7 +312,6 @@ policy:
     enabled: true
   policy-gui:
     enabled: true
-    image: onap/policy-gui:2.2.1
   policy-nexus:
     enabled: false
   policy-clamp-ac-pf-ppnt:
@@ -396,7 +395,7 @@ sdnc:
         tokenIssuer: ONAP SDNC
         tokenSecret: secret
         supportOdlusers: true
-        publicUrl: https://10.0.0.13:30205
+        publicUrl: https://192.168.1.46:30205
         odluxRbac:
           enabled: true
         # example definition for a oauth provider
@@ -405,13 +404,13 @@ sdnc:
         providers:
         - id: keycloak
           type: KEYCLOAK
-          url: http://10.0.0.13:32080
+          url: http://192.168.1.46:30080
           internalUrl: http://keycloak-http.security:80
           clientId: odlux.app
-          secret: d5xvK837z6pb14T6Cj83avhOdl9d68KE
+          secret: demo123456!
           scope: openid
           title: ONAP Keycloak Provider
-          realmName: master
+          realmName: oran
           trustAll: true
           roleMapping:
             mykeycloak: admin

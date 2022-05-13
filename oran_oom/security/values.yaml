@@ -18,9 +18,22 @@ common:
   installKeycloak: true
 
 keycloak:
+  realmJsonFile: resources/realm.json
+  image:
+    tag: 16.1.1
   postgresql:
     enabled: false
+  extraVolumes: |
+    - name: realm-secret
+      secret:
+        secretName: realm-secret
+  extraVolumeMounts: |
+    - name: realm-secret
+      mountPath: "/realm/"
+      readOnly: true
   extraEnv: |
+    - name: KEYCLOAK_IMPORT
+      value: "/realm/realm.json"
     - name: KEYCLOAK_USER
       value: test
     - name: KEYCLOAK_PASSWORD

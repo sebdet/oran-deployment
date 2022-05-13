@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#    - name: KEYCLOAK_IMPORT
+#      value: "/realm/realm.json"
+
 common:
   installKeycloak: true
 
@@ -19,6 +22,8 @@ keycloak:
   postgresql:
     enabled: false
   extraEnv: |
+    - name: KEYCLOAK_IMPORT
+      value: "/realm/realm.json"
     - name: KEYCLOAK_USER
       value: test
     - name: KEYCLOAK_PASSWORD
@@ -27,6 +32,6 @@ keycloak:
   fullnameOverride: "keycloak"
   service:
     type: "NodePort"
-    httpNodePort: 32080
+    httpNodePort: 30080
     httpsNodePort: 32443
-    httpManagementNodePort: 32090
+    httpManagementNodePort: 30090

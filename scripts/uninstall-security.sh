@@ -30,5 +30,5 @@ cd $SCRIPT_PATH
 echo "Stopping Security namespace ..."
 ./sub-scripts/uninstall-security.sh
 
-kubectl get pods -n network
+kubectl get pods -n security
 kubectl get namespaces
