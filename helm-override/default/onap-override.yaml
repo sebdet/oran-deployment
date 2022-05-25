@@ -269,7 +269,7 @@ nbi:
 oof:
   enabled: false
 platform:
-  enabled: true
+  enabled: false
 policy: 
   enabled: true
   policy-api:
