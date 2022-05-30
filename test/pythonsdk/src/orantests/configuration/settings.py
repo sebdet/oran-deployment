@@ -93,9 +93,9 @@ DMAAP_USER = "o1test"
 DMAAP_CL_GROUP = "cltest"
 DMAAP_CL_USER = "cltest"
 DMAAP_TOPIC_PNFREG = "unauthenticated.VES_PNFREG_OUTPUT"
-DMAAP_TOPIC_PNFREG_JSON = '{"topicName": "' + DMAAP_TOPIC_PNFREG + '"}'
+DMAAP_TOPIC_PNFREG_JSON = '{"topicName": "' + DMAAP_TOPIC_PNFREG + '", "replicationCount": 1}'
 DMAAP_TOPIC_FAULT = "unauthenticated.SEC_FAULT_OUTPUT"
-DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '"}'
+DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '", "replicationCount": 1}'
 
 ### Number of pods left in completed state for ONAP namespace
 ONAP_PODS_WHEN_READY = 9

@@ -172,26 +172,26 @@ contrib:
   netbox:
     enabled: true
 consul:
-  enabled: true
+  enabled: false
   consul-server:
     replicaCount: 1
 cps: 
   enabled: false
 
 dcaegen2: 
-  enabled: true
+  enabled: false
   dcae-bootstrap:
     enabled: false
   dcae-cloudify-manager:
-    enabled: true
+    enabled: false
   dcae-config-binding-service:
-    enabled: true
+    enabled: false
   dcae-dashboard:
     enabled: false
   dcae-deployment-handler:
     enabled: false
   dcae-healthcheck:
-    enabled: true
+    enabled: false
   dcae-inventory-api:
     enabled: false
   dcae-policy-handler:
@@ -246,26 +246,7 @@ holmes:
   enabled: false 
 dmaap: 
   enabled: true 
-  message-router:
-    message-router-zookeeper:
-      replicaCount: 1
-      zookeeperServers: 1
-    message-router-kafka:
-      zookeeper:
-        replicaCount: 1
-      replicaCount: 1
-      defaultpartitions: 1
-      configurationOverrides:
-        "offsets.topic.replication.factor": "1"
-        "log.dirs": "/var/lib/kafka/data"
-        "log.retention.hours": "168"
-        "num.partitions": "1"
-        "transaction.state.log.replication.factor": "1"
-        "transaction.state.log.min.isr": "1"
-        "num.recovery.threads.per.data.dir": "5"
-        "zookeeper.connection.timeout.ms": "6000"
-        "default.replication.factor": "1"
-        "zookeeper.set.acl": "true"
+
 esr:
   enabled: false
 log:
@@ -288,7 +269,7 @@ nbi:
 oof:
   enabled: false
 platform:
-  enabled: true
+  enabled: false
 policy:
   enabled: true
   policy-api:
@@ -310,7 +291,7 @@ policy:
   policy-clamp-ac-k8s-ppnt:
     enabled: true
   policy-gui:
-    enabled: true
+    enabled: false
   policy-nexus:
     enabled: false
   policy-clamp-ac-pf-ppnt:
@@ -390,6 +371,10 @@ sdnc:
         eventLogMsgDetail: LONG
 sniro-emulator:
   enabled: false
+
+strimzi:
+  enabled: true
+
 so:
   enabled: true
   so-catalog-db-adapter:
