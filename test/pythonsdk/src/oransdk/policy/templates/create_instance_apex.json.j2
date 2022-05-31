@@ -1,0 +1,4368 @@
+{
+  "data_types": {
+    "onap.datatype.controlloop.Target": {
+      "key": {
+        "version": "0.0.0",
+        "name": "onap.datatype.controlloop.Target"
+      },
+      "derived_from": "tosca.datatypes.Root",
+      "properties": {
+        "targetType": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": [
+                "VNF","VM","VFMODULE","PNF"],
+              "greater_or_equal": null,
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "Category for the target type",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "targetType",
+          "default_value": null
+        },
+        "entityIds": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "clamp_possible_values": "ClampExecution:CSAR_RESOURCES"
+          },
+          "entry_schema": {
+            "constraints": null,
+            "description": null,
+            "type_version": "0.0.0",
+            "type": "string",
+            "name": null
+          },
+          "constraints": null,
+          "description": "Map of values that identify the resource. If none are provided, it is assumed that the
+entity that generated the ONSET event will be the target.
+",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "map",
+          "name": "entityIds",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "constraints": [],
+      "description": "Definition for a entity in A&AI to perform a control loop operation on",
+      "version": "0.0.0",
+      "type_version": null,
+      "defined_name": "onap.datatype.controlloop.Target",
+      "defined_version": null,
+      "type": null,
+      "name": "onap.datatype.controlloop.Target"
+    },
+    "onap.datatypes.ToscaConceptIdentifier": {
+      "key": {
+        "version": "0.0.0",
+        "name": "onap.datatypes.ToscaConceptIdentifier"
+      },
+      "derived_from": "tosca.datatypes.Root",
+      "properties": {
+        "version": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "version",
+          "default_value": null
+        },
+        "name": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "name",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "constraints": [],
+      "description": null,
+      "version": "0.0.0",
+      "type_version": null,
+      "defined_name": "onap.datatypes.ToscaConceptIdentifier",
+      "defined_version": null,
+      "type": null,
+      "name": "onap.datatypes.ToscaConceptIdentifier"
+    },
+    "onap.datatype.controlloop.Operation": {
+      "key": {
+        "version": "0.0.0",
+        "name": "onap.datatype.controlloop.Operation"
+      },
+      "derived_from": "tosca.datatypes.Root",
+      "properties": {
+        "failure_guard": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Points to the operation to invoke when the current operation is blocked due to guard policy enforcement.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "failure_guard",
+          "default_value": "final_failure_guard"
+        },
+        "retries": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The number of retries the actor should attempt to perform the operation.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "retries",
+          "default_value": 0
+        },
+        "success": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Points to the operation to invoke on success. A value of \"final_success\" indicates and end to the operation.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "success",
+          "default_value": "final_success"
+        },
+        "description": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "A user-friendly description of the intent for the operation",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "description",
+          "default_value": null
+        },
+        "failure_retries": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Points to the operation to invoke when the current operation has exceeded its max retries.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "failure_retries",
+          "default_value": "final_failure_retries"
+        },
+        "timeout": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The amount of time for the actor to perform the operation.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "timeout",
+          "default_value": null
+        },
+        "failure": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Points to the operation to invoke on Actor operation failure.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "failure",
+          "default_value": "final_failure"
+        },
+        "id": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Unique identifier for the operation",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "id",
+          "default_value": null
+        },
+        "failure_timeout": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Points to the operation to invoke when the time out for the operation occurs.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "failure_timeout",
+          "default_value": "final_failure_timeout"
+        },
+        "failure_exception": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Points to the operation to invoke when the current operation causes an exception.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "failure_exception",
+          "default_value": "final_failure_exception"
+        },
+        "operation": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The definition of the operation to be performed.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatype.controlloop.Actor",
+          "name": "operation",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "constraints": [],
+      "description": "An operation supported by an actor",
+      "version": "0.0.0",
+      "type_version": null,
+      "defined_name": "onap.datatype.controlloop.Operation",
+      "defined_version": null,
+      "type": null,
+      "name": "onap.datatype.controlloop.Operation"
+    },
+    "onap.datatype.controlloop.Actor": {
+      "key": {
+        "version": "0.0.0",
+        "name": "onap.datatype.controlloop.Actor"
+      },
+      "derived_from": "tosca.datatypes.Root",
+      "properties": {
+        "payload": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "clamp_possible_values": "ClampExecution:CDS/payload"
+          },
+          "entry_schema": {
+            "constraints": null,
+            "description": null,
+            "type_version": "0.0.0",
+            "type": "string",
+            "name": null
+          },
+          "constraints": null,
+          "description": "Name/value pairs of payload information passed by Policy to the actor",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "map",
+          "name": "payload",
+          "default_value": null
+        },
+        "target": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The resource the operation should be performed on.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatype.controlloop.Target",
+          "name": "target",
+          "default_value": null
+        },
+        "operation": {
+          "required": true,
+          "status": null,
+          "metadata": {
+            "clamp_possible_values": "Dictionary:DefaultOperations,ClampExecution:CDS/operation"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The operation the actor is performing.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "operation",
+          "default_value": null
+        },
+        "actor": {
+          "required": true,
+          "status": null,
+          "metadata": {
+            "clamp_possible_values": "Dictionary:DefaultActors,ClampExecution:CDS/actor"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The actor performing the operation.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "actor",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "constraints": [],
+      "description": "An actor/operation/target definition",
+      "version": "0.0.0",
+      "type_version": null,
+      "defined_name": "onap.datatype.controlloop.Actor",
+      "defined_version": null,
+      "type": null,
+      "name": "onap.datatype.controlloop.Actor"
+    }
+  },
+  "topology_template": {
+    "policies_as_map": {
+      "ToscaEntityKey(name=operational.apex.linkmonitor, version=1.0.0)": {
+        "type_identifier": {
+          "version": "1.0.0",
+          "name": "onap.policies.controlloop.operational.common.Apex"
+        },
+        "key": {
+          "version": "1.0.0",
+          "name": "operational.apex.linkmonitor"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "1.0.0",
+          "name": "operational.apex.linkmonitor"
+        },
+        "properties": {
+          "eventInputParameters": {
+            "DMaaPConsumer": {
+              "carrierTechnologyParameters": {
+                "parameters": {
+                  "url": "http://message-router:3904/events/unauthenticated.SEC_FAULT_OUTPUT/{{dmaapGroup}}/{{dmaapUser}}?timeout=15000&limit=100"
+                },
+                "carrierTechnology": "RESTCLIENT",
+                "parameterClassName": "org.onap.policy.apex.plugins.event.carrier.restclient.RestClientCarrierTechnologyParameters"
+              },
+              "eventName": "LinkFailureInputEvent",
+              "eventProtocolParameters": {
+                "parameters": {
+                  "versionAlias": "version",
+                  "pojoField": "LinkFailureInput"
+                },
+                "eventProtocol": "JSON"
+              }
+            }
+          },
+          "eventOutputParameters": {
+            "RestProducer": {
+              "eventNameFilter": "LinkFailureOutputEvent",
+              "carrierTechnologyParameters": {
+                "parameters": {
+                  "url": "http://sdnc-oam:8282/rests/data/network-topology:network-topology/topology=topology-netconf/node={OduId}/yang-ext:mount/o-ran-sc-du-hello-world:network-function/distributed-unit-functions={OduId}/radio-resource-management-policy-ratio=rrm-pol-2",
+                  "httpMethod": "PUT",
+                  "httpHeaders": [
+                    [
+                      "Authorization","Basic YWRtaW46S3A4Yko0U1hzek0wV1hsaGFrM2VIbGNzZTJnQXc4NHZhb0dHbUp2VXkyVQ=="]]
+                },
+                "carrierTechnology": "RESTCLIENT",
+                "parameterClassName": "org.onap.policy.apex.plugins.event.carrier.restclient.RestClientCarrierTechnologyParameters"
+              },
+              "eventProtocolParameters": {
+                "parameters": {
+                  "pojoField": "LinkFailureOutput"
+                },
+                "eventProtocol": "JSON"
+              }
+            },
+            "StdOutProducer": {
+              "eventNameFilter": "ApexMessageOutputEvent",
+              "carrierTechnologyParameters": {
+                "parameters": {
+                  "standardIo": true
+                },
+                "carrierTechnology": "FILE"
+              },
+              "eventProtocolParameters": {
+                "parameters": {
+                  "pojoField": "message"
+                },
+                "eventProtocol": "JSON"
+              }
+            }
+          },
+          "engineServiceParameters": {
+            "policy_type_impl": {
+              "apexPolicyModel": {
+                "key": {
+                  "version": "0.0.1",
+                  "name": "LinkMonitorModel"
+                },
+                "policies": {
+                  "key": {
+                    "version": "0.0.1",
+                    "name": "LinkMonitorModel_Policies"
+                  },
+                  "policyMap": {
+                    "entry": [
+                      {
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorPolicy"
+                        },
+                        "value": {
+                          "template": "Freestyle",
+                          "policyKey": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorPolicy"
+                          },
+                          "state": {
+                            "entry": [
+                              {
+                                "key": "LinkClearedState",
+                                "value": {
+                                  "defaultTask": {
+                                    "version": "0.0.1",
+                                    "name": "LinkClearedTask"
+                                  },
+                                  "stateOutputs": {
+                                    "entry": [
+                                      {
+                                        "key": "LinkClearedLogic_Output_Direct",
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkClearedState",
+                                            "localName": "LinkClearedLogic_Output_Direct"
+                                          },
+                                          "outgoingEvent": {
+                                            "version": "0.0.1",
+                                            "name": "ApexMessageOutputEvent"
+                                          },
+                                          "nextState": {
+                                            "parentKeyName": "NULL",
+                                            "parentKeyVersion": "0.0.0",
+                                            "parentLocalName": "NULL",
+                                            "localName": "NULL"
+                                          }
+                                        }
+                                      }]
+                                  },
+                                  "taskReferences": {
+                                    "entry": [
+                                      {
+                                        "key": {
+                                          "version": "0.0.1",
+                                          "name": "LinkClearedTask"
+                                        },
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkClearedState",
+                                            "localName": "LinkClearedTask"
+                                          },
+                                          "output": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkClearedState",
+                                            "localName": "LinkClearedLogic_Output_Direct"
+                                          },
+                                          "outputType": "DIRECT"
+                                        }
+                                      }]
+                                  },
+                                  "stateKey": {
+                                    "parentKeyName": "LinkMonitorPolicy",
+                                    "parentKeyVersion": "0.0.1",
+                                    "parentLocalName": "NULL",
+                                    "localName": "LinkClearedState"
+                                  },
+                                  "contextAlbumReference": [],
+                                  "stateFinalizerLogicMap": {
+                                    "entry": []
+                                  },
+                                  "taskSelectionLogic": {
+                                    "key": "NULL",
+                                    "logic": "",
+                                    "logicFlavour": "UNDEFINED"
+                                  },
+                                  "trigger": {
+                                    "version": "0.0.1",
+                                    "name": "CreateLinkClearedOutfieldsEvent"
+                                  }
+                                }
+                              },{
+                                "key": "LinkFailureOrClearedState",
+                                "value": {
+                                  "defaultTask": {
+                                    "version": "0.0.1",
+                                    "name": "NoPolicyDefinedTask"
+                                  },
+                                  "stateOutputs": {
+                                    "entry": [
+                                      {
+                                        "key": "CreateLinkClearedOutfieldsLogic_Output_Direct",
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "CreateLinkClearedOutfieldsLogic_Output_Direct"
+                                          },
+                                          "outgoingEvent": {
+                                            "version": "0.0.1",
+                                            "name": "CreateLinkClearedOutfieldsEvent"
+                                          },
+                                          "nextState": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "NULL",
+                                            "localName": "LinkClearedState"
+                                          }
+                                        }
+                                      },{
+                                        "key": "CreateLinkFailureOutfieldsLogic_Output_Direct",
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "CreateLinkFailureOutfieldsLogic_Output_Direct"
+                                          },
+                                          "outgoingEvent": {
+                                            "version": "0.0.1",
+                                            "name": "CreateLinkFailureOutfieldsEvent"
+                                          },
+                                          "nextState": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "NULL",
+                                            "localName": "LinkFailureState"
+                                          }
+                                        }
+                                      },{
+                                        "key": "NoPolicyDefinedLogic_Output_Direct",
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "NoPolicyDefinedLogic_Output_Direct"
+                                          },
+                                          "outgoingEvent": {
+                                            "version": "0.0.1",
+                                            "name": "ApexMessageOutputEvent"
+                                          },
+                                          "nextState": {
+                                            "parentKeyName": "NULL",
+                                            "parentKeyVersion": "0.0.0",
+                                            "parentLocalName": "NULL",
+                                            "localName": "NULL"
+                                          }
+                                        }
+                                      }]
+                                  },
+                                  "taskReferences": {
+                                    "entry": [
+                                      {
+                                        "key": {
+                                          "version": "0.0.1",
+                                          "name": "CreateLinkClearedOutfieldsTask"
+                                        },
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "CreateLinkClearedOutfieldsTask"
+                                          },
+                                          "output": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "CreateLinkClearedOutfieldsLogic_Output_Direct"
+                                          },
+                                          "outputType": "DIRECT"
+                                        }
+                                      },{
+                                        "key": {
+                                          "version": "0.0.1",
+                                          "name": "CreateLinkFailureOutfieldsTask"
+                                        },
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "CreateLinkFailureOutfieldsTask"
+                                          },
+                                          "output": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "CreateLinkFailureOutfieldsLogic_Output_Direct"
+                                          },
+                                          "outputType": "DIRECT"
+                                        }
+                                      },{
+                                        "key": {
+                                          "version": "0.0.1",
+                                          "name": "NoPolicyDefinedTask"
+                                        },
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "NoPolicyDefinedTask"
+                                          },
+                                          "output": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureOrClearedState",
+                                            "localName": "NoPolicyDefinedLogic_Output_Direct"
+                                          },
+                                          "outputType": "DIRECT"
+                                        }
+                                      }]
+                                  },
+                                  "stateKey": {
+                                    "parentKeyName": "LinkMonitorPolicy",
+                                    "parentKeyVersion": "0.0.1",
+                                    "parentLocalName": "NULL",
+                                    "localName": "LinkFailureOrClearedState"
+                                  },
+                                  "contextAlbumReference": [],
+                                  "stateFinalizerLogicMap": {
+                                    "entry": []
+                                  },
+                                  "taskSelectionLogic": {
+                                    "key": "TaskSelectionLogic",
+                                    "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Selection Execution: '\"+executor.subject.id+
+    \"'. InputFields: '\"+executor.inFields+\"'\");
+
+var linkFailureInput = executor.inFields.get(\"LinkFailureInput\");
+var commonEventHeader = linkFailureInput.get(\"event\").get(\"commonEventHeader\");
+var domain = commonEventHeader.get(\"domain\");
+
+taskFailure = executor.subject.getTaskKey(\"CreateLinkFailureOutfieldsTask\");
+taskCleared = executor.subject.getTaskKey(\"CreateLinkClearedOutfieldsTask\");
+taskDefault = executor.subject.getDefaultTaskKey();
+
+if (domain == \"fault\") {
+    var faultFields = linkFailureInput.get(\"event\").get(\"faultFields\");
+    var alarmCondition = faultFields.get(\"alarmCondition\");
+    var eventSeverity = faultFields.get(\"eventSeverity\");
+    if (alarmCondition == \"28\" && eventSeverity != \"NORMAL\") {
+        taskFailure.copyTo(executor.selectedTask);
+    } else if (alarmCondition == \"28\" && eventSeverity == \"NORMAL\") {
+        taskCleared.copyTo(executor.selectedTask);
+    } else {
+        taskDefault.copyTo(executor.selectedTask);
+    }
+} else {
+    taskDefault.copyTo(executor.selectedTask);
+}
+
+true;",
+                                    "logicFlavour": "JAVASCRIPT"
+                                  },
+                                  "trigger": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureInputEvent"
+                                  }
+                                }
+                              },{
+                                "key": "LinkFailureState",
+                                "value": {
+                                  "defaultTask": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureTask"
+                                  },
+                                  "stateOutputs": {
+                                    "entry": [
+                                      {
+                                        "key": "LinkFailureLogic_Output_Direct",
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureState",
+                                            "localName": "LinkFailureLogic_Output_Direct"
+                                          },
+                                          "outgoingEvent": {
+                                            "version": "0.0.1",
+                                            "name": "LinkFailureOutputEvent"
+                                          },
+                                          "nextState": {
+                                            "parentKeyName": "NULL",
+                                            "parentKeyVersion": "0.0.0",
+                                            "parentLocalName": "NULL",
+                                            "localName": "NULL"
+                                          }
+                                        }
+                                      }]
+                                  },
+                                  "taskReferences": {
+                                    "entry": [
+                                      {
+                                        "key": {
+                                          "version": "0.0.1",
+                                          "name": "LinkFailureTask"
+                                        },
+                                        "value": {
+                                          "key": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureState",
+                                            "localName": "LinkFailureTask"
+                                          },
+                                          "output": {
+                                            "parentKeyName": "LinkMonitorPolicy",
+                                            "parentKeyVersion": "0.0.1",
+                                            "parentLocalName": "LinkFailureState",
+                                            "localName": "LinkFailureLogic_Output_Direct"
+                                          },
+                                          "outputType": "DIRECT"
+                                        }
+                                      }]
+                                  },
+                                  "stateKey": {
+                                    "parentKeyName": "LinkMonitorPolicy",
+                                    "parentKeyVersion": "0.0.1",
+                                    "parentLocalName": "NULL",
+                                    "localName": "LinkFailureState"
+                                  },
+                                  "contextAlbumReference": [],
+                                  "stateFinalizerLogicMap": {
+                                    "entry": []
+                                  },
+                                  "taskSelectionLogic": {
+                                    "key": "NULL",
+                                    "logic": "",
+                                    "logicFlavour": "UNDEFINED"
+                                  },
+                                  "trigger": {
+                                    "version": "0.0.1",
+                                    "name": "CreateLinkFailureOutfieldsEvent"
+                                  }
+                                }
+                              }]
+                          },
+                          "firstState": "LinkFailureOrClearedState"
+                        }
+                      }]
+                  }
+                },
+                "events": {
+                  "key": {
+                    "version": "0.0.1",
+                    "name": "LinkMonitorModel_Events"
+                  },
+                  "eventMap": {
+                    "entry": [
+                      {
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "ApexMessageOutputEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "ApexMessageOutputEvent"
+                          },
+                          "target": "APEX",
+                          "source": "APEX",
+                          "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                          "parameter": {
+                            "entry": [
+                              {
+                                "key": "message",
+                                "value": {
+                                  "optional": false,
+                                  "key": "message",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "MessageSchema"
+                                  }
+                                }
+                              }]
+                          }
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkClearedOutfieldsEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsEvent"
+                          },
+                          "target": "APEX",
+                          "source": "APEX",
+                          "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                          "parameter": {
+                            "entry": [
+                              {
+                                "key": "OruId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OruId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OruIdSchema"
+                                  }
+                                }
+                              }]
+                          }
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkFailureOutfieldsEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsEvent"
+                          },
+                          "target": "APEX",
+                          "source": "APEX",
+                          "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                          "parameter": {
+                            "entry": [
+                              {
+                                "key": "OduId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OduId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OduIdSchema"
+                                  }
+                                }
+                              },{
+                                "key": "OruId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OruId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OruIdSchema"
+                                  }
+                                }
+                              }]
+                          }
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureInputEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputEvent"
+                          },
+                          "target": "APEX",
+                          "source": "DMAAP",
+                          "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                          "parameter": {
+                            "entry": [
+                              {
+                                "key": "LinkFailureInput",
+                                "value": {
+                                  "optional": false,
+                                  "key": "LinkFailureInput",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureInputSchema"
+                                  }
+                                }
+                              }]
+                          }
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureOutputEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputEvent"
+                          },
+                          "target": "OAM",
+                          "source": "APEX",
+                          "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                          "parameter": {
+                            "entry": [
+                              {
+                                "key": "LinkFailureOutput",
+                                "value": {
+                                  "optional": false,
+                                  "key": "LinkFailureOutput",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureOutputSchema"
+                                  }
+                                }
+                              }]
+                          }
+                        }
+                      }]
+                  }
+                },
+                "keyInformation": {
+                  "key": {
+                    "version": "0.0.1",
+                    "name": "LinkMonitorModel_KeyInfo"
+                  },
+                  "keyInfoMap": {
+                    "entry": [
+                      {
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "ApexMessageOutputEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "ApexMessageOutputEvent"
+                          },
+                          "description": "Generated description for concept referred to by key \"ApexMessageOutputEvent:0.0.1\"",
+                          "UUID": "cca47d74-7754-4a61-b163-ca31f66b157b"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkClearedOutfieldsEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsEvent"
+                          },
+                          "description": "Generated description for concept referred to by key \"CreateLinkClearedOutfieldsEvent:0.0.1\"",
+                          "UUID": "a295d6a3-1b73-387e-abba-b41e9b608802"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkClearedOutfieldsTask"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsTask"
+                          },
+                          "description": "This task creates the output fields when link failure is cleared.",
+                          "UUID": "fd594e88-411d-4a94-b2be-697b3a0d7adf"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkFailureOutfieldsEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsEvent"
+                          },
+                          "description": "Generated description for concept referred to by key \"CreateLinkFailureOutfieldsEvent:0.0.1\"",
+                          "UUID": "02be2b5d-45b7-3c54-ae54-97f2b5c30125"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkFailureOutfieldsTask"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsTask"
+                          },
+                          "description": "This task the output fields when link failure is detected.",
+                          "UUID": "ac3d9842-80af-4a98-951c-bd79a431c613"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkClearedTask"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkClearedTask"
+                          },
+                          "description": "This task sends a message to the output when link failure is cleared.",
+                          "UUID": "eecfde90-896c-4343-8f9c-2603ced94e2d"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureInputEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputEvent"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkFailureInputEvent:0.0.1\"",
+                          "UUID": "c4500941-3f98-4080-a9cc-5b9753ed050b"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureInputSchema"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputSchema"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkFailureInputSchema:0.0.1\"",
+                          "UUID": "3b3974fc-3012-3b02-9f33-c9d8eefe4dc1"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureOutputEvent"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputEvent"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkFailureOutputEvent:0.0.1\"",
+                          "UUID": "4f04aa98-e917-4f4a-882a-c75ba5a99374"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureOutputSchema"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputSchema"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkFailureOutputSchema:0.0.1\"",
+                          "UUID": "2d1a7f6e-eb9a-3984-be1f-283d98111b84"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureTask"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureTask"
+                          },
+                          "description": "This task updates the config for O-RU when link failure is detected.",
+                          "UUID": "3351b0f4-cf06-4fa2-8823-edf67bd30223"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorModel"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel"
+                          },
+                          "description": "This is the Apex Policy Model for link monitoring.",
+                          "UUID": "540226fb-55ee-4f0e-a444-983a0494818e"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorModel_Events"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Events"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkMonitorModel_Events:0.0.1\"",
+                          "UUID": "27ad3e7e-fe3b-3bd6-9081-718705c2bcea"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorModel_KeyInfo"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_KeyInfo"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkMonitorModel_KeyInfo:0.0.1\"",
+                          "UUID": "ea0b5f58-eefd-358a-9660-840c640bf981"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorModel_Policies"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Policies"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkMonitorModel_Policies:0.0.1\"",
+                          "UUID": "ee9e0b0f-2b7d-3ab7-9a98-c5ec05ed823d"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorModel_Schemas"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Schemas"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkMonitorModel_Schemas:0.0.1\"",
+                          "UUID": "fa5f9b8f-796c-3c70-84e9-5140c958c4bb"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorModel_Tasks"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Tasks"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkMonitorModel_Tasks:0.0.1\"",
+                          "UUID": "eec592f7-69d5-39a9-981a-e552f787ed01"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkMonitorPolicy"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorPolicy"
+                          },
+                          "description": "Generated description for concept referred to by key \"LinkMonitorPolicy:0.0.1\"",
+                          "UUID": "6c5e410f-489a-46ff-964e-982ce6e8b6d0"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "MessageSchema"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "MessageSchema"
+                          },
+                          "description": "A schema for messages from apex",
+                          "UUID": "ac4b34ac-39d6-3393-a267-8d5b84854018"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "NoPolicyDefinedTask"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "NoPolicyDefinedTask"
+                          },
+                          "description": "This task sends a message to the output when an event is received for which no policy has been defined.",
+                          "UUID": "d48b619e-d00d-4008-b884-02d76ea4350b"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "OduIdSchema"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OduIdSchema"
+                          },
+                          "description": "A schema for O-DU-ID",
+                          "UUID": "50662174-a88b-3cbd-91bd-8e91b40b2660"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "OruIdSchema"
+                        },
+                        "value": {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OruIdSchema"
+                          },
+                          "description": "A schema for O-RU-ID",
+                          "UUID": "54daf32b-015f-39cd-8530-a1175c5553e9"
+                        }
+                      }]
+                  }
+                },
+                "schemas": {
+                  "key": {
+                    "version": "0.0.1",
+                    "name": "LinkMonitorModel_Schemas"
+                  },
+                  "schemas": {
+                    "entry": [
+                      {
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureInputSchema"
+                        },
+                        "value": {
+                          "schemaDefinition": "{
+    \"type\": \"record\",
+    \"name\": \"Link_Failure_Input\",
+    \"fields\": [
+        {
+            \"name\": \"event\",
+            \"type\": {
+                \"type\": \"record\",
+                \"name\": \"Event_Type\",
+                \"fields\": [
+                    {
+                        \"name\": \"commonEventHeader\",
+                        \"type\": {
+                            \"type\": \"record\",
+                            \"name\": \"Common_Event_Header_Type\",
+                            \"fields\": [
+                                {
+                                    \"name\": \"domain\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventId\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventType\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"sequence\",
+                                    \"type\": \"int\"
+                                },
+                                {
+                                    \"name\": \"priority\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"reportingEntityId\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"reportingEntityName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"sourceId\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"sourceName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"startEpochMicrosec\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"lastEpochMicrosec\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"nfNamingCode\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"nfVendorName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"timeZoneOffset\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"version\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"vesEventListenerVersion\",
+                                    \"type\": \"string\"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        \"name\": \"faultFields\",
+                        \"type\": {
+                            \"type\": \"record\",
+                            \"name\": \"Fault_Fields_Type\",
+                            \"fields\": [
+                                {
+                                    \"name\": \"faultFieldsVersion\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"alarmCondition\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"alarmInterfaceA\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventSourceType\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"specificProblem\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventSeverity\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"vfStatus\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"alarmAdditionalInformation\",
+                                    \"type\": {
+                                        \"type\": \"record\",
+                                        \"name\": \"Alarm_Additional_Information_Type\",
+                                        \"fields\": [
+                                            {
+                                                \"name\": \"eventTime\",
+                                                \"type\": \"string\"
+                                            },
+                                            {
+                                                \"name\": \"equipType\",
+                                                \"type\": \"string\"
+                                            },
+                                            {
+                                                \"name\": \"vendor\",
+                                                \"type\": \"string\"
+                                            },
+                                            {
+                                                \"name\": \"model\",
+                                                \"type\": \"string\"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}",
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputSchema"
+                          },
+                          "schemaFlavour": "Avro"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureOutputSchema"
+                        },
+                        "value": {
+                          "schemaDefinition": "{
+  \"name\": \"Link_Failure_Output\",
+  \"type\": \"record\",
+  \"fields\": [
+    {
+      \"name\": \"o_DasH_ran_DasH_sc_DasH_du_DasH_hello_DasH_world_ColoN_radio_DasH_resource_DasH_management_DasH_policy_DasH_ratio\",
+      \"type\": {
+        \"type\": \"array\",
+        \"items\": {
+          \"name\": \"o_DasH_ran_DasH_sc_DasH_du_DasH_hello_DasH_world_ColoN_radio_DasH_resource_DasH_management_DasH_policy_DasH_ratio_record\",
+          \"type\": \"record\",
+          \"fields\": [
+            {
+              \"name\": \"id\",
+              \"type\": \"string\"
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_max_DasH_ratio\",
+              \"type\": \"int\"
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members\",
+              \"type\": {
+                \"type\": \"array\",
+                \"items\": {
+                  \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members_record\",
+                  \"type\": \"record\",
+                  \"fields\": [
+                    {
+                      \"name\": \"mobile_DasH_country_DasH_code\",
+                      \"type\": \"string\"
+                    },
+                    {
+                      \"name\": \"mobile_DasH_network_DasH_code\",
+                      \"type\": \"string\"
+                    },
+                    {
+                      \"name\": \"slice_DasH_differentiator\",
+                      \"type\": \"int\"
+                    },
+                    {
+                      \"name\": \"slice_DasH_service_DasH_type\",
+                      \"type\": \"int\"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_min_DasH_ratio\",
+              \"type\": \"int\"
+            },
+            {
+              \"name\": \"user_DasH_label\",
+              \"type\": \"string\"
+            },
+            {
+              \"name\": \"resource_DasH_type\",
+              \"type\": \"string\"
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_dedicated_DasH_ratio\",
+              \"type\": \"int\"
+            },
+            {
+              \"name\": \"administrative_DasH_state\",
+              \"type\": \"string\"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}",
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputSchema"
+                          },
+                          "schemaFlavour": "Avro"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "MessageSchema"
+                        },
+                        "value": {
+                          "schemaDefinition": "java.lang.String",
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "MessageSchema"
+                          },
+                          "schemaFlavour": "Java"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "OduIdSchema"
+                        },
+                        "value": {
+                          "schemaDefinition": "java.lang.String",
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OduIdSchema"
+                          },
+                          "schemaFlavour": "Java"
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "OruIdSchema"
+                        },
+                        "value": {
+                          "schemaDefinition": "java.lang.String",
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OruIdSchema"
+                          },
+                          "schemaFlavour": "Java"
+                        }
+                      }]
+                  }
+                },
+                "tasks": {
+                  "key": {
+                    "version": "0.0.1",
+                    "name": "LinkMonitorModel_Tasks"
+                  },
+                  "taskMap": {
+                    "entry": [
+                      {
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkClearedOutfieldsTask"
+                        },
+                        "value": {
+                          "taskParameters": {
+                            "entry": []
+                          },
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsTask"
+                          },
+                          "taskLogic": {
+                            "key": "TaskLogic",
+                            "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var linkFailureInput = executor.inFields.get(\"LinkFailureInput\");
+var oruId = linkFailureInput.get(\"event\").get(\"commonEventHeader\").get(\"sourceName\");
+
+executor.outFields.put(\"OruId\", oruId);
+
+executor.logger.info(executor.outFields);
+
+true;",
+                            "logicFlavour": "JAVASCRIPT"
+                          },
+                          "inputFields": {
+                            "entry": [
+                              {
+                                "key": "LinkFailureInput",
+                                "value": {
+                                  "optional": false,
+                                  "key": "LinkFailureInput",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureInputSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "outputFields": {
+                            "entry": [
+                              {
+                                "key": "OruId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OruId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OruIdSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "contextAlbumReference": []
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "CreateLinkFailureOutfieldsTask"
+                        },
+                        "value": {
+                          "taskParameters": {
+                            "entry": []
+                          },
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsTask"
+                          },
+                          "taskLogic": {
+                            "key": "TaskLogic",
+                            "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var returnValue = true;
+var linkFailureInput = executor.inFields.get(\"LinkFailureInput\");
+var oruId = linkFailureInput.get(\"event\").get(\"commonEventHeader\").get(\"sourceName\");
+var oruOduMap = JSON.parse(executor.parameters.get(\"ORU-ODU-Map\"));
+
+if (oruId in oruOduMap) {
+    var oduId = oruOduMap[oruId];
+    executor.outFields.put(\"OruId\", oruId);
+    executor.outFields.put(\"OduId\", oduId);
+    executor.logger.info(executor.outFields);
+} else {
+    executor.message = \"No O-RU found in the config with this ID: \" + oruId;
+    returnValue = false;
+}
+
+returnValue;",
+                            "logicFlavour": "JAVASCRIPT"
+                          },
+                          "inputFields": {
+                            "entry": [
+                              {
+                                "key": "LinkFailureInput",
+                                "value": {
+                                  "optional": false,
+                                  "key": "LinkFailureInput",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureInputSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "outputFields": {
+                            "entry": [
+                              {
+                                "key": "OduId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OduId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OduIdSchema"
+                                  }
+                                }
+                              },{
+                                "key": "OruId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OruId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OruIdSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "contextAlbumReference": []
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkClearedTask"
+                        },
+                        "value": {
+                          "taskParameters": {
+                            "entry": []
+                          },
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkClearedTask"
+                          },
+                          "taskLogic": {
+                            "key": "TaskLogic",
+                            "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var oruId = executor.inFields.get(\"OruId\");
+
+executor.outFields.put(\"message\", \"CLEARED link failure for O-RU: \" + oruId);
+
+executor.logger.info(executor.outFields);
+
+true;",
+                            "logicFlavour": "JAVASCRIPT"
+                          },
+                          "inputFields": {
+                            "entry": [
+                              {
+                                "key": "OruId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OruId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OruIdSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "outputFields": {
+                            "entry": [
+                              {
+                                "key": "message",
+                                "value": {
+                                  "optional": false,
+                                  "key": "message",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "MessageSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "contextAlbumReference": []
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "LinkFailureTask"
+                        },
+                        "value": {
+                          "taskParameters": {
+                            "entry": []
+                          },
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureTask"
+                          },
+                          "taskLogic": {
+                            "key": "TaskLogic",
+                            "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var linkFailureOutput = executor.subject.getOutFieldSchemaHelper(\"LinkFailureOutput\").createNewInstance();
+
+var oruId = executor.inFields.get(\"OruId\");
+var oduId = executor.inFields.get(\"OduId\");
+
+var unlockMessageArray = new java.util.ArrayList();
+for (var i = 0; i < 1; i++) {
+    unlockMessageArray.add({
+      \"id\":\"rrm-pol-2\",
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_max_DasH_ratio\":25,
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members\":
+          [
+              {
+                  \"mobile_DasH_country_DasH_code\":\"310\",
+                  \"mobile_DasH_network_DasH_code\":\"150\",
+                  \"slice_DasH_differentiator\":1,
+                  \"slice_DasH_service_DasH_type\":1
+              }
+          ],
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_min_DasH_ratio\":15,
+      \"user_DasH_label\":\"rrm-pol-2\",
+      \"resource_DasH_type\":\"prb\",
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_dedicated_DasH_ratio\":20,
+      \"administrative_DasH_state\":\"unlocked\"
+  });
+}
+
+linkFailureOutput.put(\"o_DasH_ran_DasH_sc_DasH_du_DasH_hello_DasH_world_ColoN_radio_DasH_resource_DasH_management_DasH_policy_DasH_ratio\", unlockMessageArray);
+executor.outFields.put(\"LinkFailureOutput\", linkFailureOutput.toString());
+
+executor.getExecutionProperties().setProperty(\"OduId\", oduId);
+executor.getExecutionProperties().setProperty(\"OruId\", oruId);
+
+executor.logger.info(executor.outFields);
+
+true;",
+                            "logicFlavour": "JAVASCRIPT"
+                          },
+                          "inputFields": {
+                            "entry": [
+                              {
+                                "key": "OduId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OduId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OduIdSchema"
+                                  }
+                                }
+                              },{
+                                "key": "OruId",
+                                "value": {
+                                  "optional": false,
+                                  "key": "OruId",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "OruIdSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "outputFields": {
+                            "entry": [
+                              {
+                                "key": "LinkFailureOutput",
+                                "value": {
+                                  "optional": false,
+                                  "key": "LinkFailureOutput",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureOutputSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "contextAlbumReference": []
+                        }
+                      },{
+                        "key": {
+                          "version": "0.0.1",
+                          "name": "NoPolicyDefinedTask"
+                        },
+                        "value": {
+                          "taskParameters": {
+                            "entry": []
+                          },
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "NoPolicyDefinedTask"
+                          },
+                          "taskLogic": {
+                            "key": "TaskLogic",
+                            "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+executor.outFields.put(\"message\", \"No policy defined for this event\");
+
+executor.logger.info(executor.outFields);
+
+true;",
+                            "logicFlavour": "JAVASCRIPT"
+                          },
+                          "inputFields": {
+                            "entry": [
+                              {
+                                "key": "LinkFailureInput",
+                                "value": {
+                                  "optional": false,
+                                  "key": "LinkFailureInput",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "LinkFailureInputSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "outputFields": {
+                            "entry": [
+                              {
+                                "key": "message",
+                                "value": {
+                                  "optional": false,
+                                  "key": "message",
+                                  "fieldSchemaKey": {
+                                    "version": "0.0.1",
+                                    "name": "MessageSchema"
+                                  }
+                                }
+                              }]
+                          },
+                          "contextAlbumReference": []
+                        }
+                      }]
+                  }
+                }
+              }
+            },
+            "version": "0.0.1",
+            "id": 101,
+            "instanceCount": 1,
+            "name": "LinkMonitorApexEngine",
+            "engineParameters": {
+              "taskParameters": [
+                {
+                  "key": "ORU-ODU-Map",
+                  "value": "{
+   \"o-ru-11211\": \"o-du-1121\",
+   \"o-ru-11223\": \"o-du-1122\",
+   \"o-ru-11222\": \"o-du-1122\",
+   \"o-ru-11221\": \"o-du-1122\"
+}"
+                }],
+              "contextParameters": {
+                "schemaParameters": {
+                  "Avro": {
+                    "parameterClassName": "org.onap.policy.apex.plugins.context.schema.avro.AvroSchemaHelperParameters"
+                  }
+                },
+                "parameterClassName": "org.onap.policy.apex.context.parameters.ContextParameters"
+              },
+              "executorParameters": {
+                "JAVASCRIPT": {
+                  "parameterClassName": "org.onap.policy.apex.plugins.executor.javascript.JavascriptExecutorParameters"
+                }
+              }
+            },
+            "deploymentPort": 12345
+          }
+        },
+        "metadata": {
+          "policy-id": "operational.apex.linkmonitor",
+          "policy-version": "1.0.0"
+        },
+        "description": null,
+        "version": "1.0.0",
+        "type_version": "1.0.0",
+        "defined_name": "operational.apex.linkmonitor",
+        "defined_version": "1.0.0",
+        "type": "onap.policies.controlloop.operational.common.Apex",
+        "name": "operational.apex.linkmonitor"
+      }
+    },
+    "policies": [
+      {
+        "operational.apex.linkmonitor": {
+          "type_identifier": {
+            "version": "1.0.0",
+            "name": "onap.policies.controlloop.operational.common.Apex"
+          },
+          "key": {
+            "version": "1.0.0",
+            "name": "operational.apex.linkmonitor"
+          },
+          "derived_from": null,
+          "identifier": {
+            "version": "1.0.0",
+            "name": "operational.apex.linkmonitor"
+          },
+          "properties": {
+            "eventInputParameters": {
+              "DMaaPConsumer": {
+                "carrierTechnologyParameters": {
+                  "parameters": {
+                    "url": "http://message-router:3904/events/unauthenticated.SEC_FAULT_OUTPUT/{{dmaapGroup}}/{{dmaapUser}}?timeout=15000&limit=100"
+                  },
+                  "carrierTechnology": "RESTCLIENT",
+                  "parameterClassName": "org.onap.policy.apex.plugins.event.carrier.restclient.RestClientCarrierTechnologyParameters"
+                },
+                "eventName": "LinkFailureInputEvent",
+                "eventProtocolParameters": {
+                  "parameters": {
+                    "versionAlias": "version",
+                    "pojoField": "LinkFailureInput"
+                  },
+                  "eventProtocol": "JSON"
+                }
+              }
+            },
+            "eventOutputParameters": {
+              "RestProducer": {
+                "eventNameFilter": "LinkFailureOutputEvent",
+                "carrierTechnologyParameters": {
+                  "parameters": {
+                    "url": "http://sdnc-oam:8282/rests/data/network-topology:network-topology/topology=topology-netconf/node={OduId}/yang-ext:mount/o-ran-sc-du-hello-world:network-function/distributed-unit-functions={OduId}/radio-resource-management-policy-ratio=rrm-pol-2",
+                    "httpMethod": "PUT",
+                    "httpHeaders": [
+                      [
+                        "Authorization","Basic YWRtaW46S3A4Yko0U1hzek0wV1hsaGFrM2VIbGNzZTJnQXc4NHZhb0dHbUp2VXkyVQ=="]]
+                  },
+                  "carrierTechnology": "RESTCLIENT",
+                  "parameterClassName": "org.onap.policy.apex.plugins.event.carrier.restclient.RestClientCarrierTechnologyParameters"
+                },
+                "eventProtocolParameters": {
+                  "parameters": {
+                    "pojoField": "LinkFailureOutput"
+                  },
+                  "eventProtocol": "JSON"
+                }
+              },
+              "StdOutProducer": {
+                "eventNameFilter": "ApexMessageOutputEvent",
+                "carrierTechnologyParameters": {
+                  "parameters": {
+                    "standardIo": true
+                  },
+                  "carrierTechnology": "FILE"
+                },
+                "eventProtocolParameters": {
+                  "parameters": {
+                    "pojoField": "message"
+                  },
+                  "eventProtocol": "JSON"
+                }
+              }
+            },
+            "engineServiceParameters": {
+              "policy_type_impl": {
+                "apexPolicyModel": {
+                  "key": {
+                    "version": "0.0.1",
+                    "name": "LinkMonitorModel"
+                  },
+                  "policies": {
+                    "key": {
+                      "version": "0.0.1",
+                      "name": "LinkMonitorModel_Policies"
+                    },
+                    "policyMap": {
+                      "entry": [
+                        {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorPolicy"
+                          },
+                          "value": {
+                            "template": "Freestyle",
+                            "policyKey": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorPolicy"
+                            },
+                            "state": {
+                              "entry": [
+                                {
+                                  "key": "LinkClearedState",
+                                  "value": {
+                                    "defaultTask": {
+                                      "version": "0.0.1",
+                                      "name": "LinkClearedTask"
+                                    },
+                                    "stateOutputs": {
+                                      "entry": [
+                                        {
+                                          "key": "LinkClearedLogic_Output_Direct",
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkClearedState",
+                                              "localName": "LinkClearedLogic_Output_Direct"
+                                            },
+                                            "outgoingEvent": {
+                                              "version": "0.0.1",
+                                              "name": "ApexMessageOutputEvent"
+                                            },
+                                            "nextState": {
+                                              "parentKeyName": "NULL",
+                                              "parentKeyVersion": "0.0.0",
+                                              "parentLocalName": "NULL",
+                                              "localName": "NULL"
+                                            }
+                                          }
+                                        }]
+                                    },
+                                    "taskReferences": {
+                                      "entry": [
+                                        {
+                                          "key": {
+                                            "version": "0.0.1",
+                                            "name": "LinkClearedTask"
+                                          },
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkClearedState",
+                                              "localName": "LinkClearedTask"
+                                            },
+                                            "output": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkClearedState",
+                                              "localName": "LinkClearedLogic_Output_Direct"
+                                            },
+                                            "outputType": "DIRECT"
+                                          }
+                                        }]
+                                    },
+                                    "stateKey": {
+                                      "parentKeyName": "LinkMonitorPolicy",
+                                      "parentKeyVersion": "0.0.1",
+                                      "parentLocalName": "NULL",
+                                      "localName": "LinkClearedState"
+                                    },
+                                    "contextAlbumReference": [],
+                                    "stateFinalizerLogicMap": {
+                                      "entry": []
+                                    },
+                                    "taskSelectionLogic": {
+                                      "key": "NULL",
+                                      "logic": "",
+                                      "logicFlavour": "UNDEFINED"
+                                    },
+                                    "trigger": {
+                                      "version": "0.0.1",
+                                      "name": "CreateLinkClearedOutfieldsEvent"
+                                    }
+                                  }
+                                },{
+                                  "key": "LinkFailureOrClearedState",
+                                  "value": {
+                                    "defaultTask": {
+                                      "version": "0.0.1",
+                                      "name": "NoPolicyDefinedTask"
+                                    },
+                                    "stateOutputs": {
+                                      "entry": [
+                                        {
+                                          "key": "CreateLinkClearedOutfieldsLogic_Output_Direct",
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "CreateLinkClearedOutfieldsLogic_Output_Direct"
+                                            },
+                                            "outgoingEvent": {
+                                              "version": "0.0.1",
+                                              "name": "CreateLinkClearedOutfieldsEvent"
+                                            },
+                                            "nextState": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "NULL",
+                                              "localName": "LinkClearedState"
+                                            }
+                                          }
+                                        },{
+                                          "key": "CreateLinkFailureOutfieldsLogic_Output_Direct",
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "CreateLinkFailureOutfieldsLogic_Output_Direct"
+                                            },
+                                            "outgoingEvent": {
+                                              "version": "0.0.1",
+                                              "name": "CreateLinkFailureOutfieldsEvent"
+                                            },
+                                            "nextState": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "NULL",
+                                              "localName": "LinkFailureState"
+                                            }
+                                          }
+                                        },{
+                                          "key": "NoPolicyDefinedLogic_Output_Direct",
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "NoPolicyDefinedLogic_Output_Direct"
+                                            },
+                                            "outgoingEvent": {
+                                              "version": "0.0.1",
+                                              "name": "ApexMessageOutputEvent"
+                                            },
+                                            "nextState": {
+                                              "parentKeyName": "NULL",
+                                              "parentKeyVersion": "0.0.0",
+                                              "parentLocalName": "NULL",
+                                              "localName": "NULL"
+                                            }
+                                          }
+                                        }]
+                                    },
+                                    "taskReferences": {
+                                      "entry": [
+                                        {
+                                          "key": {
+                                            "version": "0.0.1",
+                                            "name": "CreateLinkClearedOutfieldsTask"
+                                          },
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "CreateLinkClearedOutfieldsTask"
+                                            },
+                                            "output": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "CreateLinkClearedOutfieldsLogic_Output_Direct"
+                                            },
+                                            "outputType": "DIRECT"
+                                          }
+                                        },{
+                                          "key": {
+                                            "version": "0.0.1",
+                                            "name": "CreateLinkFailureOutfieldsTask"
+                                          },
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "CreateLinkFailureOutfieldsTask"
+                                            },
+                                            "output": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "CreateLinkFailureOutfieldsLogic_Output_Direct"
+                                            },
+                                            "outputType": "DIRECT"
+                                          }
+                                        },{
+                                          "key": {
+                                            "version": "0.0.1",
+                                            "name": "NoPolicyDefinedTask"
+                                          },
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "NoPolicyDefinedTask"
+                                            },
+                                            "output": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureOrClearedState",
+                                              "localName": "NoPolicyDefinedLogic_Output_Direct"
+                                            },
+                                            "outputType": "DIRECT"
+                                          }
+                                        }]
+                                    },
+                                    "stateKey": {
+                                      "parentKeyName": "LinkMonitorPolicy",
+                                      "parentKeyVersion": "0.0.1",
+                                      "parentLocalName": "NULL",
+                                      "localName": "LinkFailureOrClearedState"
+                                    },
+                                    "contextAlbumReference": [],
+                                    "stateFinalizerLogicMap": {
+                                      "entry": []
+                                    },
+                                    "taskSelectionLogic": {
+                                      "key": "TaskSelectionLogic",
+                                      "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Selection Execution: '\"+executor.subject.id+
+    \"'. InputFields: '\"+executor.inFields+\"'\");
+
+var linkFailureInput = executor.inFields.get(\"LinkFailureInput\");
+var commonEventHeader = linkFailureInput.get(\"event\").get(\"commonEventHeader\");
+var domain = commonEventHeader.get(\"domain\");
+
+taskFailure = executor.subject.getTaskKey(\"CreateLinkFailureOutfieldsTask\");
+taskCleared = executor.subject.getTaskKey(\"CreateLinkClearedOutfieldsTask\");
+taskDefault = executor.subject.getDefaultTaskKey();
+
+if (domain == \"fault\") {
+    var faultFields = linkFailureInput.get(\"event\").get(\"faultFields\");
+    var alarmCondition = faultFields.get(\"alarmCondition\");
+    var eventSeverity = faultFields.get(\"eventSeverity\");
+    if (alarmCondition == \"28\" && eventSeverity != \"NORMAL\") {
+        taskFailure.copyTo(executor.selectedTask);
+    } else if (alarmCondition == \"28\" && eventSeverity == \"NORMAL\") {
+        taskCleared.copyTo(executor.selectedTask);
+    } else {
+        taskDefault.copyTo(executor.selectedTask);
+    }
+} else {
+    taskDefault.copyTo(executor.selectedTask);
+}
+
+true;",
+                                      "logicFlavour": "JAVASCRIPT"
+                                    },
+                                    "trigger": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureInputEvent"
+                                    }
+                                  }
+                                },{
+                                  "key": "LinkFailureState",
+                                  "value": {
+                                    "defaultTask": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureTask"
+                                    },
+                                    "stateOutputs": {
+                                      "entry": [
+                                        {
+                                          "key": "LinkFailureLogic_Output_Direct",
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureState",
+                                              "localName": "LinkFailureLogic_Output_Direct"
+                                            },
+                                            "outgoingEvent": {
+                                              "version": "0.0.1",
+                                              "name": "LinkFailureOutputEvent"
+                                            },
+                                            "nextState": {
+                                              "parentKeyName": "NULL",
+                                              "parentKeyVersion": "0.0.0",
+                                              "parentLocalName": "NULL",
+                                              "localName": "NULL"
+                                            }
+                                          }
+                                        }]
+                                    },
+                                    "taskReferences": {
+                                      "entry": [
+                                        {
+                                          "key": {
+                                            "version": "0.0.1",
+                                            "name": "LinkFailureTask"
+                                          },
+                                          "value": {
+                                            "key": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureState",
+                                              "localName": "LinkFailureTask"
+                                            },
+                                            "output": {
+                                              "parentKeyName": "LinkMonitorPolicy",
+                                              "parentKeyVersion": "0.0.1",
+                                              "parentLocalName": "LinkFailureState",
+                                              "localName": "LinkFailureLogic_Output_Direct"
+                                            },
+                                            "outputType": "DIRECT"
+                                          }
+                                        }]
+                                    },
+                                    "stateKey": {
+                                      "parentKeyName": "LinkMonitorPolicy",
+                                      "parentKeyVersion": "0.0.1",
+                                      "parentLocalName": "NULL",
+                                      "localName": "LinkFailureState"
+                                    },
+                                    "contextAlbumReference": [],
+                                    "stateFinalizerLogicMap": {
+                                      "entry": []
+                                    },
+                                    "taskSelectionLogic": {
+                                      "key": "NULL",
+                                      "logic": "",
+                                      "logicFlavour": "UNDEFINED"
+                                    },
+                                    "trigger": {
+                                      "version": "0.0.1",
+                                      "name": "CreateLinkFailureOutfieldsEvent"
+                                    }
+                                  }
+                                }]
+                            },
+                            "firstState": "LinkFailureOrClearedState"
+                          }
+                        }]
+                    }
+                  },
+                  "events": {
+                    "key": {
+                      "version": "0.0.1",
+                      "name": "LinkMonitorModel_Events"
+                    },
+                    "eventMap": {
+                      "entry": [
+                        {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "ApexMessageOutputEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "ApexMessageOutputEvent"
+                            },
+                            "target": "APEX",
+                            "source": "APEX",
+                            "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                            "parameter": {
+                              "entry": [
+                                {
+                                  "key": "message",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "message",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "MessageSchema"
+                                    }
+                                  }
+                                }]
+                            }
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkClearedOutfieldsEvent"
+                            },
+                            "target": "APEX",
+                            "source": "APEX",
+                            "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                            "parameter": {
+                              "entry": [
+                                {
+                                  "key": "OruId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OruId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OruIdSchema"
+                                    }
+                                  }
+                                }]
+                            }
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkFailureOutfieldsEvent"
+                            },
+                            "target": "APEX",
+                            "source": "APEX",
+                            "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                            "parameter": {
+                              "entry": [
+                                {
+                                  "key": "OduId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OduId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OduIdSchema"
+                                    }
+                                  }
+                                },{
+                                  "key": "OruId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OruId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OruIdSchema"
+                                    }
+                                  }
+                                }]
+                            }
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureInputEvent"
+                            },
+                            "target": "APEX",
+                            "source": "DMAAP",
+                            "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                            "parameter": {
+                              "entry": [
+                                {
+                                  "key": "LinkFailureInput",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "LinkFailureInput",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureInputSchema"
+                                    }
+                                  }
+                                }]
+                            }
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureOutputEvent"
+                            },
+                            "target": "OAM",
+                            "source": "APEX",
+                            "nameSpace": "org.onap.policy.apex.auth.clieditor",
+                            "parameter": {
+                              "entry": [
+                                {
+                                  "key": "LinkFailureOutput",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "LinkFailureOutput",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureOutputSchema"
+                                    }
+                                  }
+                                }]
+                            }
+                          }
+                        }]
+                    }
+                  },
+                  "keyInformation": {
+                    "key": {
+                      "version": "0.0.1",
+                      "name": "LinkMonitorModel_KeyInfo"
+                    },
+                    "keyInfoMap": {
+                      "entry": [
+                        {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "ApexMessageOutputEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "ApexMessageOutputEvent"
+                            },
+                            "description": "Generated description for concept referred to by key \"ApexMessageOutputEvent:0.0.1\"",
+                            "UUID": "cca47d74-7754-4a61-b163-ca31f66b157b"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkClearedOutfieldsEvent"
+                            },
+                            "description": "Generated description for concept referred to by key \"CreateLinkClearedOutfieldsEvent:0.0.1\"",
+                            "UUID": "a295d6a3-1b73-387e-abba-b41e9b608802"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsTask"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkClearedOutfieldsTask"
+                            },
+                            "description": "This task creates the output fields when link failure is cleared.",
+                            "UUID": "fd594e88-411d-4a94-b2be-697b3a0d7adf"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkFailureOutfieldsEvent"
+                            },
+                            "description": "Generated description for concept referred to by key \"CreateLinkFailureOutfieldsEvent:0.0.1\"",
+                            "UUID": "02be2b5d-45b7-3c54-ae54-97f2b5c30125"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsTask"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkFailureOutfieldsTask"
+                            },
+                            "description": "This task the output fields when link failure is detected.",
+                            "UUID": "ac3d9842-80af-4a98-951c-bd79a431c613"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkClearedTask"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkClearedTask"
+                            },
+                            "description": "This task sends a message to the output when link failure is cleared.",
+                            "UUID": "eecfde90-896c-4343-8f9c-2603ced94e2d"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureInputEvent"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkFailureInputEvent:0.0.1\"",
+                            "UUID": "c4500941-3f98-4080-a9cc-5b9753ed050b"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputSchema"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureInputSchema"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkFailureInputSchema:0.0.1\"",
+                            "UUID": "3b3974fc-3012-3b02-9f33-c9d8eefe4dc1"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputEvent"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureOutputEvent"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkFailureOutputEvent:0.0.1\"",
+                            "UUID": "4f04aa98-e917-4f4a-882a-c75ba5a99374"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputSchema"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureOutputSchema"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkFailureOutputSchema:0.0.1\"",
+                            "UUID": "2d1a7f6e-eb9a-3984-be1f-283d98111b84"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureTask"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureTask"
+                            },
+                            "description": "This task updates the config for O-RU when link failure is detected.",
+                            "UUID": "3351b0f4-cf06-4fa2-8823-edf67bd30223"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorModel"
+                            },
+                            "description": "This is the Apex Policy Model for link monitoring.",
+                            "UUID": "540226fb-55ee-4f0e-a444-983a0494818e"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Events"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorModel_Events"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkMonitorModel_Events:0.0.1\"",
+                            "UUID": "27ad3e7e-fe3b-3bd6-9081-718705c2bcea"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_KeyInfo"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorModel_KeyInfo"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkMonitorModel_KeyInfo:0.0.1\"",
+                            "UUID": "ea0b5f58-eefd-358a-9660-840c640bf981"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Policies"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorModel_Policies"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkMonitorModel_Policies:0.0.1\"",
+                            "UUID": "ee9e0b0f-2b7d-3ab7-9a98-c5ec05ed823d"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Schemas"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorModel_Schemas"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkMonitorModel_Schemas:0.0.1\"",
+                            "UUID": "fa5f9b8f-796c-3c70-84e9-5140c958c4bb"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorModel_Tasks"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorModel_Tasks"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkMonitorModel_Tasks:0.0.1\"",
+                            "UUID": "eec592f7-69d5-39a9-981a-e552f787ed01"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkMonitorPolicy"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkMonitorPolicy"
+                            },
+                            "description": "Generated description for concept referred to by key \"LinkMonitorPolicy:0.0.1\"",
+                            "UUID": "6c5e410f-489a-46ff-964e-982ce6e8b6d0"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "MessageSchema"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "MessageSchema"
+                            },
+                            "description": "A schema for messages from apex",
+                            "UUID": "ac4b34ac-39d6-3393-a267-8d5b84854018"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "NoPolicyDefinedTask"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "NoPolicyDefinedTask"
+                            },
+                            "description": "This task sends a message to the output when an event is received for which no policy has been defined.",
+                            "UUID": "d48b619e-d00d-4008-b884-02d76ea4350b"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OduIdSchema"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "OduIdSchema"
+                            },
+                            "description": "A schema for O-DU-ID",
+                            "UUID": "50662174-a88b-3cbd-91bd-8e91b40b2660"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OruIdSchema"
+                          },
+                          "value": {
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "OruIdSchema"
+                            },
+                            "description": "A schema for O-RU-ID",
+                            "UUID": "54daf32b-015f-39cd-8530-a1175c5553e9"
+                          }
+                        }]
+                    }
+                  },
+                  "schemas": {
+                    "key": {
+                      "version": "0.0.1",
+                      "name": "LinkMonitorModel_Schemas"
+                    },
+                    "schemas": {
+                      "entry": [
+                        {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureInputSchema"
+                          },
+                          "value": {
+                            "schemaDefinition": "{
+    \"type\": \"record\",
+    \"name\": \"Link_Failure_Input\",
+    \"fields\": [
+        {
+            \"name\": \"event\",
+            \"type\": {
+                \"type\": \"record\",
+                \"name\": \"Event_Type\",
+                \"fields\": [
+                    {
+                        \"name\": \"commonEventHeader\",
+                        \"type\": {
+                            \"type\": \"record\",
+                            \"name\": \"Common_Event_Header_Type\",
+                            \"fields\": [
+                                {
+                                    \"name\": \"domain\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventId\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventType\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"sequence\",
+                                    \"type\": \"int\"
+                                },
+                                {
+                                    \"name\": \"priority\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"reportingEntityId\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"reportingEntityName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"sourceId\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"sourceName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"startEpochMicrosec\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"lastEpochMicrosec\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"nfNamingCode\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"nfVendorName\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"timeZoneOffset\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"version\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"vesEventListenerVersion\",
+                                    \"type\": \"string\"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        \"name\": \"faultFields\",
+                        \"type\": {
+                            \"type\": \"record\",
+                            \"name\": \"Fault_Fields_Type\",
+                            \"fields\": [
+                                {
+                                    \"name\": \"faultFieldsVersion\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"alarmCondition\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"alarmInterfaceA\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventSourceType\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"specificProblem\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"eventSeverity\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"vfStatus\",
+                                    \"type\": \"string\"
+                                },
+                                {
+                                    \"name\": \"alarmAdditionalInformation\",
+                                    \"type\": {
+                                        \"type\": \"record\",
+                                        \"name\": \"Alarm_Additional_Information_Type\",
+                                        \"fields\": [
+                                            {
+                                                \"name\": \"eventTime\",
+                                                \"type\": \"string\"
+                                            },
+                                            {
+                                                \"name\": \"equipType\",
+                                                \"type\": \"string\"
+                                            },
+                                            {
+                                                \"name\": \"vendor\",
+                                                \"type\": \"string\"
+                                            },
+                                            {
+                                                \"name\": \"model\",
+                                                \"type\": \"string\"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}",
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureInputSchema"
+                            },
+                            "schemaFlavour": "Avro"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureOutputSchema"
+                          },
+                          "value": {
+                            "schemaDefinition": "{
+  \"name\": \"Link_Failure_Output\",
+  \"type\": \"record\",
+  \"fields\": [
+    {
+      \"name\": \"o_DasH_ran_DasH_sc_DasH_du_DasH_hello_DasH_world_ColoN_radio_DasH_resource_DasH_management_DasH_policy_DasH_ratio\",
+      \"type\": {
+        \"type\": \"array\",
+        \"items\": {
+          \"name\": \"o_DasH_ran_DasH_sc_DasH_du_DasH_hello_DasH_world_ColoN_radio_DasH_resource_DasH_management_DasH_policy_DasH_ratio_record\",
+          \"type\": \"record\",
+          \"fields\": [
+            {
+              \"name\": \"id\",
+              \"type\": \"string\"
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_max_DasH_ratio\",
+              \"type\": \"int\"
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members\",
+              \"type\": {
+                \"type\": \"array\",
+                \"items\": {
+                  \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members_record\",
+                  \"type\": \"record\",
+                  \"fields\": [
+                    {
+                      \"name\": \"mobile_DasH_country_DasH_code\",
+                      \"type\": \"string\"
+                    },
+                    {
+                      \"name\": \"mobile_DasH_network_DasH_code\",
+                      \"type\": \"string\"
+                    },
+                    {
+                      \"name\": \"slice_DasH_differentiator\",
+                      \"type\": \"int\"
+                    },
+                    {
+                      \"name\": \"slice_DasH_service_DasH_type\",
+                      \"type\": \"int\"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_min_DasH_ratio\",
+              \"type\": \"int\"
+            },
+            {
+              \"name\": \"user_DasH_label\",
+              \"type\": \"string\"
+            },
+            {
+              \"name\": \"resource_DasH_type\",
+              \"type\": \"string\"
+            },
+            {
+              \"name\": \"radio_DasH_resource_DasH_management_DasH_policy_DasH_dedicated_DasH_ratio\",
+              \"type\": \"int\"
+            },
+            {
+              \"name\": \"administrative_DasH_state\",
+              \"type\": \"string\"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}",
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureOutputSchema"
+                            },
+                            "schemaFlavour": "Avro"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "MessageSchema"
+                          },
+                          "value": {
+                            "schemaDefinition": "java.lang.String",
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "MessageSchema"
+                            },
+                            "schemaFlavour": "Java"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OduIdSchema"
+                          },
+                          "value": {
+                            "schemaDefinition": "java.lang.String",
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "OduIdSchema"
+                            },
+                            "schemaFlavour": "Java"
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "OruIdSchema"
+                          },
+                          "value": {
+                            "schemaDefinition": "java.lang.String",
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "OruIdSchema"
+                            },
+                            "schemaFlavour": "Java"
+                          }
+                        }]
+                    }
+                  },
+                  "tasks": {
+                    "key": {
+                      "version": "0.0.1",
+                      "name": "LinkMonitorModel_Tasks"
+                    },
+                    "taskMap": {
+                      "entry": [
+                        {
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkClearedOutfieldsTask"
+                          },
+                          "value": {
+                            "taskParameters": {
+                              "entry": []
+                            },
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkClearedOutfieldsTask"
+                            },
+                            "taskLogic": {
+                              "key": "TaskLogic",
+                              "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var linkFailureInput = executor.inFields.get(\"LinkFailureInput\");
+var oruId = linkFailureInput.get(\"event\").get(\"commonEventHeader\").get(\"sourceName\");
+
+executor.outFields.put(\"OruId\", oruId);
+
+executor.logger.info(executor.outFields);
+
+true;",
+                              "logicFlavour": "JAVASCRIPT"
+                            },
+                            "inputFields": {
+                              "entry": [
+                                {
+                                  "key": "LinkFailureInput",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "LinkFailureInput",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureInputSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "outputFields": {
+                              "entry": [
+                                {
+                                  "key": "OruId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OruId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OruIdSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "contextAlbumReference": []
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "CreateLinkFailureOutfieldsTask"
+                          },
+                          "value": {
+                            "taskParameters": {
+                              "entry": []
+                            },
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "CreateLinkFailureOutfieldsTask"
+                            },
+                            "taskLogic": {
+                              "key": "TaskLogic",
+                              "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var returnValue = true;
+var linkFailureInput = executor.inFields.get(\"LinkFailureInput\");
+var oruId = linkFailureInput.get(\"event\").get(\"commonEventHeader\").get(\"sourceName\");
+var oruOduMap = JSON.parse(executor.parameters.get(\"ORU-ODU-Map\"));
+
+if (oruId in oruOduMap) {
+    var oduId = oruOduMap[oruId];
+    executor.outFields.put(\"OruId\", oruId);
+    executor.outFields.put(\"OduId\", oduId);
+    executor.logger.info(executor.outFields);
+} else {
+    executor.message = \"No O-RU found in the config with this ID: \" + oruId;
+    returnValue = false;
+}
+
+returnValue;",
+                              "logicFlavour": "JAVASCRIPT"
+                            },
+                            "inputFields": {
+                              "entry": [
+                                {
+                                  "key": "LinkFailureInput",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "LinkFailureInput",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureInputSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "outputFields": {
+                              "entry": [
+                                {
+                                  "key": "OduId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OduId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OduIdSchema"
+                                    }
+                                  }
+                                },{
+                                  "key": "OruId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OruId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OruIdSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "contextAlbumReference": []
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkClearedTask"
+                          },
+                          "value": {
+                            "taskParameters": {
+                              "entry": []
+                            },
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkClearedTask"
+                            },
+                            "taskLogic": {
+                              "key": "TaskLogic",
+                              "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var oruId = executor.inFields.get(\"OruId\");
+
+executor.outFields.put(\"message\", \"CLEARED link failure for O-RU: \" + oruId);
+
+executor.logger.info(executor.outFields);
+
+true;",
+                              "logicFlavour": "JAVASCRIPT"
+                            },
+                            "inputFields": {
+                              "entry": [
+                                {
+                                  "key": "OruId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OruId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OruIdSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "outputFields": {
+                              "entry": [
+                                {
+                                  "key": "message",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "message",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "MessageSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "contextAlbumReference": []
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "LinkFailureTask"
+                          },
+                          "value": {
+                            "taskParameters": {
+                              "entry": []
+                            },
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "LinkFailureTask"
+                            },
+                            "taskLogic": {
+                              "key": "TaskLogic",
+                              "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+var linkFailureOutput = executor.subject.getOutFieldSchemaHelper(\"LinkFailureOutput\").createNewInstance();
+
+var oruId = executor.inFields.get(\"OruId\");
+var oduId = executor.inFields.get(\"OduId\");
+
+var unlockMessageArray = new java.util.ArrayList();
+for (var i = 0; i < 1; i++) {
+    unlockMessageArray.add({
+      \"id\":\"rrm-pol-2\",
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_max_DasH_ratio\":25,
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_members\":
+          [
+              {
+                  \"mobile_DasH_country_DasH_code\":\"310\",
+                  \"mobile_DasH_network_DasH_code\":\"150\",
+                  \"slice_DasH_differentiator\":1,
+                  \"slice_DasH_service_DasH_type\":1
+              }
+          ],
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_min_DasH_ratio\":15,
+      \"user_DasH_label\":\"rrm-pol-2\",
+      \"resource_DasH_type\":\"prb\",
+      \"radio_DasH_resource_DasH_management_DasH_policy_DasH_dedicated_DasH_ratio\":20,
+      \"administrative_DasH_state\":\"unlocked\"
+  });
+}
+
+linkFailureOutput.put(\"o_DasH_ran_DasH_sc_DasH_du_DasH_hello_DasH_world_ColoN_radio_DasH_resource_DasH_management_DasH_policy_DasH_ratio\", unlockMessageArray);
+executor.outFields.put(\"LinkFailureOutput\", linkFailureOutput.toString());
+
+executor.getExecutionProperties().setProperty(\"OduId\", oduId);
+executor.getExecutionProperties().setProperty(\"OruId\", oruId);
+
+executor.logger.info(executor.outFields);
+
+true;",
+                              "logicFlavour": "JAVASCRIPT"
+                            },
+                            "inputFields": {
+                              "entry": [
+                                {
+                                  "key": "OduId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OduId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OduIdSchema"
+                                    }
+                                  }
+                                },{
+                                  "key": "OruId",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "OruId",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "OruIdSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "outputFields": {
+                              "entry": [
+                                {
+                                  "key": "LinkFailureOutput",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "LinkFailureOutput",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureOutputSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "contextAlbumReference": []
+                          }
+                        },{
+                          "key": {
+                            "version": "0.0.1",
+                            "name": "NoPolicyDefinedTask"
+                          },
+                          "value": {
+                            "taskParameters": {
+                              "entry": []
+                            },
+                            "key": {
+                              "version": "0.0.1",
+                              "name": "NoPolicyDefinedTask"
+                            },
+                            "taskLogic": {
+                              "key": "TaskLogic",
+                              "logic": "/*
+ * ============LICENSE_START=======================================================
+ * Copyright (C) 2021 Nordix Foundation.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the \"License\");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an \"AS IS\" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END=========================================================
+ */
+
+executor.logger.info(\"Task Execution: '\"+executor.subject.id+\"'. Input Fields: '\"+executor.inFields+\"'\");
+
+executor.outFields.put(\"message\", \"No policy defined for this event\");
+
+executor.logger.info(executor.outFields);
+
+true;",
+                              "logicFlavour": "JAVASCRIPT"
+                            },
+                            "inputFields": {
+                              "entry": [
+                                {
+                                  "key": "LinkFailureInput",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "LinkFailureInput",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "LinkFailureInputSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "outputFields": {
+                              "entry": [
+                                {
+                                  "key": "message",
+                                  "value": {
+                                    "optional": false,
+                                    "key": "message",
+                                    "fieldSchemaKey": {
+                                      "version": "0.0.1",
+                                      "name": "MessageSchema"
+                                    }
+                                  }
+                                }]
+                            },
+                            "contextAlbumReference": []
+                          }
+                        }]
+                    }
+                  }
+                }
+              },
+              "version": "0.0.1",
+              "id": 101,
+              "instanceCount": 1,
+              "name": "LinkMonitorApexEngine",
+              "engineParameters": {
+                "taskParameters": [
+                  {
+                    "key": "ORU-ODU-Map",
+                    "value": "{
+   \"o-ru-11211\": \"o-du-1121\",
+   \"o-ru-11223\": \"o-du-1122\",
+   \"o-ru-11222\": \"o-du-1122\",
+   \"o-ru-11221\": \"o-du-1122\"
+}"
+                  }],
+                "contextParameters": {
+                  "schemaParameters": {
+                    "Avro": {
+                      "parameterClassName": "org.onap.policy.apex.plugins.context.schema.avro.AvroSchemaHelperParameters"
+                    }
+                  },
+                  "parameterClassName": "org.onap.policy.apex.context.parameters.ContextParameters"
+                },
+                "executorParameters": {
+                  "JAVASCRIPT": {
+                    "parameterClassName": "org.onap.policy.apex.plugins.executor.javascript.JavascriptExecutorParameters"
+                  }
+                }
+              },
+              "deploymentPort": 12345
+            }
+          },
+          "metadata": {
+            "policy-id": "operational.apex.linkmonitor",
+            "policy-version": "1.0.0"
+          },
+          "description": null,
+          "version": "1.0.0",
+          "type_version": "1.0.0",
+          "defined_name": "operational.apex.linkmonitor",
+          "defined_version": "1.0.0",
+          "type": "onap.policies.controlloop.operational.common.Apex",
+          "name": "operational.apex.linkmonitor"
+        }
+      }],
+    "description": null,
+    "node_templates": {
+      "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition": {
+        "type_identifier": {
+          "version": "1.0.1",
+          "name": "org.onap.policy.clamp.acm.AutomationComposition"
+        },
+        "key": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition"
+        },
+        "properties": {
+          "elements": [
+            {
+              "version": "1.2.3",
+              "name": "org.onap.domain.pmsh.PMSH_OperationalPolicyAutomationCompositionElement"
+            }],
+          "provider": "Ericsson"
+        },
+        "metadata": {},
+        "description": "Automation composition for Hello World",
+        "requirements": null,
+        "version": "1.2.3",
+        "type_version": "1.0.1",
+        "capabilities": null,
+        "defined_name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition",
+        "defined_version": "1.2.3",
+        "type": "org.onap.policy.clamp.acm.AutomationComposition",
+        "name": "org.onap.domain.sample.GenericK8s_AutomationCompositionDefinition"
+      },
+      "org.onap.domain.pmsh.PMSH_OperationalPolicyAutomationCompositionElement": {
+        "type_identifier": {
+          "version": "1.0.1",
+          "name": "org.onap.policy.clamp.acm.PolicyAutomationCompositionElement"
+        },
+        "key": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.pmsh.PMSH_OperationalPolicyAutomationCompositionElement"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "1.2.3",
+          "name": "org.onap.domain.pmsh.PMSH_OperationalPolicyAutomationCompositionElement"
+        },
+        "properties": {
+          "participantType": {
+            "version": "2.3.1",
+            "name": "org.onap.policy.clamp.acm.PolicyParticipant"
+          },
+          "policy_type_id": {
+            "version": "1.0.0",
+            "name": "onap.policies.operational.pm-subscription-handler"
+          },
+          "participant_id": {
+            "version": "1.0.0",
+            "name": "org.onap.PM_Policy"
+          },
+          "provider": "Ericsson",
+          "policy_id": {
+            "get_input": "pmsh_operational_policy"
+          }
+        },
+        "metadata": {},
+        "description": "Automation composition element for the operational policy for Performance Management Subscription Handling",
+        "requirements": null,
+        "version": "1.2.3",
+        "type_version": "1.0.1",
+        "capabilities": null,
+        "defined_name": "org.onap.domain.pmsh.PMSH_OperationalPolicyAutomationCompositionElement",
+        "defined_version": "1.2.3",
+        "type": "org.onap.policy.clamp.acm.PolicyAutomationCompositionElement",
+        "name": "org.onap.domain.pmsh.PMSH_OperationalPolicyAutomationCompositionElement"
+      },
+      "org.onap.policy.clamp.acm.PolicyParticipant": {
+        "type_identifier": {
+          "version": "1.0.1",
+          "name": "org.onap.policy.clamp.acm.Participant"
+        },
+        "key": {
+          "version": "2.3.1",
+          "name": "org.onap.policy.clamp.acm.PolicyParticipant"
+        },
+        "derived_from": null,
+        "identifier": {
+          "version": "2.3.1",
+          "name": "org.onap.policy.clamp.acm.PolicyParticipant"
+        },
+        "properties": {
+          "provider": "ONAP"
+        },
+        "metadata": {},
+        "description": "Participant for DCAE microservices",
+        "requirements": null,
+        "version": "2.3.1",
+        "type_version": "1.0.1",
+        "capabilities": null,
+        "defined_name": "org.onap.policy.clamp.acm.PolicyParticipant",
+        "defined_version": "2.3.1",
+        "type": "org.onap.policy.clamp.acm.Participant",
+        "name": "org.onap.policy.clamp.acm.PolicyParticipant"
+      }
+    },
+    "inputs": {
+      "pmsh_operational_policy": {
+        "value": null,
+        "type_version": "0.0.0",
+        "type": "onap.datatypes.ToscaConceptIdentifier",
+        "name": "pmsh_operational_policy"
+      }
+    }
+  },
+  "policy_types": {
+    "onap.policies.controlloop.operational.Common": {
+      "key": {
+        "version": "1.0.0",
+        "name": "onap.policies.controlloop.operational.Common"
+      },
+      "derived_from": "tosca.policies.Root",
+      "properties": {
+        "abatement": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Whether an abatement event message will be expected for the control loop from DCAE.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "boolean",
+          "name": "abatement",
+          "default_value": false
+        },
+        "operations": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": {
+            "constraints": null,
+            "description": null,
+            "type_version": "0.0.0",
+            "type": "onap.datatype.controlloop.Operation",
+            "name": null
+          },
+          "constraints": null,
+          "description": "List of operations to be performed when Control Loop is triggered.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "list",
+          "name": "operations",
+          "default_value": null
+        },
+        "timeout": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Overall timeout for executing all the operations. This timeout should equal or exceed the total
+timeout for each operation listed.
+",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "timeout",
+          "default_value": null
+        },
+        "id": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The unique control loop id.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "id",
+          "default_value": null
+        },
+        "trigger": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Initial operation to execute upon receiving an Onset event message for the Control Loop.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "trigger",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": "Operational Policy for Control Loop execution. Originated in Frankfurt to support TOSCA Compliant
+Policy Types. This does NOT support the legacy Policy YAML policy type.
+",
+      "version": "1.0.0",
+      "type_version": null,
+      "defined_name": "onap.policies.controlloop.operational.Common",
+      "defined_version": "1.0.0",
+      "type": null,
+      "name": "onap.policies.controlloop.operational.Common"
+    },
+    "onap.policies.controlloop.operational.common.Apex": {
+      "key": {
+        "version": "1.0.0",
+        "name": "onap.policies.controlloop.operational.common.Apex"
+      },
+      "derived_from": "onap.policies.controlloop.operational.Common",
+      "properties": {
+        "javaProperties": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Name/value pairs of properties to be set for APEX if needed.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "javaProperties",
+          "default_value": null
+        },
+        "eventInputParameters": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The event input parameters.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "eventInputParameters",
+          "default_value": null
+        },
+        "eventOutputParameters": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The event output parameters.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "eventOutputParameters",
+          "default_value": null
+        },
+        "engineServiceParameters": {
+          "required": true,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The engine parameters like name, instanceCount, policy implementation, parameters etc.",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "engineServiceParameters",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": "Operational policies for Apex PDP",
+      "version": "1.0.0",
+      "type_version": null,
+      "defined_name": "onap.policies.controlloop.operational.common.Apex",
+      "defined_version": "1.0.0",
+      "type": null,
+      "name": "onap.policies.controlloop.operational.common.Apex"
+    }
+  },
+  "tosca_definitions_version": "tosca_simple_yaml_1_3",
+  "name": "apex_usecase",
+  "node_types": {
+    "org.onap.policy.clamp.acm.AutomationComposition": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.AutomationComposition"
+      },
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "elements": {
+          "required": true,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": {
+            "constraints": null,
+            "description": null,
+            "type_version": "0.0.0",
+            "type": "onap.datatypes.ToscaConceptIdentifier",
+            "name": null
+          },
+          "constraints": null,
+          "description": "Specifies a list of automation composition element definitions that make up this automation composition definition",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "list",
+          "name": "elements",
+          "default_value": null
+        },
+        "provider": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Specifies the organization that provides the automation composition element",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "provider",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.AutomationComposition",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.AutomationComposition"
+    },
+    "org.onap.policy.clamp.acm.AutomationCompositionElement": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.AutomationCompositionElement"
+      },
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "runningToPassiveTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from running to passive",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "runningToPassiveTimeout",
+          "default_value": 60
+        },
+        "participantType": {
+          "required": true,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "The identity of the participant type that hosts this type of Automation Composition Element",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatypes.ToscaConceptIdentifier",
+          "name": "participantType",
+          "default_value": null
+        },
+        "startPhase": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "A value indicating the start phase in which this automation composition element will be started, the first start phase is zero. Automation Composition Elements are started in their start_phase order and stopped in reverse start phase order. Automation Composition Elements with the same start phase are started and stopped simultaneously",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "startPhase",
+          "default_value": null
+        },
+        "passiveToUninitializedTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from passive to uninitialized",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "passiveToUninitializedTimeout",
+          "default_value": 60
+        },
+        "uninitializedToPassiveTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from uninitialized to passive",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "uninitializedToPassiveTimeout",
+          "default_value": 60
+        },
+        "participant_id": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatypes.ToscaConceptIdentifier",
+          "name": "participant_id",
+          "default_value": null
+        },
+        "provider": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": null,
+          "description": "Specifies the organization that provides the automation composition element",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "provider",
+          "default_value": null
+        },
+        "passiveToRunningTimeout": {
+          "required": false,
+          "status": null,
+          "metadata": {
+            "common": "true"
+          },
+          "entry_schema": null,
+          "constraints": [
+            {
+              "valid_values": null,
+              "greater_or_equal": "0",
+              "equal": null,
+              "greater_than": null,
+              "range_values": null,
+              "less_than": null,
+              "less_or_equal": null
+            }],
+          "description": "The maximum time in seconds to wait for a state chage from passive to running",
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "integer",
+          "name": "passiveToRunningTimeout",
+          "default_value": 60
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.AutomationCompositionElement",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.AutomationCompositionElement"
+    },
+    "org.onap.policy.clamp.acm.PolicyAutomationCompositionElement": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.PolicyAutomationCompositionElement"
+      },
+      "derived_from": "org.onap.policy.clamp.acm.AutomationCompositionElement",
+      "properties": {
+        "policy_type_id": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatypes.ToscaConceptIdentifier",
+          "name": "policy_type_id",
+          "default_value": null
+        },
+        "policy_id": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "onap.datatypes.ToscaConceptIdentifier",
+          "name": "policy_id",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.PolicyAutomationCompositionElement",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.PolicyAutomationCompositionElement"
+    },
+    "org.onap.policy.clamp.acm.Participant": {
+      "key": {
+        "version": "1.0.1",
+        "name": "org.onap.policy.clamp.acm.Participant"
+      },
+      "derived_from": "tosca.nodetypes.Root",
+      "properties": {
+        "provider": {
+          "required": false,
+          "status": null,
+          "metadata": null,
+          "entry_schema": null,
+          "constraints": null,
+          "description": null,
+          "type_version": "0.0.0",
+          "key_schema": null,
+          "type": "string",
+          "name": "provider",
+          "default_value": null
+        }
+      },
+      "metadata": {},
+      "description": null,
+      "requirements": null,
+      "version": "1.0.1",
+      "type_version": null,
+      "defined_name": "org.onap.policy.clamp.acm.Participant",
+      "defined_version": "1.0.1",
+      "type": null,
+      "name": "org.onap.policy.clamp.acm.Participant"
+    }
+  }
+}
