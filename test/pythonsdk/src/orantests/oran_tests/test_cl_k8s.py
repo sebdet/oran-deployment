@@ -41,6 +41,7 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
+chartmuseum_tls_enabled = True
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("test Control Loops for O-RU Fronthaul Recovery usecase - Clamp K8S usecase")
 clcommissioning_utils = ClCommissioningUtils()
@@ -57,41 +58,49 @@ def setup_simulators():
     """Prepare the test environment before the executing the tests."""
     logger.info("Test class setup for Closed Loop tests")
 
-    deploy_chartmuseum()
+    protocol = "http"
+    #if chartmuseum_tls_enabled:
+    #    protocol = "https"
+    #deploy_chartmuseum(protocol)
 
     # Add the remote repo to Clamp k8s pod
-    logger.info("Add the remote repo to Clamp k8s pod")
-    k8s_pod = subprocess.run("kubectl get pods -n onap | grep k8s | awk '{print $1}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+    #logger.info("Add the remote repo to Clamp k8s pod")
+    #k8s_pod = subprocess.run("kubectl get pods -n onap | grep k8s | awk '{print $1}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
 
-    repo_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
-    logger.info("k8s: %s, repo_url:%s", k8s_pod, repo_url)
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo add chartmuseum http://{repo_url}\""
-    check_output(cmd, shell=True).decode('utf-8')
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo update\""
-    check_output(cmd, shell=True).decode('utf-8')
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm search repo -l oru-app\""
-    result = check_output(cmd, shell=True).decode('utf-8')
-    if result == '':
-        logger.info("Failed to update the K8s pod repo")
+    #repo_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
+    #if chartmuseum_tls_enabled:
+    #    repo_url = "clusecase.com"
+    #logger.info("k8s: %s, repo_url:%s", k8s_pod, repo_url)
+
+    #cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo add chartmuseum {protocol}://{repo_url}\""
+    #check_output(cmd, shell=True).decode('utf-8')
+    #cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo update\""
+    #check_output(cmd, shell=True).decode('utf-8')
+    #cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm search repo -l oru-app\""
+    #result = check_output(cmd, shell=True).decode('utf-8')
+    #if result == '':
+    #    logger.info("Failed to update the K8s pod repo")
     logger.info("Test Session setup completed successfully")
 
     ### Cleanup code
     yield
     # Finish and delete the cl instance
-    clcommissioning_utils.clean_instance(usecase_name)
-    wait(lambda: is_oru_app_down(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app is down")
+    #clcommissioning_utils.clean_instance(usecase_name)
+    #wait(lambda: is_oru_app_down(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app is down")
     # Remove the remote repo to Clamp k8s pod
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
-    check_output(cmd, shell=True).decode('utf-8')
-    cmd = "kubectl delete namespace test"
-    check_output(cmd, shell=True).decode('utf-8')
-    cmd = "helm repo remove test"
-    check_output(cmd, shell=True).decode('utf-8')
-    time.sleep(10)
+    #cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
+    #check_output(cmd, shell=True).decode('utf-8')
+    #cmd = "kubectl delete namespace test"
+    #check_output(cmd, shell=True).decode('utf-8')
+    #cmd = "helm repo remove test"
+    #check_output(cmd, shell=True).decode('utf-8')
+    #time.sleep(10)
+    #cmd = "sudo sed -i '/clusecase.com/d' /etc/hosts"
+    #check_output(cmd, shell=True).decode('utf-8')
     logger.info("Test Session cleanup done")
 
 
-def deploy_chartmuseum():
+def deploy_chartmuseum(protocol):
     """Start chartmuseum pod and populate with the nedded helm chart."""
     logger.info("Start to deploy chartmuseum")
     cmd = "helm repo add test https://chartmuseum.github.io/charts"
@@ -99,15 +108,40 @@ def deploy_chartmuseum():
     cmd = "kubectl create namespace test"
     check_output(cmd, shell=True).decode('utf-8')
 
-    cmd = "helm install test test/chartmuseum --version 3.1.0 --namespace test --set env.open.DISABLE_API=false"
-    check_output(cmd, shell=True).decode('utf-8')
+    resource_folder = f"{dname}/resources/cl-test"
+    if chartmuseum_tls_enabled:
+        cmd = f"kubectl apply -f {resource_folder}/ingress-nginx-controller.yaml"
+        check_output(cmd, shell=True).decode('utf-8')
+        time.sleep(10)
+
+        cmd = f"kubectl create secret -n test generic tls-secret --from-file=tls.key={resource_folder}/cl_usecase.key --from-file=tls.crt={resource_folder}/cl_usecase.crt"
+        check_output(cmd, shell=True).decode('utf-8')
+        time.sleep(10)
+
+        cmd = f"helm install test test/chartmuseum --version 3.1.0 --namespace test -f {resource_folder}/chartmuseum-override.yaml --set env.open.DISABLE_API=false"
+        check_output(cmd, shell=True).decode('utf-8')
+
+        ingress_controller_ip = subprocess.run("kubectl get services -n test | grep 'ingress-nginx-controller ' | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+        cmd = f"echo '{ingress_controller_ip} clusecase.com' | sudo tee -a /etc/hosts"
+        check_output(cmd, shell=True).decode('utf-8')
+
+    else:
+        cmd = "helm install test test/chartmuseum --version 3.1.0 --namespace test --set env.open.DISABLE_API=false"
+        check_output(cmd, shell=True).decode('utf-8')
+
     wait(lambda: is_chartmuseum_up(), sleep_seconds=10, timeout_seconds=60, waiting_for="chartmuseum to be ready")
 
     time.sleep(10)
-    chartmuseum_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
-    cmd = f"curl -X POST --data-binary @{dname}/resources/cl-test-helm-chart/oru-app-1.0.0.tgz http://{chartmuseum_url}/api/charts"
-    check_output(cmd, shell=True).decode('utf-8')
 
+    chartmuseum_url = ""
+    if chartmuseum_tls_enabled:
+        chartmuseum_url = "clusecase.com"
+    else:
+        chartmuseum_url = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
+
+    cmd = f"curl -k -X POST --data-binary @{resource_folder}/oru-app-1.0.0.tgz {protocol}://{chartmuseum_url}/api/charts"
+    logger.info("command: %s", cmd)
+    check_output(cmd, shell=True).decode('utf-8')
 
 def is_chartmuseum_up() -> bool:
     """Check if the chartmuseum is up."""
@@ -147,9 +181,9 @@ def test_cl_oru_app_deploy():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     logger.info("Upload tosca to commissioning")
     chartmuseum_ip = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
-    commissioning_payload = jinja_env().get_template("commission_k8s.json.j2").render(chartmuseumIp=chartmuseum_ip, chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name)
-    instance_payload = jinja_env().get_template("create_instance_k8s.json.j2").render(chartmuseumIp=chartmuseum_ip, chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name, instanceName=usecase_name)
+    commissioning_payload = jinja_env().get_template("commission_k8s.json.j2").render(chartmuseumIp="localhost", chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name)
+    instance_payload = jinja_env().get_template("create_instance_k8s.json.j2").render(chartmuseumIp="localhost", chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name, instanceName=usecase_name)
     assert clcommissioning_utils.create_instance(usecase_name, commissioning_payload, instance_payload) is True
 
-    logger.info("Check if oru-app is up")
-    wait(lambda: is_oru_app_up(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app to be up")
+    #logger.info("Check if oru-app is up")
+    #wait(lambda: is_oru_app_up(), sleep_seconds=5, timeout_seconds=60, waiting_for="Oru app to be up")
