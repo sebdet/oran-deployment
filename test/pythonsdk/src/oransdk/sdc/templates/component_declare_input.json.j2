@@ -1,0 +1,37 @@
+{
+  "componentInstanceInputsMap": {},
+  "componentInstanceProperties": {
+    "{{ component.unique_id }}": [
+      {
+        "constraints": null,
+        "defaultValue": null,
+        "description": "",
+        "name": "{{ property.name }}",
+        "origName": "{{ property.name }}",
+        "parentUniqueId": null,
+        "password": false,
+        "required": true,
+        "schema": {
+          "property": {}
+        },
+        "schemaType": null,
+        "type": "{{ property.property_type }}",
+        "uniqueId": "{{ property.unique_id }}",
+        {% if property.value is not none %}
+        "value":"{{ property.value }}",
+        {% else %}
+        "value":null,
+        {% endif %}
+        "definition": false,
+        "getInputValues": null,
+        "parentPropertyType": null,
+        "subPropertyInputPath": null,
+        "getPolicyValues": null,
+        "inputPath": null,
+        "metadata": null
+      }
+    ]
+  },
+  "groupProperties": {},
+  "policyProperties": {}
+}
