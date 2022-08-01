@@ -28,7 +28,7 @@ from time import sleep
 import onapsdk.constants as const
 from onapsdk.exceptions import APIError, ResourceNotFound
 from onapsdk.onap_service import OnapService as Onap
-from onapsdk.sdc.properties import ParameterError
+from onapsdk.sdc.properties import Input, NestedInput, ParameterError
 
 from onapsdk.sdc.vf import Vf
 from onapsdk.sdc.vsp import Vsp
@@ -37,15 +37,14 @@ from onapsdk.sdc.vendor import Vendor
 from oransdk.sdc.category_management import OranServiceCategory
 from oransdk.sdc.service import OranService
 
-SUFFIX = ''
 class SdcTemplate(Onap):
     """Onap Sdc Template class."""
 
     def create_service_category(self, category_names) -> None:
-        """
-           Create service category by names.
-           Args:
-                category_names : The list of category names
+        """Create service category by names.
+
+        Args:
+            category_names : The list of category names
         """
         for cn in category_names:
             self._logger.info('creating service category [%s]', cn)
@@ -53,12 +52,12 @@ class SdcTemplate(Onap):
 
 
     def create_vendor(self, vendor_name) -> dict:
-        """
-           Create Vendor by names.
-           Args:
-                vendor_name : The vendor names
-           Returns:
-                the vendor
+        """Create Vendor by names.
+
+        Args:
+            vendor_name : The vendor names
+        Returns:
+            the vendor
         """
         vendor = Vendor(vendor_name)
         vendor.create()
@@ -70,13 +69,14 @@ class SdcTemplate(Onap):
         return vendor
 
     def create_vsp(self, name, vendor, onboard=False) -> dict:
-        """
-           Create vsp.
-           Args:
-                name : The vsp name
-                vendor : The vendor name
-           Returns:
-                the vsp
+        """Create vsp.
+
+        Args:
+            name : The vsp name
+            vendor : The vendor name
+            onboard : The onboard flag
+        Returns:
+            the vsp
         """
         self._logger.info("creating vsp: [%s:%s]", name, vendor)
         retry = 0
@@ -102,14 +102,16 @@ class SdcTemplate(Onap):
 
 
     def create_vf(self, name, category, subcategory, vendor, onboard=False) -> dict:
-        """
-           Create vf.
-           Args:
-                name : The vf name
-                category :  The category name
-                vendor : The vendor name
-           Returns:
-                the vf
+        """Create vf.
+
+        Args:
+            name : The vf name
+            category :  The category name
+            subcategory : The subcategory name
+            vendor : The vendor name
+            onboard : The onboard flag
+        Returns:
+            the vf
         """
         self._logger.error("create vf: [%s:%s]", name, category)
 
@@ -126,10 +128,10 @@ class SdcTemplate(Onap):
 
 
     def onboard_vf(self, vf) -> None:
-        """
-           Onboard the vf.
-           Args:
-                vf : The vf to onboard
+        """Onboard the vf.
+
+        Args:
+            vf : The vf to onboard
         """
         retry = 0
         done = False
@@ -149,18 +151,18 @@ class SdcTemplate(Onap):
         self._logger.info("onboarded vf: [%s]", vf.name)
 
 
-    def create_service(self, name, category, vnfs=None, properties=None, role=None, service_type=None) -> dict:
-        """
-           Create service.
-           Args:
-                name : The service name
-                category :  The category name
-                vnfs : The list of vnfs
-                properties : the list of properties
-                role : the role value
-                service_type : the service type
-           Returns:
-                the created service
+    def create_service(self, name, category, vnfs=None, properties=None, inputs=None, role=None, service_type=None) -> dict:
+        """Create service.
+
+        Args:
+             name : The service name
+             category :  The category name
+             vnfs : The list of vnfs
+             properties : the list of properties
+             role : the role value
+             service_type : the service type
+        Returns:
+             the created service
         """
         self._logger.info("create service: [%s:%s]", name, category)
         retry = 0
@@ -171,7 +173,7 @@ class SdcTemplate(Onap):
         if properties is None:
             properties = []
 
-        srvc = OranService(name=name, category=category, properties=properties, role=role, service_type=service_type)
+        srvc = OranService(name=name, category=category, properties=properties, inputs=inputs, role=role, service_type=service_type)
         srvc.create()
 
         while not done:
@@ -191,18 +193,20 @@ class SdcTemplate(Onap):
 
         return srvc
 
-    def create_service_1(self, name, category, vnfs=None, properties=None, complex_input=None, role=None, service_type=None) -> dict:
-        """
-            Create slicing profile service.
-            Args:
-                 name : The service name
-                 category :  The category name
-                 vnfs : The list of vnfs
-                 properties : the list of properties
-                 role : the role value
-                 service_type : the service type
-            Returns:
-                 the created service
+    def create_service_1(self, name, category, vnfs=None, properties=None, inputs=None, complex_input=None, role=None, service_type=None) -> dict:
+        """Create slicing profile service.
+
+        Args:
+             name : The service name
+             category :  The category name
+             vnfs : The list of vnfs
+             properties : the list of properties
+             inputs : the list of inputs
+             complex_input : the predefined property type, that should be declared as input
+             role : the role value
+             service_type : the service type
+        Returns:
+             the created service
         """
         self._logger.info("create service: [%s:%s]", name, category)
         retry = 0
@@ -211,14 +215,10 @@ class SdcTemplate(Onap):
         if vnfs is None:
             vnfs = []
         if properties is None:
-            self._logger.info("properties is none")
             properties = []
 
-        srvc = OranService(name=name, category=category, properties=properties, role=role, service_type=service_type)
+        srvc = OranService(name=name, category=category, inputs=inputs, complex_input=complex_input, properties=properties, role=role, service_type=service_type)
         srvc.create()
-
-        if complex_input is not None:
-            srvc.declare_complex_input(complex_input)
 
         while not done:
             try:
@@ -226,7 +226,7 @@ class SdcTemplate(Onap):
                     for vnf in vnfs:
                         srvc.add_resource(vnf)
                         for c in srvc.components:
-                            self.set_property_input_slice_ar(c)
+                            self.set_property_input_slice_ar(vnf, srvc, c)
 
                 if srvc.status != const.DISTRIBUTED:
                     srvc.onboard()
@@ -239,39 +239,44 @@ class SdcTemplate(Onap):
 
         return srvc
 
-    def set_property_input_slice_ar(self, component) -> None:
-        """
-            Get component property.
-            Args:
-                 component : The component
-                 name :  The property name
-            Returns:
-                 the property
+    def set_property_input_slice_ar(self, vnf, service, component) -> None:
+        """Get component property.
+
+        Args:
+            vnf: The vnf of the input
+            service : The service
+            component :  The component
         """
         self._logger.info("set property input slice ar: %s", component.name)
-        if component.name == 'Slice_AR 0':
+        if component.name.startswith("Slice_AR"):
             self._logger.info("get component Slice_AR 0")
             cp = self.get_component_property(component, 'allottedresource0_providing_service_invariant_uuid')
             if cp:
-                self._logger.error('setting value on property [%s]', cp)
-                self.declare_resource_input(cp)
+                self._logger.info('setting value on property [%s]', cp)
+                service.declare_input(NestedInput(sdc_resource=vnf, input_obj=Input(unique_id="123",
+                                                                                    input_type=cp.property_type,
+                                                                                    name=cp.name,
+                                                                                    sdc_resource=vnf)))
             else:
                 raise ParameterError('no property providing_service_invariant_uuid found')
 
             cp = self.get_component_property(component, 'allottedresource0_providing_service_uuid')
             if cp:
-                self.declare_resource_input(cp)
+                service.declare_input(NestedInput(sdc_resource=vnf, input_obj=Input(unique_id="123",
+                                                                                    input_type=cp.property_type,
+                                                                                    name=cp.name,
+                                                                                    sdc_resource=vnf)))
             else:
                 raise ParameterError('no property providing_service_uuid found')
 
     def get_component_property(self, component, name) -> dict:
-        """
-            Get component property.
-            Args:
-                 component : The component
-                 name :  The property name
-            Returns:
-                 the property
+        """Get component property.
+
+        Args:
+             component : The component
+             name :  The property name
+        Returns:
+             the property
         """
         prop = None
         try:

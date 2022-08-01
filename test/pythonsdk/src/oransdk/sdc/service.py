@@ -23,17 +23,51 @@
 ###
 """SDC Service module."""
 
-from typing import Iterator
-import os
+from typing import Dict, Iterator, List, Optional, Union
 from onapsdk.sdc.component import Component
-from onapsdk.sdc.properties import Property
-from onapsdk.sdc.service import Service
+from onapsdk.sdc.properties import Property, NestedInput
+from onapsdk.sdc.service import Service, ServiceInstantiationType
 from onapsdk.sdc.sdc_resource import SdcResource
 from oransdk.utils.jinja import jinja_env
 
 
 class OranService(Service):  # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """ONAP Service Object used for SDC operations."""
+
+    def __init__(self, name: str = None, version: str = None, sdc_values: Dict[str, str] = None,  # pylint: disable=too-many-arguments
+                 resources: List[SdcResource] = None, properties: List[Property] = None, complex_input: Property = None,
+                 inputs: List[Union[Property, NestedInput]] = None,
+                 instantiation_type: Optional[ServiceInstantiationType] = \
+                     None,
+                 category: str = None, role: str = "", function: str = "", service_type: str = ""):
+        """
+        Initialize service object.
+
+        Args:
+            name (str, optional): the name of the service
+            version (str, optional): the version of the service
+            sdc_values (Dict[str, str], optional): dictionary of values
+                returned by SDC
+            resources (List[SdcResource], optional): list of SDC resources
+            properties (List[Property], optional): list of properties to add to service.
+                None by default.
+            inputs (List[Union[Property, NestedInput]], optional): list of inputs
+                to declare for service. It can be both Property or NestedInput object.
+                None by default.
+            instantiation_type (ServiceInstantiationType, optional): service instantiation
+                type. ServiceInstantiationType.A_LA_CARTE by default
+            category (str, optional): service category name
+            role (str, optional): service role
+            function (str, optional): service function. Empty by default
+            service_type (str, optional): service type. Empty by default
+            complex_input (List[Property], optional): internal defined property type, that needs to be declared as input.
+                None by default.
+
+        """
+        super().__init__(name=name, sdc_values=sdc_values, version=version, properties=properties,
+                         inputs=inputs, category=category, resources=resources,
+                         instantiation_type=instantiation_type, role=role, function=function, service_type=service_type)
+        self.complex_input = complex_input
 
     @property
     def components(self) -> Iterator[Component]:
@@ -80,18 +114,42 @@ class OranService(Service):  # pylint: disable=too-many-instance-attributes, too
             property_obj (Property): Property to declare input
 
         """
-        self._logger.debug("Declare input for SliceProfile property")
-        self.send_message_json("POST",
-                               f"Declare new input for {property_obj.name} property",
-                               f"{self.resource_inputs_url}/create/inputs",
-                               data=jinja_env().get_template(\
-                                   "sdc_resource_add_complex_input.json.j2").\
+        self._logger.debug("Declare input for Complex property")
+        if property_obj.property_type == "org.openecomp.datatypes.SliceProfile":
+            self._logger.debug("Declare input for SliceProfile")
+            self.send_message_json("POST",
+                                   f"Declare new input for {property_obj.name} property",
+                                   f"{self.resource_inputs_url}/create/inputs",
+                                   data=jinja_env().get_template(\
+                                   "sdc_add_slice_profile_input.json.j2").\
                                        render(\
                                            sdc_resource=self,
                                            property=property_obj))
+        elif property_obj.property_type == "org.openecomp.datatypes.ServiceProfile":
+            self._logger.debug("Declare input for ServiceProfile")
+            self.send_message_json("POST",
+                                   f"Declare new input for {property_obj.name} property",
+                                   f"{self.resource_inputs_url}/create/inputs",
+                                   data=jinja_env().get_template(\
+                                       "sdc_add_service_profile_input.json.j2").\
+                                           render(\
+                                               sdc_resource=self,
+                                               property=property_obj))
+        elif property_obj.property_type == "org.openecomp.datatypes.CSProperties":
+            self._logger.debug("Declare input for CSProperties")
+            self.send_message_json("POST",
+                                   f"Declare new input for {property_obj.name} property",
+                                   f"{self.resource_inputs_url}/create/inputs",
+                                   data=jinja_env().get_template(\
+                                       "sdc_add_cs_properties_input.json.j2").\
+                                            render(\
+                                                sdc_resource=self,
+                                                property=property_obj))
+        else:
+            self._logger.error("Data type %s not supported", property_obj.property_type)
 
     def declare_resource_input(self,
-                      input_to_declare: Property) -> None:
+                               input_to_declare: Property) -> None:
         """Declare input for given property, nested input or component property object.
 
         Call SDC FE API to declare input for given property.
@@ -105,10 +163,25 @@ class OranService(Service):  # pylint: disable=too-many-instance-attributes, too
 
         """
         self.send_message("POST",
-                              f"Declare new input for {input_to_declare.name} property",
-                              f"{self.resource_inputs_url}/create/inputs",
-                              data=jinja_env().get_template(\
-                                  "component_declare_input.json.j2").\
-                                      render(\
-                                          component=input_to_declare.component,
-                                          property=input_to_declare))
+                          f"Declare new input for {input_to_declare.name} property",
+                          f"{self.resource_inputs_url}/create/inputs",
+                          data=jinja_env().get_template(\
+                              "component_declare_input.json.j2").\
+                                  render(\
+                                      component=input_to_declare.component,
+                                      property=input_to_declare))
+
+    def declare_resources_and_properties(self) -> None:
+        """Delcare resources and properties.
+
+        It declares also inputs.
+
+        """
+        for resource in self.resources:
+            self.add_resource(resource)
+        for property_to_add in self._properties_to_add:
+            self.add_property(property_to_add)
+        for input_to_add in self._inputs_to_add:
+            self.declare_input(input_to_add)
+        if self.complex_input is not None:
+            self.declare_complex_input(self.complex_input)

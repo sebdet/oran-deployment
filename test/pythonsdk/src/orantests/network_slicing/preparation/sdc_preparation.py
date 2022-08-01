@@ -33,7 +33,7 @@ from onapsdk.sdc.vf import Vf
 import onapsdk.constants as const
 from onapsdk.configuration import settings
 from onapsdk.exceptions import ResourceNotFound
-from onapsdk.sdc.properties import Input, Property, ParameterError, NestedInput
+from onapsdk.sdc.properties import Property, ParameterError
 from onapsdk.sdc.service import Service
 from oransdk.sdc.sdc import SdcTemplate
 
@@ -45,6 +45,7 @@ os.chdir(dname)
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("####################### Start SDC Preparation")
+SUFFIX = ''
 
 class SdcPreparation():
     """Can be used to prepare SDC for Network Slicing usecase option2."""
@@ -53,44 +54,44 @@ class SdcPreparation():
     def prepare_sdc(cls):
         """Create SDC templates."""
         sdc = SdcTemplate()
-        vendor = sdc.create_vendor('aaaa')
+        vendor = sdc.create_vendor('ONAP')
         sdc.create_vsp('test1', vendor)
 
         # 0.create custom categories
-        #logger.info("####################### create custom categories")
-        #sdc.create_service_category(['CST', 'ServiceProfile', 'AN SliceProfile', 'CN SliceProfile', 'TN SliceProfile',
-        #                             'NST', 'TN BH NSST', 'TN Network Requirement', 'AN NF NSST', 'CN NSST', 'Allotted Resource'])
+        logger.info("####################### create custom categories")
+        sdc.create_service_category(['CST', 'ServiceProfile', 'AN SliceProfile', 'CN SliceProfile', 'TN SliceProfile',
+                                     'NST', 'TN BH NSST', 'TN Network Requirement', 'AN NF NSST', 'CN NSST', 'Allotted Resource'])
 
 
-        #vf_tn_bh_ar = cls.create_tn_resources(sdc, vendor)
-        #vf_embban_nf_ar = cls.create_an_resources(sdc, vendor)
-        #vf_embbcn_external_ar = cls.create_cn_resources(sdc, vendor)
-        #cls.create_nst(sdc, vf_embbcn_external_ar, vf_embban_nf_ar, vf_tn_bh_ar)
+        vf_tn_bh_ar = cls.create_tn_resources(sdc, vendor)
+        vf_embban_nf_ar = cls.create_an_resources(sdc, vendor)
+        vf_embbcn_external_ar = cls.create_cn_resources(sdc, vendor)
+        cls.create_nst(sdc, vf_embbcn_external_ar, vf_embban_nf_ar, vf_tn_bh_ar)
 
         vf_slice_ar = cls.create_slice_ar(sdc, vendor)
 
         srv_slice_profile_an_o2 = cls.create_an_slice_profiles(sdc, vf_slice_ar)
-        #srv_slice_profile_tn = cls.create_tn_slice_profiles(sdc, vf_slice_ar)
-        #srv_slice_profile_cn = cls.create_cn_slice_profiles(sdc, vf_slice_ar)
-
-        #srv_profile_o2 = cls.create_service_profile(sdc, vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2)
-        #cls.create_cst(sdc, srv_profile_o2)
+        srv_slice_profile_tn = cls.create_tn_slice_profiles(sdc, vf_slice_ar)
+        srv_slice_profile_cn = cls.create_cn_slice_profiles(sdc, vf_slice_ar)
+        srv_profile_o2 = cls.create_service_profile(sdc, vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2)
+        cls.create_cst(sdc, srv_profile_o2)
 
     @classmethod
     def create_tn_resources(cls, sdc, vendor) -> dict:
         """Create TN related resources."""
         # 1.Create TN_Network_Requirement Service
         logger.info("####################### create TN_Network_Requirement Service")
-        props = [Property('ConnectionLink', 'string', value='{\\"get_input\\":\\"ConnectionLink\\"}'),
+        props = [Property('ConnectionLink', 'string'),
                  Property('jitter', 'string', value='10'),
                  Property('latency', 'integer', value=10),
                  Property('maxBandwith', 'integer', value=1000)]
 
-        srv_tn_network = sdc.create_service('TN_Network_Requirement', 'TN Network Requirement', properties=props)
+        srv_tn_network = sdc.create_service(cls.updated_name('TN_Network_Requirement'), 'TN Network Requirement', properties=props,
+                                            inputs=[Property('ConnectionLink', 'string')])
 
         # 2.Create TN_Network_Req_AR
         logger.info("####################### create TN_Network_Req_AR")
-        vf = sdc.create_vf('TN_Network_Req_AR', 'Allotted Resource', 'Allotted Resource', vendor)
+        vf = sdc.create_vf(cls.updated_name('TN_Network_Req_AR'), 'Allotted Resource', 'Allotted Resource', vendor)
         for c in vf.components:
             if c.name == 'AllottedResource 0':
                 c.get_property('providing_service_invariant_uuid').value = srv_tn_network.unique_uuid
@@ -106,12 +107,12 @@ class SdcPreparation():
                  Property('latency', 'integer', value=10),
                  Property('maxBandwith', 'integer', value=1000)]
 
-        srv_tn_bh = sdc.create_service('Tn_ONAP_internal_BH', 'TN BH NSST', vnfs=[vf], role='ONAP_internal',
-                                       properties=props)
+        srv_tn_bh = sdc.create_service(cls.updated_name('Tn_ONAP_internal_BH'), 'TN BH NSST', vnfs=[vf], role='huawei',
+                                       service_type='ONAP_internal', properties=props)
 
         # 6.Create Tn_BH_AR
         logger.info("####################### Create Tn_BH_AR")
-        vf_tn_bh_ar = sdc.create_vf('Tn_BH_AR', 'Allotted Resource', 'Allotted Resource', vendor)
+        vf_tn_bh_ar = sdc.create_vf(cls.updated_name('Tn_BH_AR'), 'Allotted Resource', 'Allotted Resource', vendor)
         for c in vf_tn_bh_ar.components:
             if c.name == 'AllottedResource 0':
                 c.get_property('providing_service_invariant_uuid').value = srv_tn_bh.unique_uuid
@@ -127,11 +128,11 @@ class SdcPreparation():
         # 4.Create EmbbAn_NF Service Template
         logger.info("####################### create EmbbAn_NF Service Template")
         props = [Property('anNSSCap', 'org.openecomp.datatypes.NSSCapabilities')]
-        srv_embban_nf = sdc.create_service('EmbbAn_NF', 'AN NF NSST', role='huawei', service_type='embb', properties=props)
+        srv_embban_nf = sdc.create_service(cls.updated_name('EmbbAn_NF'), 'AN NF NSST', role='huawei', service_type='embb', properties=props)
 
         # 7.Create EmbbAn_NF_AR
         logger.info("####################### create EmbbAn_NF_AR")
-        vf_embban_nf_ar = sdc.create_vf('EmbbAn_NF_AR', 'Allotted Resource', 'Allotted Resource', vendor)
+        vf_embban_nf_ar = sdc.create_vf(cls.updated_name('EmbbAn_NF_AR'), 'Allotted Resource', 'Allotted Resource', vendor)
         for c in vf_embban_nf_ar.components:
             if c.name == 'AllottedResource 0':
                 c.get_property('providing_service_invariant_uuid').value = srv_embban_nf.unique_uuid
@@ -146,12 +147,17 @@ class SdcPreparation():
         """Create CN related resources."""
         # 5.Create EmbbCn_External Service Template
         logger.info("####################### create EmbbCn_External Service Template")
-        srv_embbcn = Service(name='EmbbCn_External',
+        srv_embbcn = Service(name=cls.updated_name('EmbbCn_External'),
                              category='CN NSST',
                              role='huawei',
                              service_type='embb',
-                             properties=[Property('aname', 'org.openecomp.datatypes.NSSCapabilities',
-                                                  value="[{\\\"latency\\\":20,\\\"maxNumberofUEs\\\":10000,\\\"resourceSharingLevel\\\":\\\"Shared\\\",\\\"sST\\\":\\\"eMBB\\\",\\\"activityFactor\\\":30,\\\"areaTrafficCapDL\\\":800,\\\"areaTrafficCapUL\\\":800}]")])
+                             properties=[Property('cnCap', 'org.openecomp.datatypes.NSSCapabilities',
+                                                  value="{\\\"latency\\\":20,\\\"maxNumberofUEs\\\":10000,"
+                                                        + "\\\"resourceSharingLevel\\\":\\\"Shared\\\",\\\"sST\\\":\\\"eMBB\\\","
+                                                        + "\\\"activityFactor\\\":30,\\\"areaTrafficCapDL\\\":800,"
+                                                        + "\\\"areaTrafficCapUL\\\":800,\\\"expDataRateDL\\\":1000,"
+                                                        + "\\\"survivalTime\\\":10,\\\"uEMobilityLevel\\\":\\\"stationary\\\","
+                                                        + "\\\"expDataRateUL\\\":1000,\\\"pLMNIdList\\\":\\\"39-00\\\"}")])
 
         srv_embbcn.create()
 
@@ -177,7 +183,7 @@ class SdcPreparation():
 
         # 8.EmbbCn_External_AR
         logger.info("####################### create EmbbCn_External_AR")
-        vf_embbcn_external_ar = sdc.create_vf('EmbbCn_External_AR', 'Allotted Resource', 'Allotted Resource', vendor)
+        vf_embbcn_external_ar = sdc.create_vf(cls.updated_name('EmbbCn_External_AR'), 'Allotted Resource', 'Allotted Resource', vendor)
         for c in vf_embbcn_external_ar.components:
             if c.name == 'AllottedResource 0':
                 c.get_property('providing_service_invariant_uuid').value = srv_embbcn.unique_uuid
@@ -207,7 +213,7 @@ class SdcPreparation():
                  Property('uEMobilityLevel', 'string', value='stationary'),
                  Property('pLMNIdList', 'string', value='39-00'),
                  Property('reliability', 'string', value='99%')]
-        sdc.create_service('EmbbNst_O2',
+        sdc.create_service(cls.updated_name('EmbbNst_O2'),
                            'NST',
                            role='option2',
                            vnfs=[vf_embbcn_external_ar, vf_embban_nf_ar, vf_tn_bh_ar],
@@ -220,15 +226,13 @@ class SdcPreparation():
         logger.info("####################### create Slice_AR")
 
         vfc = Vfc('AllottedResource')
-        vf_slice_ar = Vf(name='Slice_AR', category='Allotted Resource', subcategory='Allotted Resource', vendor=vendor)
+        vf_slice_ar = Vf(name=cls.updated_name('Slice_AR'), category='Allotted Resource', subcategory='Allotted Resource', vendor=vendor)
         vf_slice_ar.create()
         if vf_slice_ar.status == const.DRAFT:
             vf_slice_ar.add_resource(vfc)
 
-        component_uid = None
         for c in vf_slice_ar.components:
             if c.name == 'AllottedResource 0':
-                component_uid = c.actual_component_uid
                 cp = sdc.get_component_property(c, 'providing_service_invariant_uuid')
                 if cp:
                     logger.info('declare input for property [%s]', cp)
@@ -253,18 +257,14 @@ class SdcPreparation():
         """Create AN Slice profile."""
         # 11.Create SliceProfile_AN_O2 Service Template
         logger.info("####################### create SliceProfile_AN_O2 Service Template")
-        #slice_profile = "[{\\\"activityFactor\\\":20,\\\"areaTrafficCapDL\\\":100,\\\"areaTrafficCapUL\\\":100,\\\"cSAvailabilityTarget\\\":\\\"test\\\",\\\"cSRealibilityMeanTime\\\":100}]"
-        slice_profile = "[{\\\"activityFactor\\\":20}]"
-
-        an_slice_profile = [Property('ipAddress', 'string', value='{\\"get_input\\":\\"ipAddress\\"}'),
-                            Property('logicInterfaceId', 'string', value='{\\"get_input\\":\\"logicInterfaceId\\"}'),
-                            Property('nextHopInfo', 'string', value='{\\"get_input\\":\\"nextHopInfo\\"}')]
-        complex_property =  Property('anSP', 'org.openecomp.datatypes.SliceProfile', value=slice_profile)
-
-
-        srv_slice_profile_an_o2 = sdc.create_service_1('SliceProfile_AN',
+        an_slice_profile = [Property('ipAddress', 'string'),
+                            Property('logicInterfaceId', 'string'),
+                            Property('nextHopInfo', 'string')]
+        complex_property = Property('anSP', 'org.openecomp.datatypes.SliceProfile')
+        srv_slice_profile_an_o2 = sdc.create_service_1(cls.updated_name('SliceProfile_AN_O2'),
                                                        'AN SliceProfile',
                                                        properties=an_slice_profile,
+                                                       inputs=an_slice_profile,
                                                        complex_input=complex_property,
                                                        vnfs=[vf_slice_ar])
         return srv_slice_profile_an_o2
@@ -274,16 +274,17 @@ class SdcPreparation():
         """Create TN Slice profile."""
         # 12.Create SliceProfile_TN Service Template
         logger.info('####################### create service SliceProfile_TN')
-        tn_slice_profile = [Property('jitter', 'string', value='{\\"get_input\\":\\"jitter\\"}'),
-                            Property('latency', 'integer', value='{\\"get_input\\":\\"latency\\"}'),
-                            Property('pLMNIdList', 'string', value='{\\"get_input\\":\\"pLMNIdList\\"}'),
-                            Property('sNSSAI', 'string', 'value={\\"get_input\\":\\"sNSSAI\\"}'),
-                            Property('sST', 'integer', value='{\\"get_input\\":\\"sST\\"}'),
-                            Property('maxBandwidth', 'integer', value='{\\"get_input\\":\\"maxBandwidth\\"}')]
+        tn_slice_profile = [Property('jitter', 'string'),
+                            Property('latency', 'integer'),
+                            Property('pLMNIdList', 'string'),
+                            Property('sNSSAI', 'string'),
+                            Property('sST', 'integer'),
+                            Property('maxBandwidth', 'integer')]
 
-        srv_slice_profile_tn = sdc.create_service_1('SliceProfile_TN',
+        srv_slice_profile_tn = sdc.create_service_1(cls.updated_name('SliceProfile_TN'),
                                                     'TN SliceProfile',
                                                     vnfs=[vf_slice_ar],
+                                                    inputs=tn_slice_profile,
                                                     properties=tn_slice_profile)
         return srv_slice_profile_tn
 
@@ -292,12 +293,13 @@ class SdcPreparation():
         """Create CN Slice profile."""
         # 13.Create SliceProfile_CN Service Template
         logger.info('####################### create slice SliceProfile_CN')
-        cn_slice_profile = [Property('ipAddress', 'string', value='{\\"get_input\\":\\"ipAddress\\"}'),
-                            Property('logicInterfaceId', 'string', value='{\\"get_input\\":\\"logicInterfaceId\\"}'),
-                            Property('nextHopInfo', 'string', value='{\\"get_input\\":\\"nextHopInfo\\"}')]
-        srv_slice_profile_cn = sdc.create_service_1('SliceProfile_CN',
+        cn_slice_profile = [Property('ipAddress', 'string'),
+                            Property('logicInterfaceId', 'string'),
+                            Property('nextHopInfo', 'string')]
+        srv_slice_profile_cn = sdc.create_service_1(cls.updated_name('SliceProfile_CN'),
                                                     'CN SliceProfile',
                                                     vnfs=[vf_slice_ar],
+                                                    inputs=cn_slice_profile,
                                                     properties=cn_slice_profile)
         return srv_slice_profile_cn
 
@@ -306,21 +308,11 @@ class SdcPreparation():
         """Create Slice profile."""
         # 14.Create ServiceProfile_O2 Service Template
         logger.info('####################### create service ServiceProfile O2')
-        service_profile = '[{' \
-                            '\\"resourceSharingLevel\\":{\\"get_input\\":\\"spProp_resourceSharingLevel\\"},' \
-                            '\\"sNSSAI\\":{\\"get_input\\":\\"spProp_sNSSAI\\"},' \
-                            '\\"coverageAreaTAList\\":{\\"get_input\\":\\"spProp_coverageAreaTAList\\"},' \
-                            '\\"sST\\":{\\"get_input\\":\\"spProp_sST\\"},' \
-                            '\\"dLThptPerUE\\":{\\"get_input\\":\\"spProp_dLThptPerUE\\"},' \
-                            '\\"uEMobilityLevel\\":{\\"get_input\\":\\"spProp_uEMobilityLevel\\"},'\
-                            '\\"latency\\":{\\"get_input\\":\\"spProp_latency\\"},' \
-                            '\\"uLThptPerUE\\":{\\"get_input\\":\\"spProp_uLThptPerUE\\"},' \
-                            '\\"maxNumberofUEs\\":{\\"get_input\\":\\"spProp_maxNumberofUEs\\"}' \
-                            '}]'
-        service_props = [Property('spProp', 'org.openecomp.datatypes.ServiceProfile', value=service_profile)]
-        srv_profile_o2 = sdc.create_service_1('ServiceProfile_O2',
+        service_props = Property('spProp', 'org.openecomp.datatypes.ServiceProfile')
+        srv_profile_o2 = sdc.create_service_1(cls.updated_name('ServiceProfile_O2'),
                                               'ServiceProfile',
-                                              properties=service_props,
+                                              properties=[service_props],
+                                              complex_input=service_props,
                                               vnfs=[vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2],
                                               role='option2')
         return srv_profile_o2
@@ -330,20 +322,17 @@ class SdcPreparation():
         """Create CST."""
         # 15.Create CST_O2 Service Template
         logger.info('####################### create service CST O2')
-        props = '[{' \
-                         '\\"coverageAreaList\\":{\\"get_input\\":\\"csProp_coverageAreaList\\"},' \
-                        '\\"expDataRateDL\\":{\\"get_input\\":\\"csProp_expDataRateDL\\"},' \
-                        '\\"expDataRateUL\\":{\\"get_input\\":\\"csProp_expDataRateUL\\"},' \
-                        '\\"latency\\":{\\"get_input\\":\\"csProp_latency\\"},' \
-                        '\\"maxNumberofUEs\\":{\\"get_input\\":\\"csProp_maxNumberofEUs\\"},' \
-                        '\\"resourceSharingLevel\\":{\\"get_input\\":\\"csProp_resourceSharingLevel\\"},' \
-                        '\\"uEMobilityLevel\\":{\\"get_input\\":\\"csProp_uEMobilityLevel\\"},' \
-                        '\\"useInterval\\":{\\"get_input\\":\\"csProp_useInterval\\"},' \
-                '}]'
-        srv = sdc.create_service_1('CST_O2',
+        cs_prop = Property('csProp', 'org.openecomp.datatypes.CSProperties')
+        srv = sdc.create_service_1(cls.updated_name('CST_O2'),
                                    'CST',
                                    role='option2',
                                    service_type='embb',
                                    vnfs=[srv_profile_o2],
-                                   properties=[Property('csProp', 'org.openecomp.datatypes.CSProperties', value=props)])
+                                   properties=[cs_prop],
+                                   complex_input=cs_prop)
         return srv
+
+    @classmethod
+    def updated_name(cls, name) -> str:
+        """Adding suffix for the name."""
+        return name + SUFFIX

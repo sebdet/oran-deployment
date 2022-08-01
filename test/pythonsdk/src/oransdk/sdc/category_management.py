@@ -49,36 +49,3 @@ class OranServiceCategory(ServiceCategory):
                               headers=cls.headers())
         category_obj.exists()
         return category_obj
-
-    @classmethod
-    def get(cls, name: str, subcategory: str = None) -> "ResourceCategory":  # pylint: disable=arguments-differ
-        """Get resource category with given name.
-
-        It returns resource category with all subcategories by default. You can
-            get resource category with only one subcategory if you provide it's
-            name as `subcategory` parameter.
-
-        Args:
-            name (str): Resource category name.
-            subcategory (str, optional): Name of subcategory. Defaults to None.
-
-        Raises:
-            ResourceNotFound: Subcategory with given name does not exist
-
-        Returns:
-            BaseCategory: BaseCategory instance
-
-        """
-        self._logger.error("resource is ResourceCategory: %s:%s", name, subcategory)
-        category_obj: "ResourceCategory" = super().get(name=name)
-        if not subcategory:
-            self._logger.error("No subcategory")
-            return category_obj
-        filtered_subcategories: Dict[str, str] = list(filter(lambda x: x["name"] == subcategory,
-                                                             category_obj.subcategories))
-        if not filtered_subcategories:
-            self._logger.error("No filtered_subcategories")
-            raise ResourceNotFound(f"Subcategory {subcategory} does not exist.")
-        self._logger.error("category_obj: %s:%s", category_obj, filtered_subcategories)
-        category_obj.subcategories = filtered_subcategories
-        return category_obj
