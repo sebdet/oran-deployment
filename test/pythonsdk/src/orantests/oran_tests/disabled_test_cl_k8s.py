@@ -58,7 +58,7 @@ def setup_simulators():
     """Prepare the test environment before the executing the tests."""
     logger.info("Test class setup for Closed Loop tests")
 
-    protocol = "http"
+    #protocol = "http"
     #if chartmuseum_tls_enabled:
     #    protocol = "https"
     #deploy_chartmuseum(protocol)
@@ -180,7 +180,7 @@ def is_oru_app_down() -> bool:
 def test_cl_oru_app_deploy():
     """The Closed Loop O-RU Fronthaul Recovery usecase Apex version."""
     logger.info("Upload tosca to commissioning")
-    chartmuseum_ip = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
+    #chartmuseum_ip = subprocess.run("kubectl get services -n test | grep test-chartmuseum | awk '{print $3}'", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()+":8080"
     commissioning_payload = jinja_env().get_template("commission_k8s.json.j2").render(chartmuseumIp="localhost", chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name)
     instance_payload = jinja_env().get_template("create_instance_k8s.json.j2").render(chartmuseumIp="localhost", chartmuseumPort=chartmuseum_port, chartVersion=chart_version, chartName=chart_name, releaseName=release_name, instanceName=usecase_name)
     assert clcommissioning_utils.create_instance(usecase_name, commissioning_payload, instance_payload) is True

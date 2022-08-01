@@ -151,13 +151,13 @@ class SdcPreparation():
                              category='CN NSST',
                              role='huawei',
                              service_type='embb',
-                             properties=[Property('cnCap', 'org.openecomp.datatypes.NSSCapabilities',
-                                                  value="{\\\"latency\\\":20,\\\"maxNumberofUEs\\\":10000,"
-                                                        + "\\\"resourceSharingLevel\\\":\\\"Shared\\\",\\\"sST\\\":\\\"eMBB\\\","
-                                                        + "\\\"activityFactor\\\":30,\\\"areaTrafficCapDL\\\":800,"
-                                                        + "\\\"areaTrafficCapUL\\\":800,\\\"expDataRateDL\\\":1000,"
-                                                        + "\\\"survivalTime\\\":10,\\\"uEMobilityLevel\\\":\\\"stationary\\\","
-                                                        + "\\\"expDataRateUL\\\":1000,\\\"pLMNIdList\\\":\\\"39-00\\\"}")])
+                             properties=[Property('cnCap', 'org.openecomp.datatypes.NSSCapabilities',\
+                                                  value="{\\\"latency\\\":20,\\\"maxNumberofUEs\\\":10000,\
+                                                          \\\"resourceSharingLevel\\\":\\\"Shared\\\",\\\"sST\\\":\\\"eMBB\\\",\
+                                                          \\\"activityFactor\\\":30,\\\"areaTrafficCapDL\\\":800,\
+                                                          \\\"areaTrafficCapUL\\\":800,\\\"expDataRateDL\\\":1000,\
+                                                          \\\"survivalTime\\\":10,\\\"uEMobilityLevel\\\":\\\"stationary\\\",\
+                                                          \\\"expDataRateUL\\\":1000,\\\"pLMNIdList\\\":\\\"39-00\\\"}")])
 
         srv_embbcn.create()
 
