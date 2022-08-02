@@ -107,8 +107,8 @@ class SdcPreparation():
                  Property('latency', 'integer', value=10),
                  Property('maxBandwith', 'integer', value=1000)]
 
-        srv_tn_bh = sdc.create_service(cls.updated_name('Tn_ONAP_internal_BH'), 'TN BH NSST', vnfs=[vf], role='huawei',
-                                       service_type='ONAP_internal', properties=props)
+        srv_tn_bh = sdc.create_service(cls.updated_name('Tn_ONAP_internal_BH'), 'TN BH NSST', vnfs=[vf],
+                                       role='ONAP_internal', properties=props)
 
         # 6.Create Tn_BH_AR
         logger.info("####################### Create Tn_BH_AR")

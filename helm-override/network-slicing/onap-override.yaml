@@ -58,7 +58,7 @@ global:
 # to customize the ONAP deployment.
 #################################################################
 a1policymanagement:
-  enabled: false
+  enabled: true
   rics:
     - name: ric1
       link: http://a1-sim-osc-0.nonrtric:8085
@@ -102,15 +102,15 @@ aaf:
     readiness:
       initialDelaySeconds: 150
 aai:
-  enabled: false
+  enabled: true
   flavorOverride: unlimited
   global:
     flavorOverride: unlimited
     cassandra:
-      replicas: 3
+      replicas: 1
   aai-cassandra:
     flavorOverride: unlimited
-    replicaCount: 3
+    replicaCount: 1
   aai-babel:
     flavorOverride: unlimited
   aai-data-router:
@@ -153,7 +153,7 @@ cassandra:
     failureThreshold: 3
     # necessary to disable liveness probe when setting breakpoints
     # in debugger so K8s doesn't restart unresponsive container
-    enabled: false
+    enabled: true
 
   readiness:
     initialDelaySeconds: 120
@@ -204,13 +204,13 @@ dcaegen2-services:
   dcae-bbs-eventprocessor-ms:
     enabled: false
   dcae-datafile-collector:
-    enabled: false
+    enabled: true
   dcae-datalake-admin-ui:
     enabled: false
   dcae-datalake-des:
-    enabled: false
+    enabled: true
   dcae-datalake-feeder:
-    enabled: false
+    enabled: true
   dcae-heartbeat:
     enabled: false
   dcae-hv-ves-collector:
@@ -220,7 +220,7 @@ dcaegen2-services:
   dcae-ms-healthcheck:
     enabled: false
   dcae-pm-mapper:
-    enabled: false
+    enabled: true
   dcae-pmsh:
     enabled: false
   dcae-prh:
@@ -250,7 +250,7 @@ dmaap:
   enabled: true
 
 esr:
-  enabled: false
+  enabled: true
 log:
   enabled: false
   log-logstash:
@@ -261,23 +261,23 @@ mariadb-galera:
 modeling:
   enabled: false
 msb:
-  enabled: false
+  enabled: true
 multicloud:
-  enabled: false
+  enabled: true
 nbi:
   enabled: false
 oof:
-  enabled: false
+  enabled: true
 platform:
   enabled: false
 policy:
-  enabled: false
+  enabled: true
   policy-api:
     enabled: true
   policy-pap:
     enabled: true
   policy-xacml-pdp:
-    enabled: false
+    enabled: true
   policy-apex-pdp:
     enabled: true
   policy-drools-pdp:
@@ -308,11 +308,6 @@ robot:
   enabled: false
 sdc:
   enabled: true
-  sdc-wfd:
-    enabled: false
-  global:
-    sdc_cassandra:
-      replicaCount: 1
   sdc-be:
     config:
       javaOptions: "-Xmx1g -Xms512m"
@@ -331,9 +326,14 @@ sdc:
         requests:
           cpu: 100m
           memory: 500Mi
+  sdc-wfd:
+    enabled: false
+  global:
+    sdc_cassandra:
+      replicaCount: 1
 
 sdnc:
-  enabled: false
+  enabled: true
   replicaCount: 1
   elasticsearch:
     master:
@@ -347,7 +347,7 @@ sdnc:
   dgbuilder:
     enabled: true
   cds:
-    enabled: true
+    enabled: false
   sdnc-web:
     config:
       topologyserver:
@@ -383,7 +383,7 @@ strimzi:
   enabled: true
 
 so:
-  enabled: false
+  enabled: true
   so-catalog-db-adapter:
     config:
       openStackUserName: "the username"
@@ -391,11 +391,11 @@ so:
       openStackEncryptedPasswordHere: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
       openStackKeystoneVersion: "KEYSTONE_V3"
 uui:
-  enabled: false
+  enabled: true
 vfc:
   enabled: false
 vid:
-  enabled: false
+  enabled: true
 vnfsdk:
   enabled: false
 
