@@ -63,7 +63,7 @@ class ClCommissioningUtils():
 
         logger.info("Change Instance Status to PASSIVE")
         clamp.change_instance_status("PASSIVE", usecase_name, "1.2.3")
-        wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=60,
+        wait(lambda: clamp.verify_instance_status("PASSIVE"), sleep_seconds=5, timeout_seconds=90,
              waiting_for="Clamp instance switches to PASSIVE")
 
         return True
