@@ -28,7 +28,9 @@ from onapsdk.sdc.component import Component
 from onapsdk.sdc.properties import Property, NestedInput
 from onapsdk.sdc.service import Service, ServiceInstantiationType
 from onapsdk.sdc.sdc_resource import SdcResource
+from onapsdk.utils.configuration import components_needing_distribution
 from oransdk.utils.jinja import jinja_env
+from onapsdk.utils.headers_creator import headers_sdc_creator
 
 
 class OranService(Service):  # pylint: disable=too-many-instance-attributes, too-many-public-methods
@@ -185,3 +187,21 @@ class OranService(Service):  # pylint: disable=too-many-instance-attributes, too
             self.declare_input(input_to_add)
         if self.complex_input is not None:
             self.declare_complex_input(self.complex_input)
+
+
+    def get_distribution_status(self) -> dict:
+        """Get service distribution status."""
+        url = "{}/services/distribution/{}".format(self._base_create_url(),
+                                                   self.distribution_id)
+        headers = headers_sdc_creator(SdcResource.headers)
+        try:
+            result = self.send_message_json("GET",
+                                            "Check distribution for {}".format(
+                                                self.name),
+                                            url,
+                                            headers=headers)
+        except ResourceNotFound:
+            msg = f"No distributions found for {self.name} of {self.__class__.__name__}."
+            self._logger.debug(msg)
+        else:
+            return result

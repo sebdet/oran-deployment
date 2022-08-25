@@ -46,6 +46,7 @@ def jinja_env() -> Environment:
     return Environment(autoescape=select_autoescape(['html', 'htm', 'xml']),
                        loader=ChoiceLoader([
                            PackageLoader("oransdk.a1sim"),
+                           PackageLoader("oransdk.aai"),
                            PackageLoader("oransdk.dmaap"),
                            PackageLoader("oransdk.enrichmentservice"),
                            PackageLoader("oransdk.policy"),

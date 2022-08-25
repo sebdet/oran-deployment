@@ -24,6 +24,7 @@
 #
 ###
 """Create SDC Templates for Network Slicing option2 test."""
+import json
 import logging
 import logging.config
 from time import sleep
@@ -35,7 +36,10 @@ from onapsdk.configuration import settings
 from onapsdk.exceptions import ResourceNotFound
 from onapsdk.sdc.properties import Property, ParameterError
 from onapsdk.sdc.service import Service
+from oransdk.aai.service_design_and_creation import AaiModel
 from oransdk.sdc.sdc import SdcTemplate
+from oransdk.sdc.service import OranService
+from waiting import wait
 
 
 # Set working dir as python script location
@@ -46,13 +50,17 @@ os.chdir(dname)
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("####################### Start SDC Preparation")
 SUFFIX = ''
+service_dict = {}
+service_list = []
 
 class SdcPreparation():
     """Can be used to prepare SDC for Network Slicing usecase option2."""
 
     @classmethod
-    def prepare_sdc(cls):
+    def prepare_sdc(cls) -> dict:
         """Create SDC templates."""
+        # Populate AAI needed value
+
         sdc = SdcTemplate()
         vendor = sdc.create_vendor('ONAP')
         sdc.create_vsp('test1', vendor)
@@ -74,7 +82,9 @@ class SdcPreparation():
         srv_slice_profile_tn = cls.create_tn_slice_profiles(sdc, vf_slice_ar)
         srv_slice_profile_cn = cls.create_cn_slice_profiles(sdc, vf_slice_ar)
         srv_profile_o2 = cls.create_service_profile(sdc, vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2)
-        cls.create_cst(sdc, srv_profile_o2)
+        cst = cls.create_cst(sdc, srv_profile_o2)
+        wait(lambda: cls.verify_distribution(), sleep_seconds=60, timeout_seconds=1800, waiting_for="All services distributed successfully")
+        return [cst.identifier, srv_profile_o2.identifier]
 
     @classmethod
     def create_tn_resources(cls, sdc, vendor) -> dict:
@@ -88,6 +98,8 @@ class SdcPreparation():
 
         srv_tn_network = sdc.create_service(cls.updated_name('TN_Network_Requirement'), 'TN Network Requirement', properties=props,
                                             inputs=[Property('ConnectionLink', 'string')])
+        service_dict[srv_tn_network.identifier] = False
+        service_list.append(srv_tn_network)
 
         # 2.Create TN_Network_Req_AR
         logger.info("####################### create TN_Network_Req_AR")
@@ -109,6 +121,8 @@ class SdcPreparation():
 
         srv_tn_bh = sdc.create_service(cls.updated_name('Tn_ONAP_internal_BH'), 'TN BH NSST', vnfs=[vf],
                                        role='ONAP_internal', properties=props)
+        service_dict[srv_tn_bh.identifier] = False
+        service_list.append(srv_tn_bh)
 
         # 6.Create Tn_BH_AR
         logger.info("####################### Create Tn_BH_AR")
@@ -129,6 +143,8 @@ class SdcPreparation():
         logger.info("####################### create EmbbAn_NF Service Template")
         props = [Property('anNSSCap', 'org.openecomp.datatypes.NSSCapabilities')]
         srv_embban_nf = sdc.create_service(cls.updated_name('EmbbAn_NF'), 'AN NF NSST', role='huawei', service_type='embb', properties=props)
+        service_dict[srv_embban_nf.identifier] = False
+        service_list.append(srv_embban_nf)
 
         # 7.Create EmbbAn_NF_AR
         logger.info("####################### create EmbbAn_NF_AR")
@@ -147,7 +163,7 @@ class SdcPreparation():
         """Create CN related resources."""
         # 5.Create EmbbCn_External Service Template
         logger.info("####################### create EmbbCn_External Service Template")
-        srv_embbcn = Service(name=cls.updated_name('EmbbCn_External'),
+        srv_embbcn = OranService(name=cls.updated_name('EmbbCn_External'),
                              category='CN NSST',
                              role='huawei',
                              service_type='embb',
@@ -180,6 +196,8 @@ class SdcPreparation():
                     sleep(to)
                 else:
                     done = True
+        service_dict[srv_embbcn.identifier] = False
+        service_list.append(srv_embbcn)
 
         # 8.EmbbCn_External_AR
         logger.info("####################### create EmbbCn_External_AR")
@@ -213,11 +231,13 @@ class SdcPreparation():
                  Property('uEMobilityLevel', 'string', value='stationary'),
                  Property('pLMNIdList', 'string', value='39-00'),
                  Property('reliability', 'string', value='99%')]
-        sdc.create_service(cls.updated_name('EmbbNst_O2'),
+        nst = sdc.create_service(cls.updated_name('EmbbNst_O2'),
                            'NST',
                            role='option2',
                            vnfs=[vf_embbcn_external_ar, vf_embban_nf_ar, vf_tn_bh_ar],
                            properties=props)
+        service_dict[nst.identifier] = False
+        service_list.append(nst)
 
     @classmethod
     def create_slice_ar(cls, sdc, vendor) -> dict:
@@ -250,6 +270,9 @@ class SdcPreparation():
                 break
 
         sdc.onboard_vf(vf_slice_ar)
+        # AAI bug workaround: create Slice_ar in AAI DB before SO distribution, otherwise service will not be deployed to AAI succesfully
+        aai = AaiModel(invariant_id=vf_slice_ar.unique_uuid, model_type="resource", resource_version=vf_slice_ar.version)
+        aai.create(vf_slice_ar.name, vf_slice_ar.identifier, aai.invariant_id)
         return vf_slice_ar
 
     @classmethod
@@ -267,6 +290,8 @@ class SdcPreparation():
                                                        inputs=an_slice_profile,
                                                        complex_input=complex_property,
                                                        vnfs=[vf_slice_ar])
+        service_dict[srv_slice_profile_an_o2.identifier] = False
+        service_list.append(srv_slice_profile_an_o2)
         return srv_slice_profile_an_o2
 
     @classmethod
@@ -286,6 +311,8 @@ class SdcPreparation():
                                                     vnfs=[vf_slice_ar],
                                                     inputs=tn_slice_profile,
                                                     properties=tn_slice_profile)
+        service_dict[srv_slice_profile_tn.identifier] = False
+        service_list.append(srv_slice_profile_tn)
         return srv_slice_profile_tn
 
     @classmethod
@@ -301,6 +328,8 @@ class SdcPreparation():
                                                     vnfs=[vf_slice_ar],
                                                     inputs=cn_slice_profile,
                                                     properties=cn_slice_profile)
+        service_dict[srv_slice_profile_cn.identifier] = False
+        service_list.append(srv_slice_profile_cn)
         return srv_slice_profile_cn
 
     @classmethod
@@ -315,6 +344,8 @@ class SdcPreparation():
                                               complex_input=service_props,
                                               vnfs=[vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2],
                                               role='option2')
+        service_dict[srv_profile_o2.identifier] = False
+        service_list.append(srv_profile_o2)
         return srv_profile_o2
 
     @classmethod
@@ -323,16 +354,43 @@ class SdcPreparation():
         # 15.Create CST_O2 Service Template
         logger.info('####################### create service CST O2')
         cs_prop = Property('csProp', 'org.openecomp.datatypes.CSProperties')
-        srv = sdc.create_service_1(cls.updated_name('CST_O2'),
+        cst = sdc.create_service_1(cls.updated_name('CST_O2'),
                                    'CST',
                                    role='option2',
                                    service_type='embb',
                                    vnfs=[srv_profile_o2],
                                    properties=[cs_prop],
                                    complex_input=cs_prop)
-        return srv
+        service_dict[cst.identifier] = False
+        service_list.append(cst)
+        return cst
 
     @classmethod
     def updated_name(cls, name) -> str:
         """Adding suffix for the name."""
         return name + SUFFIX
+
+    @classmethod
+    def verify_distribution(cls) -> bool:
+        """Verify the distribution of all the services."""
+        for service in service_list:
+            logger.info('####################### verify service:' + service.name)
+            if service_dict[service.identifier]:
+                continue
+            so_ready = False
+            aai_ready = False
+            result = service.get_distribution_status()
+            for element in result['distributionStatusList']:
+                #if (element['omfComponentID'] == "SO-COpenSource-Env11" and (element['status'] == "DEPLOY_OK" or element['status'] == const.DOWNLOAD_OK):
+                so_ready = True
+                if (element['omfComponentID'] == "aai-ml" and element['status'] == "DEPLOY_OK"):
+                    aai_ready = True
+            if so_ready and aai_ready:
+                service_dict[service.identifier] = True
+                logger.info('####################### service ' + service.name + ' distributed successfully to SO and AAI')
+
+        res = True
+        for value in service_dict.values():
+            res = res and value
+            logger.info('####################### res is; ' + str(res) + ' value is:' + str(value))
+        return res
