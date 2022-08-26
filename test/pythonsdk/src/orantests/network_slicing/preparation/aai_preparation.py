@@ -35,16 +35,14 @@ logger = logging.getLogger("####################### Start AAI Preparation")
 class AaiPreparation():
     """Can be used to prepare AAI for Network Slicing usecase option2."""
 
-    @classmethod
-    def prepare_aai(cls):
+    def prepare_aai(self):
         """Prepare AAI for network slicing use case."""
         logger.info("####################### Start to prepare AAI")
         aai = Customer("5GCustomer","5GCustomer","INFRA")
         aai.create("5GCustomer","5GCustomer","INFRA")
         aai.subscribe_service("5G")
 
-    @classmethod
-    def cleanup_aai(cls):
+    def cleanup_aai(self):
         """Clean up AAI settings."""
         logger.info("####################### Start to clean up AAI settings")
         aai = Customer.get_by_global_customer_id("5GCustomer")

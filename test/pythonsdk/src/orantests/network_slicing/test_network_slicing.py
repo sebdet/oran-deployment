@@ -29,14 +29,17 @@ import logging.config
 import pytest
 from onapsdk.configuration import settings
 from preparation.aai_preparation import AaiPreparation
+from preparation.oof_preparation import OofPreparation
 from preparation.sdc_preparation import SdcPreparation
 from preparation.so_preparation import SoPreparation
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("Test Network Slicing usecase Option2")
-sdcPreparation = SdcPreparation()
+sdc_template_suffix = ""
+sdcPreparation = SdcPreparation(sdc_template_suffix)
 soPreparation = SoPreparation()
 aaiPreparation = AaiPreparation()
+oofPreparation = OofPreparation()
 
 @pytest.fixture(scope="module", autouse=True)
 def pre_config():
@@ -49,9 +52,9 @@ def pre_config():
     sp_id = res[1]
     logger.info("SDC Templates created successfully, cst_id;" + cst_id + "; sp_id:" + sp_id)
 
-    #logger.info("PreConfig Step2: AAI Configuration")
-    #aaiPreparation.prepare_aai()
-    #logger.info("AAI Configured successfully")
+    logger.info("PreConfig Step2: AAI Configuration")
+    aaiPreparation.prepare_aai()
+    logger.info("AAI Configured successfully")
 
     #cst_id = "1c255e2f-b915-4319-b125-36ea4f65eccd"
     #sp_id = "03d396bf-0246-4d48-817a-b219cc2e7a5a"
@@ -59,12 +62,16 @@ def pre_config():
     #soPreparation.prepare_so(cst_id, sp_id)
     #logger.info("SO Configured successfully")
 
-    #logger.info("PreConfig Step4: OOF Configuration - Optimization Policy Creation")
-    #logger.info("OOF Configured successfully")
+    logger.info("PreConfig Step4: OOF Configuration - Optimization Policy Creation")
+    oofPreparation.prepare_oof("EmbbNst_O2", "EmbbAn_NF", "Tn_ONAP_internal_BH")
+    logger.info("OOF Configured successfully")
 
     ### Cleanup code
     yield
     logger.info("Test Session cleanup done")
+    aaiPreparation.cleanup_aai()
+    #soPreparation.cleanup_so()
+    oofPreparation.cleanup_oof()
 
 def test_network_slicing_option2():
     """The Network Slicing option2 usecase."""
