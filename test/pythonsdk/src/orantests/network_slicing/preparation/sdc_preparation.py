@@ -378,8 +378,8 @@ class SdcPreparation():
             aai_ready = False
             result = service.get_distribution_status()
             for element in result['distributionStatusList']:
-                #if (element['omfComponentID'] == "SO-COpenSource-Env11" and (element['status'] == "DEPLOY_OK" or element['status'] == const.DOWNLOAD_OK):
-                so_ready = True
+                if (element['omfComponentID'] == "SO-COpenSource-Env11" and (element['status'] == "DEPLOY_OK" or element['status'] == const.DOWNLOAD_OK)):
+                    so_ready = True
                 if (element['omfComponentID'] == "aai-ml" and element['status'] == "DEPLOY_OK"):
                     aai_ready = True
             if so_ready and aai_ready:
