@@ -29,6 +29,7 @@ import logging.config
 import subprocess
 from subprocess import check_output
 from onapsdk.configuration import settings
+from oransdk.policy.policy import OranPolicy
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("####################### Start OOF Preparation")
@@ -80,6 +81,12 @@ class OofPreparation():
         #python3 policy_utils.py create_and_push_policies gen_nssi_policies
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py create_and_push_policies gen_nssi_policies"
         check_output(cmd, shell=True).decode('utf-8')
+
+        #Verify policies created
+        policy = OranPolicy()
+        policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
+        if len(policy_status_list) != 20:
+            sys.exit('OOF preparation failed. Exception while creating policies. Please check the policies manually.')
 
     @classmethod
     def cleanup_oof(self):

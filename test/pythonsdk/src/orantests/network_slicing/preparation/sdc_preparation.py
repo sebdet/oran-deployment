@@ -93,7 +93,7 @@ class SdcPreparation():
         srv_slice_profile_cn = self.create_cn_slice_profiles(sdc, vf_slice_ar)
         srv_profile_o2 = self.create_service_profile(sdc, vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2)
         cst = self.create_cst(sdc, srv_profile_o2)
-        wait(lambda: self.verify_distribution(), sleep_seconds=60, timeout_seconds=1800, waiting_for="All services distributed successfully")
+        wait(lambda: self.verify_distribution(), sleep_seconds=60, timeout_seconds=3600, waiting_for="All services distributed successfully")
         return [cst.identifier, srv_profile_o2.identifier]
 
     def create_tn_resources(self, sdc, vendor) -> dict:
