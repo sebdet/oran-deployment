@@ -24,13 +24,13 @@
 """SDC Service module."""
 
 from typing import Dict, Iterator, List, Optional, Union
+from onapsdk.exceptions import ResourceNotFound
 from onapsdk.sdc.component import Component
 from onapsdk.sdc.properties import Property, NestedInput
 from onapsdk.sdc.service import Service, ServiceInstantiationType
 from onapsdk.sdc.sdc_resource import SdcResource
-from onapsdk.utils.configuration import components_needing_distribution
-from oransdk.utils.jinja import jinja_env
 from onapsdk.utils.headers_creator import headers_sdc_creator
+from oransdk.utils.jinja import jinja_env
 
 
 class OranService(Service):  # pylint: disable=too-many-instance-attributes, too-many-public-methods

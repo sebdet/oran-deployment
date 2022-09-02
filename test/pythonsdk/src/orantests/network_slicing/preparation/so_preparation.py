@@ -22,7 +22,7 @@
 # ============LICENSE_END=====================================================
 #
 ###
-"""Create SDC Templates for Network Slicing option2 test."""
+"""Prepare SO for Network Slicing option2 test."""
 import logging
 import logging.config
 import os
@@ -41,7 +41,8 @@ logger = logging.getLogger("####################### Start SO Preparation")
 class SoPreparation():
     """Can be used to prepare SO for Network Slicing usecase option2."""
 
-    def prepare_so(self, cst_id, sp_id):
+    @classmethod
+    def prepare_so(cls, cst_id, sp_id):
         """Update So catalog db.
 
         Args:
@@ -53,7 +54,7 @@ class SoPreparation():
         logger.info("####################### Start to update SO catalog DB")
         cmd = "kubectl get secret/onap-mariadb-galera-db-root-password -n onap -o jsonpath={.data.password} | base64 --decode"
         pw = check_output(cmd, shell=True).decode('utf-8')
-        logger.info("####################### pass is:" + pw)
+        #logger.info("####################### pass is:%s", pw)
 
         # populate communication service actions
         sql = f"INSERT INTO  \
@@ -110,7 +111,8 @@ class SoPreparation():
         cmd = f"kubectl cp ../resources/subnetCapability.json -n onap {so_pod}:/app"
         check_output(cmd, shell=True).decode('utf-8')
 
-    def cleanup_so(self, cst_id, sp_id):
+    @classmethod
+    def cleanup_so(cls, cst_id, sp_id):
         """Clean up So configuration.
 
         Args:

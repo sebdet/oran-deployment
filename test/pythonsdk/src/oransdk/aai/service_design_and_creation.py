@@ -21,9 +21,9 @@
 # ===================================================================
 #
 ###
-from oransdk.utils.jinja import jinja_env
-
+"""Onap AAI model module."""
 from onapsdk.aai.service_design_and_creation import Model
+from oransdk.utils.jinja import jinja_env
 
 class AaiModel(Model):
     """Model resource class."""

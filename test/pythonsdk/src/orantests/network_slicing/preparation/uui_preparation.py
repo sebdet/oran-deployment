@@ -22,30 +22,27 @@
 # ============LICENSE_END=====================================================
 #
 ###
-"""Configure AAI for Network Slicing option2 test."""
+"""Update UUI configuration for Network Slicing option2 test."""
 import logging
 import logging.config
-
-from onapsdk.aai.business.customer import Customer
+import subprocess
+from subprocess import check_output
 from onapsdk.configuration import settings
 
 logging.config.dictConfig(settings.LOG_CONFIG)
-logger = logging.getLogger("####################### Start AAI Preparation")
+logger = logging.getLogger("####################### Start UUI Preparation")
 
-class AaiPreparation():
-    """Can be used to prepare AAI for Network Slicing usecase option2."""
-
-    @classmethod
-    def prepare_aai(cls):
-        """Prepare AAI for network slicing use case."""
-        logger.info("####################### Start to prepare AAI")
-        aai = Customer("5GCustomer", "5GCustomer", "INFRA")
-        aai.create("5GCustomer", "5GCustomer", "INFRA")
-        aai.subscribe_service("5G")
+class UuiPreparation():
+    """Can be used to prepare UUI for Network Slicing usecase option2."""
 
     @classmethod
-    def cleanup_aai(cls):
-        """Clean up AAI settings."""
-        logger.info("####################### Start to clean up AAI settings")
-        aai = Customer.get_by_global_customer_id("5GCustomer")
-        aai.delete()
+    def prepare_uui(cls, cst_uuid, cst_invariant_id):
+        """Register services to uui."""
+        logger.info("####################### Start to update uui settings")
+        uui_pod = subprocess.run("kubectl get pod -n onap | grep uui-server | awk '{print $1}' ", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+
+        cmd = f"kubectl exec -ti -n onap {uui_pod} -- sed -i 's/8ee5926d-720b-4bb2-86f9-d20e921c143b/{cst_uuid}/g' /home/uui/config/slicing.properties"
+        check_output(cmd, shell=True).decode('utf-8')
+
+        cmd = f"kubectl exec -ti -n onap {uui_pod} -- sed -i 's/e75698d9-925a-4cdd-a6c0-edacbe6a0b51/{cst_invariant_id}/g' /home/uui/config/slicing.properties"
+        check_output(cmd, shell=True).decode('utf-8')

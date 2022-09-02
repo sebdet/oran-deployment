@@ -24,7 +24,6 @@
 #
 ###
 """Create SDC Templates for Network Slicing option2 test."""
-import json
 import logging
 import logging.config
 from time import sleep
@@ -35,11 +34,10 @@ import onapsdk.constants as const
 from onapsdk.configuration import settings
 from onapsdk.exceptions import ResourceNotFound
 from onapsdk.sdc.properties import Property, ParameterError
-from onapsdk.sdc.service import Service
+from waiting import wait
 from oransdk.aai.service_design_and_creation import AaiModel
 from oransdk.sdc.sdc import SdcTemplate
 from oransdk.sdc.service import OranService
-from waiting import wait
 
 # Set working dir as python script location
 abspath = os.path.abspath(__file__)
@@ -62,7 +60,7 @@ class SdcPreparation():
             suffix (str, optional): the suffix of the SDC template names
 
         """
-        if (suffix is None):
+        if suffix is None:
             self.suffix = ""
         else:
             self.suffix = suffix
@@ -94,7 +92,7 @@ class SdcPreparation():
         srv_profile_o2 = self.create_service_profile(sdc, vf_slice_ar, srv_slice_profile_cn, srv_slice_profile_tn, srv_slice_profile_an_o2)
         cst = self.create_cst(sdc, srv_profile_o2)
         wait(lambda: self.verify_distribution(), sleep_seconds=60, timeout_seconds=3600, waiting_for="All services distributed successfully")
-        return [cst.identifier, srv_profile_o2.identifier]
+        return [cst.identifier, cst.unique_uuid, srv_profile_o2.identifier]
 
     def create_tn_resources(self, sdc, vendor) -> dict:
         """Create TN related resources."""
@@ -171,16 +169,16 @@ class SdcPreparation():
         # 5.Create EmbbCn_External Service Template
         logger.info("####################### create EmbbCn_External Service Template")
         srv_embbcn = OranService(name=self.updated_name('EmbbCn_External'),
-                             category='CN NSST',
-                             role='huawei',
-                             service_type='embb',
-                             properties=[Property('cnCap', 'org.openecomp.datatypes.NSSCapabilities',\
-                                                  value="{\\\"latency\\\":20,\\\"maxNumberofUEs\\\":10000,\
-                                                          \\\"resourceSharingLevel\\\":\\\"Shared\\\",\\\"sST\\\":\\\"eMBB\\\",\
-                                                          \\\"activityFactor\\\":30,\\\"areaTrafficCapDL\\\":800,\
-                                                          \\\"areaTrafficCapUL\\\":800,\\\"expDataRateDL\\\":1000,\
-                                                          \\\"survivalTime\\\":10,\\\"uEMobilityLevel\\\":\\\"stationary\\\",\
-                                                          \\\"expDataRateUL\\\":1000,\\\"pLMNIdList\\\":\\\"39-00\\\"}")])
+                                 category='CN NSST',
+                                 role='huawei',
+                                 service_type='embb',
+                                 properties=[Property('cnCap', 'org.openecomp.datatypes.NSSCapabilities',\
+                                                      value="{\\\"latency\\\":20,\\\"maxNumberofUEs\\\":10000,\
+                                                              \\\"resourceSharingLevel\\\":\\\"Shared\\\",\\\"sST\\\":\\\"eMBB\\\",\
+                                                              \\\"activityFactor\\\":30,\\\"areaTrafficCapDL\\\":800,\
+                                                              \\\"areaTrafficCapUL\\\":800,\\\"expDataRateDL\\\":1000,\
+                                                              \\\"survivalTime\\\":10,\\\"uEMobilityLevel\\\":\\\"stationary\\\",\
+                                                              \\\"expDataRateUL\\\":1000,\\\"pLMNIdList\\\":\\\"39-00\\\"}")])
 
         srv_embbcn.create()
 
@@ -237,10 +235,10 @@ class SdcPreparation():
                  Property('pLMNIdList', 'string', value='39-00'),
                  Property('reliability', 'string', value='99%')]
         nst = sdc.create_service(self.updated_name('EmbbNst_O2'),
-                           'NST',
-                           role='option2',
-                           vnfs=[vf_embbcn_external_ar, vf_embban_nf_ar, vf_tn_bh_ar],
-                           properties=props)
+                                 'NST',
+                                 role='option2',
+                                 vnfs=[vf_embbcn_external_ar, vf_embban_nf_ar, vf_tn_bh_ar],
+                                 properties=props)
         service_dict[nst.identifier] = False
         service_list.append(nst)
 
@@ -368,10 +366,11 @@ class SdcPreparation():
         """Adding suffix for the name."""
         return name + self.suffix
 
-    def verify_distribution(self) -> bool:
+    @classmethod
+    def verify_distribution(cls) -> bool:
         """Verify the distribution of all the services."""
         for service in service_list:
-            logger.info('####################### verify service:' + service.name)
+            logger.info('####################### verify service:%s', service.name)
             if service_dict[service.identifier]:
                 continue
             so_ready = False
@@ -384,10 +383,10 @@ class SdcPreparation():
                     aai_ready = True
             if so_ready and aai_ready:
                 service_dict[service.identifier] = True
-                logger.info('####################### service ' + service.name + ' distributed successfully to SO and AAI')
+                logger.info('####################### service %s distributed successfully to SO and AAI', service.name)
 
         res = True
         for value in service_dict.values():
             res = res and value
-            logger.info('####################### res is; ' + str(res) + ' value is:' + str(value))
+            logger.info('####################### res is:%s, value is:%s', str(res), str(value))
         return res

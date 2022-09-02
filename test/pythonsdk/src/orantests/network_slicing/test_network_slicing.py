@@ -32,6 +32,8 @@ from preparation.aai_preparation import AaiPreparation
 from preparation.oof_preparation import OofPreparation
 from preparation.sdc_preparation import SdcPreparation
 from preparation.so_preparation import SoPreparation
+from preparation.msb_preparation import MsbPreparation
+from preparation.uui_preparation import UuiPreparation
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("Test Network Slicing usecase Option2")
@@ -40,6 +42,8 @@ sdcPreparation = SdcPreparation(sdc_template_suffix)
 soPreparation = SoPreparation()
 aaiPreparation = AaiPreparation()
 oofPreparation = OofPreparation()
+msbPreparation = MsbPreparation()
+uuiPreparation = UuiPreparation()
 
 @pytest.fixture(scope="module", autouse=True)
 def pre_config():
@@ -49,14 +53,16 @@ def pre_config():
     logger.info("PreConfig Step1: Create SDC Templates")
     res = sdcPreparation.prepare_sdc()
     cst_id = res[0]
-    sp_id = res[1]
-    logger.info("SDC Templates created successfully, cst_id;" + cst_id + "; sp_id:" + sp_id)
+    cst_invariant_id = res[1]
+    sp_id = res[2]
+    logger.info("SDC Templates created successfully, cst_id:" + cst_id + "; sp_id:" + sp_id + "; cst_invariant_id:" + cst_invariant_id)
 
     logger.info("PreConfig Step2: AAI Configuration")
     aaiPreparation.prepare_aai()
     logger.info("AAI Configured successfully")
 
-    #cst_id = "1c255e2f-b915-4319-b125-36ea4f65eccd"
+    #cst_id = "test"
+    #cst_invariant_id = "test"
     #sp_id = "03d396bf-0246-4d48-817a-b219cc2e7a5a"
     logger.info("PreConfig Step3: SO Configuration")
     soPreparation.prepare_so(cst_id, sp_id)
@@ -65,6 +71,14 @@ def pre_config():
     logger.info("PreConfig Step4: OOF Configuration - Optimization Policy Creation")
     oofPreparation.prepare_oof("EmbbNst_O2", "EmbbAn_NF", "Tn_ONAP_internal_BH")
     logger.info("OOF Configured successfully")
+
+    logger.info("PreConfig Step5: MSB Configuration - Create msb services")
+    msbPreparation.prepare_msb()
+    logger.info("MSB Configured successfully")
+
+    logger.info("PreConfig Step6: UUI Configuration - Update uui settings")
+    uuiPreparation.prepare_uui(cst_id, cst_invariant_id)
+    logger.info("UUI Configured successfully")
 
     ### Cleanup code
     yield

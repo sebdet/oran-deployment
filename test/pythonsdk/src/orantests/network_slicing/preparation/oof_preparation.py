@@ -27,6 +27,7 @@ import os
 import logging
 import logging.config
 import subprocess
+import sys
 from subprocess import check_output
 from onapsdk.configuration import settings
 from oransdk.policy.policy import OranPolicy
@@ -42,11 +43,12 @@ os.chdir(dname)
 class OofPreparation():
     """Can be used to prepare OOF for Network Slicing usecase option2."""
 
-    def prepare_oof(self, nst_name, an_nsst_name, tn_nsst_name):
+    @classmethod
+    def prepare_oof(cls, nst_name, an_nsst_name, tn_nsst_name):
         """Prepare OOF, create optimization policies."""
 
         # copy policy creation package to oof pod
-        logger.info("####################### copy policy generation package to OOF pod:" + dname)
+        logger.info("####################### copy policy generation package to OOF pod:%s", dname)
         oof_pod = subprocess.run("kubectl get pods -n onap | awk '{print $1}' | grep  onap-oof-[a-z0-9]*-[a-z0-9]*$", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
         cmd = f"kubectl cp ../resources/policies_option2 -n onap {oof_pod}:/opt/osdf"
         check_output(cmd, shell=True).decode('utf-8')
@@ -58,27 +60,21 @@ class OofPreparation():
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py create_and_push_policies nst_policies"
         check_output(cmd, shell=True).decode('utf-8')
 
-        #python3 policy_utils.py generate_nsi_policies NSTO2
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py generate_nsi_policies {nst_name}"
         check_output(cmd, shell=True).decode('utf-8')
 
-        #python3 policy_utils.py create_and_push_policies gen_nsi_policies
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py create_and_push_policies gen_nsi_policies"
         check_output(cmd, shell=True).decode('utf-8')
 
-        #python3 policy_utils.py generate_nssi_policies EmbbAn_NF minimize latency
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py generate_nssi_policies {an_nsst_name} minimize latency"
         check_output(cmd, shell=True).decode('utf-8')
 
-        #python3 policy_utils.py create_and_push_policies gen_nssi_policies
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py create_and_push_policies gen_nssi_policies"
         check_output(cmd, shell=True).decode('utf-8')
 
-        #python3 policy_utils.py generate_nssi_policies Tn_ONAP_internal_BH  minimize latency
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py generate_nssi_policies {tn_nsst_name}  minimize latency"
         check_output(cmd, shell=True).decode('utf-8')
 
-        #python3 policy_utils.py create_and_push_policies gen_nssi_policies
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- python3 policies_option2/policy_utils.py create_and_push_policies gen_nssi_policies"
         check_output(cmd, shell=True).decode('utf-8')
 
@@ -86,10 +82,11 @@ class OofPreparation():
         policy = OranPolicy()
         policy_status_list = policy.get_policy_status(settings.POLICY_BASICAUTH)
         if len(policy_status_list) != 20:
+            logger.info("####################### Policy created failed. 20 policies expected, but only %s found. Please verify manually.", str(len(policy_status_list)))
             sys.exit('OOF preparation failed. Exception while creating policies. Please check the policies manually.')
 
     @classmethod
-    def cleanup_oof(self):
+    def cleanup_oof(cls):
         """Delete OOF optimization policies."""
         oof_pod = subprocess.run("kubectl get pods -n onap | awk '{print $1}' | grep  onap-oof-[a-z0-9]*-[a-z0-9]*$", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
 
@@ -106,10 +103,6 @@ class OofPreparation():
         check_output(cmd, shell=True).decode('utf-8')
 
         # run python command to create policies
-        logger.info("####################### copy policy generation package to OOF pod:" + dname)
+        logger.info("####################### copy policy generation package to OOF pod:%s", dname)
         cmd = f"kubectl exec -ti -n onap {oof_pod} -- rm -rf policies_option2"
         check_output(cmd, shell=True).decode('utf-8')
-
-
-
-
