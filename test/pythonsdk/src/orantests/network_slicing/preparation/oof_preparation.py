@@ -50,7 +50,10 @@ class OofPreparation():
         # copy policy creation package to oof pod
         logger.info("####################### copy policy generation package to OOF pod:%s", dname)
         oof_pod = subprocess.run("kubectl get pods -n onap | awk '{print $1}' | grep  onap-oof-[a-z0-9]*-[a-z0-9]*$", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-        cmd = f"kubectl cp ../resources/policies_option2 -n onap {oof_pod}:/opt/osdf"
+        cmd = f"kubectl cp ../resources/policies_option2.tar.gz -n onap {oof_pod}:/opt/osdf"
+        check_output(cmd, shell=True).decode('utf-8')
+
+        cmd = f"kubectl exec -ti -n onap {oof_pod} -- tar -xvf policies_option2.tar.gz"
         check_output(cmd, shell=True).decode('utf-8')
 
         # run python command to create policies
