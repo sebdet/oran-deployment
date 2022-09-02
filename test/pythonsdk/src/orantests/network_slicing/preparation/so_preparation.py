@@ -48,9 +48,7 @@ class SoPreparation():
         Args:
             cst_id (str): The CST uuid of from the SDC Template creation step.
             sp_id (str): The ServiceProfile uuid from the SDC Template creation step.
-
         """
-
         logger.info("####################### Start to update SO catalog DB")
         cmd = "kubectl get secret/onap-mariadb-galera-db-root-password -n onap -o jsonpath={.data.password} | base64 --decode"
         pw = check_output(cmd, shell=True).decode('utf-8')
@@ -118,9 +116,7 @@ class SoPreparation():
         Args:
             cst_id (str): The CST uuid of from the SDC Template creation step.
             sp_id (str): The ServiceProfile uuid from the SDC Template creation step.
-
         """
-
         logger.info("####################### Start to clean up SO catalog DB")
         cmd = "kubectl get secret/onap-mariadb-galera-db-root-password -n onap -o jsonpath={.data.password} | base64 --decode"
         pw = check_output(cmd, shell=True).decode('utf-8')

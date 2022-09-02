@@ -46,7 +46,6 @@ class OofPreparation():
     @classmethod
     def prepare_oof(cls, nst_name, an_nsst_name, tn_nsst_name):
         """Prepare OOF, create optimization policies."""
-
         # copy policy creation package to oof pod
         logger.info("####################### copy policy generation package to OOF pod:%s", dname)
         oof_pod = subprocess.run("kubectl get pods -n onap | awk '{print $1}' | grep  onap-oof-[a-z0-9]*-[a-z0-9]*$", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
