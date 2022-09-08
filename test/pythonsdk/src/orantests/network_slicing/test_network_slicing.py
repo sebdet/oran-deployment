@@ -69,7 +69,7 @@ def pre_config():
     logger.info("SO Configured successfully")
 
     logger.info("PreConfig Step4: OOF Configuration - Optimization Policy Creation")
-    oofPreparation.prepare_oof("EmbbNst_O2", "EmbbAn_NF", "Tn_ONAP_internal_BH")
+    oofPreparation.prepare_oof(sdcPreparation.updated_name("EmbbNst_O2"), sdcPreparation.updated_name("EmbbAn_NF"), sdcPreparation.updated_name("Tn_ONAP_internal_BH"))
     logger.info("OOF Configured successfully")
 
     logger.info("PreConfig Step5: MSB Configuration - Create msb services")
@@ -82,10 +82,13 @@ def pre_config():
 
     ### Cleanup code
     yield
-    logger.info("Test Session cleanup done")
+    logger.info("Start to cleanup user case specific configurations")
     #aaiPreparation.cleanup_aai()
     #soPreparation.cleanup_so()
     #oofPreparation.cleanup_oof()
+    #msbPreparation.cleanup_msb()
+    #uuiPreparation.cleanup_uui(cst_id, cst_invariant_id)
+    logger.info("Test Session cleanup done")
 
 def test_network_slicing_option2():
     """The Network Slicing option2 usecase."""

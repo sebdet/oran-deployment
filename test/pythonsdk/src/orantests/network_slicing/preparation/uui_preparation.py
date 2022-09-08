@@ -46,3 +46,16 @@ class UuiPreparation():
 
         cmd = f"kubectl exec -ti -n onap {uui_pod} -- sed -i 's/e75698d9-925a-4cdd-a6c0-edacbe6a0b51/{cst_invariant_id}/g' /home/uui/config/slicing.properties"
         check_output(cmd, shell=True).decode('utf-8')
+
+    @classmethod
+    def cleanup_uui(cls, cst_uuid, cst_invariant_id):
+        """Rollback uui settings."""
+        logger.info("####################### Start to rollback uui settings")
+        uui_pod = subprocess.run("kubectl get pod -n onap | grep uui-server | awk '{print $1}' ", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+
+        cmd = f"kubectl exec -ti -n onap {uui_pod} -- sed -i 's/{cst_uuid}/8ee5926d-720b-4bb2-86f9-d20e921c143b/g' /home/uui/config/slicing.properties"
+        check_output(cmd, shell=True).decode('utf-8')
+
+        cmd = f"kubectl exec -ti -n onap {uui_pod} -- sed -i 's/{cst_invariant_id}/e75698d9-925a-4cdd-a6c0-edacbe6a0b51/g' /home/uui/config/slicing.properties"
+        check_output(cmd, shell=True).decode('utf-8')
+        logger.info("####################### UUI settings rollback successfully")
