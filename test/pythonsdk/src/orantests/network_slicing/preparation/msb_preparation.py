@@ -71,15 +71,5 @@ class MsbPreparation():
     def cleanup_msb(cls):
         """Rollback msb settings."""
         logger.info("####################### Start to remove SO instance service")
-        so_pod = subprocess.run("kubectl get svc -n onap so | grep so | awk '{print $3}' ", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-        cmd = f"curl -sk --noproxy \"*\" -X DELETE {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" "
-        check_output(cmd, shell=True).decode('utf-8')
-
-        logger.info("####################### Start to remove SO orchestration tasks")
-        cmd = f"curl -sk --noproxy \"*\" -X DELETE {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" "
-        check_output(cmd, shell=True).decode('utf-8')
-
-        logger.info("####################### Start to remove AAI business instance service")
-        aai_pod = subprocess.run("kubectl get svc -n onap aai | grep aai | awk '{print $3}' ", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
         cmd = f"curl -sk --noproxy \"*\" -X DELETE {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" "
         check_output(cmd, shell=True).decode('utf-8')

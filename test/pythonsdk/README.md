@@ -42,22 +42,6 @@ Then execute the integration tests with command:
 $ tox -e oran-tests
 ```
 
-#### Network Slicing Option2 Preparation script
-
-To run the Network Slicing Option2 preparation script, start all the needed ONAP components on kubernetes.
-
-Go to *scripts/layer-2* directory and start all the needed components with the scripts:
-
-```
-$ ./2-install-onap-only.sh network-slicing
-```
-
-Then go to *test/pythonsdk/src/orantests/network_slicing* folder execute the integration tests with command:
-
-```
-$ tox -e ns-tests
-```
-
 #### Code analyse and check style checking
 To run code analyse and check check styles:
 

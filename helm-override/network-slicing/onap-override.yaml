@@ -58,7 +58,7 @@ global:
 # to customize the ONAP deployment.
 #################################################################
 a1policymanagement:
-  enabled: true
+  enabled: false
   rics:
     - name: ric1
       link: http://a1-sim-osc-0.nonrtric:8085

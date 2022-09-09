@@ -195,11 +195,6 @@ In the ./helm-override/ folder the helm config that are used by the SMO installa
 
 		```./oran-deployment/scripts/layer-2/2-install-oran-cnf.sh```
 
-	- ONAP Network Slicing Option2 user case:
-
-	  ```./oran-deployment/scripts/layer-2/2-install-onap-only.sh network-slicing```
-
-
 
 * Install the network simulators (DU/RU/Topo):
 	- When all pods in "onap" and "nonrtric" namespaces are well up & running:
