@@ -1,0 +1,31 @@
+{
+  "AN_NF": {
+    "latency": 5,
+    "maxNumberofUEs": 200,
+    "maxThroughput": 90,
+    "termDensity": 40
+  },
+  "AN": {
+    "latency": 20,
+    "maxNumberofUEs": 100,
+    "maxThroughput": 150,
+    "termDensity": 50
+  },
+  "CN": {
+    "latency": 10,
+    "maxThroughput": 50,
+    "maxNumberofConns": 100
+  },
+  "TN_FH": {
+    "latency": 10,
+    "maxThroughput": 90
+  },
+  "TN_MH": {
+    "latency": 5,
+    "maxThroughput": 90
+  },
+  "TN_BH": {
+    "latency": 10,
+    "maxThroughput": 100
+  }
+}

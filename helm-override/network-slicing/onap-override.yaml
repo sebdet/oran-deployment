@@ -1,0 +1,401 @@
+# Copyright © 2017 Amdocs, Bell Canada
+#
+# Modifications Copyright © 2021 AT&T
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#################################################################
+# Global configuration overrides.
+#
+# These overrides will affect all helm charts (ie. applications)
+# that are listed below and are 'enabled'.
+#################################################################
+global:
+  # Change to an unused port prefix range to prevent port conflicts
+  # with other instances running within the same k8s cluster
+  repository: nexus3.onap.org:10001 #__docker_proxy__
+  nodePortPrefix: 302
+  nodePortPrefixExt: 304
+  masterPassword: secretpassword
+  addTestingComponents: true
+  cmpv2Enabled: false
+  flavor: unlimited
+  # ONAP Repository
+  # Uncomment the following to enable the use of a single docker
+  # repository but ONLY if your repository mirrors all ONAP
+  # docker images. This includes all images from dockerhub and
+  # any other repository that hosts images for ONAP components.
+  #repository: nexus3.onap.org:10001
+
+  # readiness check - temporary repo until images migrated to nexus3
+  readinessRepository: oomk8s
+  # logging agent - temporary repo until images migrated to nexus3
+  loggingRepository: docker.elastic.co
+
+  # image pull policy
+  pullPolicy: IfNotPresent
+
+  # override default mount path root directory
+  # referenced by persistent volumes and log files
+  persistence:
+    mountPath: /dockerdata-nfs
+
+  # flag to enable debugging - application support required
+  debugEnabled: false
+
+#################################################################
+# Enable/disable and configure helm charts (ie. applications)
+# to customize the ONAP deployment.
+#################################################################
+a1policymanagement:
+  enabled: false
+  rics:
+    - name: ric1
+      link: http://a1-sim-osc-0.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric2
+      link: http://a1-sim-osc-1.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric3
+      link: http://a1-sim-std-0.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric4
+      link: http://a1-sim-std-1.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric5
+      link: http://a1-sim-std2-0.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+    - name: ric6
+      link: http://a1-sim-std2-1.nonrtric:8085
+      controller: controller1
+      managedElementIds:
+        - kista_1
+        - kista_2
+aaf:
+  enabled: true
+  aaf-service:
+    readiness:
+      initialDelaySeconds: 150
+aai:
+  enabled: true
+  flavorOverride: unlimited
+  global:
+    flavorOverride: unlimited
+    cassandra:
+      replicas: 1
+  aai-cassandra:
+    flavorOverride: unlimited
+    replicaCount: 1
+  aai-babel:
+    flavorOverride: unlimited
+  aai-data-router:
+    flavorOverride: unlimited
+  aai-elasticsearch:
+    flavorOverride: unlimited
+  aai-graphadmin:
+    flavorOverride: unlimited
+  aai-modelloader:
+    flavorOverride: unlimited
+  aai-resources:
+    flavorOverride: unlimited
+  aai-schema-service:
+    flavorOverride: unlimited
+  aai-search-data:
+    flavorOverride: unlimited
+  aai-sparky-be:
+    flavorOverride: unlimited
+    readiness:
+      initialDelaySeconds: 150
+      periodSeconds: 20
+      timeoutSeconds: 10
+  aai-traversal:
+    flavorOverride: unlimited
+appc:
+  enabled: false
+cassandra:
+  enabled: true
+  replicaCount: 1
+  config:
+    cluster_domain: cluster.local
+    heap:
+      max: 1G
+      min: 256M
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    # necessary to disable liveness probe when setting breakpoints
+    # in debugger so K8s doesn't restart unresponsive container
+    enabled: true
+
+  readiness:
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+cds:
+  enabled: false
+cli:
+  enabled: false
+contrib:
+  enabled: true
+  awx:
+    enabled: false
+  netbox:
+    enabled: false
+consul:
+  enabled: false
+  consul-server:
+    replicaCount: 1
+cps:
+  enabled: false
+dcaegen2:
+  enabled: false
+  dcae-bootstrap:
+    enabled: false
+  dcae-cloudify-manager:
+    enabled: false
+  dcae-config-binding-service:
+    enabled: false
+  dcae-dashboard:
+    enabled: false
+  dcae-deployment-handler:
+    enabled: false
+  dcae-healthcheck:
+    enabled: false
+  dcae-inventory-api:
+    enabled: false
+  dcae-policy-handler:
+    enabled: false
+  dcae-servicechange-handler:
+    enabled: false
+  dcae-ves-openapi-manager:
+    enabled: false
+dcaegen2-services:
+  enabled: true
+  dcae-bbs-eventprocessor-ms:
+    enabled: false
+  dcae-datafile-collector:
+    enabled: true
+  dcae-datalake-admin-ui:
+    enabled: false
+  dcae-datalake-des:
+    enabled: true
+  dcae-datalake-feeder:
+    enabled: true
+  dcae-heartbeat:
+    enabled: false
+  dcae-hv-ves-collector:
+    enabled: false
+  dcae-kpi-ms:
+    enabled: false
+  dcae-ms-healthcheck:
+    enabled: false
+  dcae-pm-mapper:
+    enabled: true
+  dcae-pmsh:
+    enabled: false
+  dcae-prh:
+    enabled: false
+  dcae-restconf-collector:
+    enabled: false
+  dcae-slice-analysis-ms:
+    enabled: true
+  dcae-snmptrap-collector:
+    enabled: false
+  dcae-son-handler:
+    enabled: false
+  dcae-tcagen2:
+    enabled: false
+  dcae-ves-collector:
+    enabled: true
+  dcae-ves-mapper:
+    enabled: false
+  dcae-ves-openapi-manager:
+    enabled: false
+
+dcaemod:
+  enabled: false
+holmes:
+  enabled: false
+dmaap:
+  enabled: true
+
+esr:
+  enabled: true
+log:
+  enabled: false
+  log-logstash:
+    replicaCount: 1
+mariadb-galera:
+  enabled: true
+  replicaCount: 1
+modeling:
+  enabled: false
+msb:
+  enabled: true
+multicloud:
+  enabled: true
+nbi:
+  enabled: false
+oof:
+  enabled: true
+platform:
+  enabled: false
+policy:
+  enabled: true
+  policy-api:
+    enabled: true
+  policy-pap:
+    enabled: true
+  policy-xacml-pdp:
+    enabled: true
+  policy-apex-pdp:
+    enabled: true
+  policy-drools-pdp:
+    enabled: false
+  policy-distribution:
+    enabled: false
+  policy-clamp-be:
+    enabled: true
+  policy-clamp-runtime-acm:
+    enabled: true
+  policy-clamp-ac-k8s-ppnt:
+    enabled: true
+  policy-gui:
+    enabled: false
+    image: onap/policy-gui:2.2.1
+  policy-nexus:
+    enabled: false
+  policy-clamp-ac-pf-ppnt:
+    enabled: true
+  policy-clamp-ac-http-ppnt:
+    enabled: true
+
+pomba:
+  enabled: false
+portal:
+  enabled: false
+robot:
+  enabled: false
+sdc:
+  enabled: true
+  sdc-be:
+    config:
+      javaOptions: "-Xmx1g -Xms512m"
+    liveness:
+      periodSeconds: 300
+      timeoutSeconds: 180
+    readiness:
+      periodSeconds: 300
+      timeoutSeconds: 240
+  sdc-fe:
+    resources:
+      small:
+        limits:
+          cpu: 1
+          memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 500Mi
+  sdc-wfd:
+    enabled: false
+  global:
+    sdc_cassandra:
+      replicaCount: 1
+
+sdnc:
+  enabled: true
+  replicaCount: 1
+  elasticsearch:
+    master:
+      replicaCount: 1
+  mysql:
+    replicaCount: 1
+  ueb-listener:
+    enabled: false
+  sdnc-ansible-server:
+    enabled: true
+  dgbuilder:
+    enabled: true
+  cds:
+    enabled: false
+  sdnc-web:
+    config:
+      topologyserver:
+        enabled: true
+        topologyserverUrl: http://topology.nonrtric:3001
+  config:
+    sdnr:
+      enabled: true
+      # mode: web - SDNC contains device manager only plus dedicated webserver service for ODLUX (default),
+      # mode: dm - SDNC contains sdnr device manager + ODLUX components
+      mode: dm
+      # sdnronly: true starts sdnc container with odl and sdnrwt features only
+      sdnronly: false
+      sdnrdbTrustAllCerts: true
+      mountpointRegistrarEnabled: true
+      mountpointStateProviderEnabled: true
+      netconfCallHome:
+        enabled: true
+      vesCollector:
+        enabled: true
+        tls:
+          enabled: true
+        trustAllCertificates: true
+        username: sample1
+        password: sample1
+        address: dcae-ves-collector.onap
+        port: 8443
+        eventLogMsgDetail: LONG
+sniro-emulator:
+  enabled: false
+
+strimzi:
+  enabled: true
+
+so:
+  enabled: true
+  so-catalog-db-adapter:
+    config:
+      openStackUserName: "the username"
+      openStackKeyStoneUrl: "http://10.12.25.2:5000/v3"
+      openStackEncryptedPasswordHere: "1DD1B3B4477FBAFAFEA617C575639C6F09E95446B5AE1F46C72B8FD960219ABB0DBA997790FCBB12"
+      openStackKeystoneVersion: "KEYSTONE_V3"
+uui:
+  enabled: true
+vfc:
+  enabled: false
+vid:
+  enabled: true
+vnfsdk:
+  enabled: false
+
