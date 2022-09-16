@@ -26,11 +26,12 @@
 import logging
 import logging.config
 import subprocess
-from subprocess import check_output
 from onapsdk.configuration import settings
+from oransdk.msb.msb_microservice import OranMsb
 
 logging.config.dictConfig(settings.LOG_CONFIG)
 logger = logging.getLogger("####################### Start MSB Preparation")
+msb = OranMsb()
 
 class MsbPreparation():
     """Can be used to prepare MSB for Network Slicing usecase option2."""
@@ -45,8 +46,7 @@ class MsbPreparation():
                   \"tls_skip_verify\": true}],\"status\": \"1\",\"publish_port\": \"\",\"lb_policy\": \"ip_hash\",\"serviceName\": \
                   \"so-serviceInstances\",\"metadata\": [],\"network_plane_type\": \"\", \"version\": \"v3\",\"labels\": [],\"namespace\": \"\", \
                   \"enable_ssl\": false,\"path\": \"\",\"protocol\": \"REST\",\"host\": \"\",\"visualRange\": \"1\",\"is_manual\": true}"
-        cmd = f"curl -sk --noproxy \"*\" -X POST {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" -d '{content}'"
-        check_output(cmd, shell=True).decode('utf-8')
+        msb.create_service(content)
 
         logger.info("####################### Start to register SO orchestration tasks")
         content = "{ \"url\": \"/onap/so/infra/orchestrationTasks/v4\",\"nodes\": [{\"nodeId\": \"_v4_so-orchestrationTasks_" + so_pod + "_8080\", \
@@ -54,8 +54,7 @@ class MsbPreparation():
                   \"tls_skip_verify\": true}],\"status\": \"1\",\"publish_port\": \"\",\"lb_policy\": \"ip_hash\",\"serviceName\": \
                   \"so-orchestrationTasks\",\"metadata\": [],\"network_plane_type\": \"\", \"version\": \"v4\",\"labels\": [],\"namespace\": \"\", \
                   \"enable_ssl\": false,\"path\": \"\",\"protocol\": \"REST\",\"host\": \"\",\"visualRange\": \"1\",\"is_manual\": true}"
-        cmd = f"curl -sk --noproxy \"*\" -X POST {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" -d '{content}'"
-        check_output(cmd, shell=True).decode('utf-8')
+        msb.create_service(content)
 
         logger.info("####################### Start to register AAI business instance service")
         aai_pod = subprocess.run("kubectl get svc -n onap aai | grep aai | awk '{print $3}' ", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
@@ -64,12 +63,12 @@ class MsbPreparation():
                   "tls_skip_verify": true}],"status": "1","publish_port": "","lb_policy": "", "serviceName": "aai-business","metadata": \
                   [],"network_plane_type": "","version": "v13","labels": [],"namespace": "","enable_ssl": true,"path": "","protocol": \
                   "REST","host": "","visualRange": "1","is_manual": true}'
-        cmd = f"curl -sk --noproxy \"*\" -X POST {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" -d '{content}'"
-        check_output(cmd, shell=True).decode('utf-8')
+        msb.create_service(content)
 
     @classmethod
     def cleanup_msb(cls):
         """Rollback msb settings."""
-        logger.info("####################### Start to remove SO instance service")
-        cmd = f"curl -sk --noproxy \"*\" -X DELETE {settings.MSB_URL}/api/msdiscover/v1/services -H  \"accept: application/json\" -H  \"Content-Type: application/json\" "
-        check_output(cmd, shell=True).decode('utf-8')
+        logger.info("####################### Remove SO instance service")
+        msb.delete_service("so-serviceInstances", "v3")
+        msb.delete_service("so-orchestrationTasks", "v4")
+        msb.delete_service("aai-business", "v13")

@@ -26,6 +26,7 @@
 """Onap Sdc module."""
 from time import sleep
 import onapsdk.constants as const
+from onapsdk.configuration import settings
 from onapsdk.exceptions import APIError, ResourceNotFound
 from onapsdk.onap_service import OnapService as Onap
 from onapsdk.sdc.properties import Input, NestedInput, ParameterError
@@ -39,6 +40,18 @@ from oransdk.sdc.service import OranService
 
 class SdcTemplate(Onap):
     """Onap Sdc Template class."""
+
+    def healthcheck(self) -> dict:
+        """Healchcheck SDC components.
+
+        Returns:
+            status of SDC components
+        """
+        status = self.send_message_json("GET",
+                                        "SDC Healchcheck",
+                                        f"{settings.SDC_FE_URL}/sdc1/feProxy/rest/healthCheck")
+
+        return status
 
     def create_service_category(self, category_names) -> None:
         """Create service category by names.

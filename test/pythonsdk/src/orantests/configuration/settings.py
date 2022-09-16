@@ -66,6 +66,7 @@ VES_URL         = "http://ves.api.simpledemo.onap.org:30417"
 DMAAP_URL       = "http://192.168.1.39:3904"
 NBI_URL         = "https://nbi.api.simpledemo.onap.org:30274"
 NBI_API_VERSION = "/nbi/api/v4"
+OOF_URL         = "https://oof.api.simpledemo.onap.org:30275"
 
 POLICY_BASICAUTH = { 'username': 'policyadmin', 'password': 'zb!XztG34' }
 SDNC_BASICAUTH = { 'username': 'admin', 'password': 'Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U' }
@@ -99,6 +100,8 @@ DMAAP_TOPIC_FAULT_JSON = '{"topicName": "' + DMAAP_TOPIC_FAULT + '", "replicatio
 
 ### Number of pods left in completed state for ONAP namespace
 ONAP_PODS_WHEN_READY = 9
+DEFAULT_CHECK_RETRY = 30
+DEFAULT_CHECK_TIMEOUT = 900
 SMO_CHECK_RETRY = 30
 SMO_CHECK_TIMEOUT = 900
 SDNC_CHECK_RETRY = 30
