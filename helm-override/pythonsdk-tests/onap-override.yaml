@@ -290,7 +290,7 @@ policy:
     enabled: true
   policy-clamp-ac-k8s-ppnt:
     enabled: true
-    image: onap/policy-clamp-ac-k8s-ppnt:latest
+    image: onap/policy-clamp-ac-k8s-ppnt:6.3.0
     repoList:
       helm:
         repos:
