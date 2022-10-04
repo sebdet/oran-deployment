@@ -67,17 +67,18 @@ def setup_simulators():
     check_output(cmd, shell=True).decode('utf-8')
 
     logger.info("Start chartmuseum on policy k8s pod")
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"curl -LO https://s3.amazonaws.com/chartmuseum/release/latest/bin/linux/amd64/chartmuseum\""
+    subprocess.run("curl -LO https://s3.amazonaws.com/chartmuseum/release/latest/bin/linux/amd64/chartmuseum", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+    subprocess.run(f"kubectl cp ./chartmuseum onap/{k8s_pod}:/opt/app/policy/clamp/bin/chartmuseum", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+    subprocess.run("rm -rf ./chartmuseum", shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+
+    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"chmod +x /opt/app/policy/clamp/bin/chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
 
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"chmod +x ./chartmuseum\""
-    check_output(cmd, shell=True).decode('utf-8')
-
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"./chartmuseum --storage local --storage-local-rootdir /home/policy/helm3-storage -port 8080 > /dev/null 2>&1 &\""
+    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"/opt/app/policy/clamp/bin/chartmuseum --storage local --storage-local-rootdir /home/policy/helm3-storage -port 8080 > /dev/null 2>&1 &\""
     check_output(cmd, shell=True).decode('utf-8')
 
     logger.info("Deploy o-ru helm chart to clamp k8s pod local repo")
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"curl -k -X POST --data-binary @/home/policy/local-charts/oru-app-1.0.0.tgz {chartmuseum_url}/api/charts\""
+    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"curl -k --noproxy '*' -X POST --data-binary @/home/policy/local-charts/oru-app-1.0.0.tgz {chartmuseum_url}/api/charts\""
     check_output(cmd, shell=True).decode('utf-8')
 
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo add chartmuseum {chartmuseum_url}\""
@@ -99,7 +100,7 @@ def setup_simulators():
     # Remove the remote repo to Clamp k8s pod
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"helm repo remove chartmuseum\""
     check_output(cmd, shell=True).decode('utf-8')
-    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"curl -k -X DELETE {chartmuseum_url}/api/charts/oru-app/1.0.0\""
+    cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"curl -k --noproxy '*' -X DELETE {chartmuseum_url}/api/charts/oru-app/1.0.0\""
     check_output(cmd, shell=True).decode('utf-8')
     cmd = f"kubectl exec -it -n onap {k8s_pod} -- sh -c \"rm -rf /home/policy/local-charts/oru-app-1.0.0.tgz\""
     check_output(cmd, shell=True).decode('utf-8')
