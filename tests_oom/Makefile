@@ -28,7 +28,7 @@ ifneq "$(findstring v3,$(HELM_VER))" "v3"
 	HELM_VER := $(shell $(HELM_BIN) version -c --template "{{.Client.SemVer}}")
 endif
 
-# use this if you would like to push onap charts to repo with other name
+# use this if you would like to cm-push onap charts to repo with other name
 # WARNING: Helm v3+ only
 # WARNING: Make sure to edit also requirements files
 HELM_REPO := local
@@ -82,7 +82,7 @@ lint-%: dep-%
 package-%: lint-%
 	@mkdir -p $(PACKAGE_DIR)
 ifeq "$(findstring v3,$(HELM_VER))" "v3"
-	@if [ -f $*/Chart.yaml ]; then PACKAGE_NAME=$$($(HELM_BIN) package -d $(PACKAGE_DIR) $* | cut -d":" -f2) && $(HELM_BIN) push -f $$PACKAGE_NAME $(HELM_REPO); fi
+	@if [ -f $*/Chart.yaml ]; then PACKAGE_NAME=$$($(HELM_BIN) package -d $(PACKAGE_DIR) $* | cut -d":" -f2) && $(HELM_BIN) cm-push -f $$PACKAGE_NAME $(HELM_REPO); fi
 else
 	@if [ -f $*/Chart.yaml ]; then $(HELM_BIN) package -d $(PACKAGE_DIR) $*; fi
 	@$(HELM_BIN) repo index $(PACKAGE_DIR)
