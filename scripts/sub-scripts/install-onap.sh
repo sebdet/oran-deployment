@@ -27,7 +27,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 cd $SCRIPT_PATH
 
-helm push ../packages/strimzi-kafka-operator-helm-3-chart-0.28.0.tgz local
+helm cm-push ../packages/strimzi-kafka-operator-helm-3-chart-0.28.0.tgz local
 helm repo update
 helm install strimzi-kafka-operator local/strimzi-kafka-operator --namespace strimzi-system --version 0.28.0 --set watchAnyNamespace=true --create-namespace
 
