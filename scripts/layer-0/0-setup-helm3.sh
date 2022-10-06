@@ -36,12 +36,12 @@ echo "Checking HELM ..."
 helm version
 plugin_path=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
 echo "plugin path is: $plugin_path"
-cp ../packages/helm.tar plugin_path
-tar xvfz plutin_path/helm.tar
-res=$(ls -lrt plugin_path)
+cp ../packages/helm.tar $plugin_path
+tar xvfz $plutin_path/helm.tar
+res=$(ls -lrt $plugin_path)
 echo "list plugin folder: $res"
-rm -rf plugin_path/helm.tar
-res=$(ls -lrt plugin_path)
+rm -rf $plugin_path/helm.tar
+res=$(ls -lrt $plugin_path)
 echo "list plugin folder: $res"
 res=$(helm plugin list)
 echo "list plugins: $res"
