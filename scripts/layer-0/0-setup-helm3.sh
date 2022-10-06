@@ -37,14 +37,14 @@ cd $SCRIPT_PATH
 
 echo "Checking HELM ..."
 helm version
-plugin_path=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
-echo "plugin path is: $plugin_path"
-cp ../packages/helm.tar $plugin_path
+PLUGIN_PATH=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
+echo "plugin path is: $PLUGIN_PATH; script path is: $SCRIPT_PATH"
+cp ../packages/helm.tar $PLUGIN_PATH
 tar xvfz $plutin_path/helm.tar
-res=$(ls -lrt $plugin_path)
+res=$(ls -lrt $PLUGIN_PATH)
 echo "list plugin folder: $res"
-rm -rf $plugin_path/helm.tar
-res=$(ls -lrt $plugin_path)
+rm -rf $PLUGIN_PATH/helm.tar
+res=$(ls -lrt $PLUGIN_PATH)
 echo "list plugin folder: $res"
 res=$(helm plugin list)
 echo "list plugins: $res"
