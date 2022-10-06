@@ -33,8 +33,17 @@ apt-get install git -y
 
 
 echo "Checking HELM ..."
-helm version 
-
-helm plugin install --version v0.10.3 https://github.com/chartmuseum/helm-push.git
+helm version
+plugin_path=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
+echo "plugin path is: $plugin_path"
+cp ../packages/helm.tar plugin_path
+tar xvfz plutin_path/helm.tar
+res=$(ls -lrt plugin_path)
+echo "list plugin folder: $res"
+rm -rf plugin_path/helm.tar
+res=$(ls -lrt plugin_path)
+echo "list plugin folder: $res"
+res=$(helm plugin list)
+echo "list plugins: $res"
 helm repo remove local
 helm repo add local http://localhost:18080
