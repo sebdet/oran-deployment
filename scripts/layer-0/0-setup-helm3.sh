@@ -34,17 +34,11 @@ tar xvfz /tmp/helm-v3.5.4-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 apt-get install git -y
 
-
 echo "Checking HELM ..."
 helm version
-PLUGIN_PATH=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
-echo "plugin path is: $PLUGIN_PATH; script path is: $SCRIPT_PATH"
 cd $SCRIPT_PATH
-
-sleep 5m
-sudo tar xvf ../packages/helm.tar --directory $PLUGIN_PATH
-res=$(sudo ls -lrt $PLUGIN_PATH)
-echo "list plugin folder: $res"
+tar xvf ../packages/helm.tar --directory ../packages
+helm plugin install ../packages/helm-push/
 helm repo remove local
 helm repo add local http://localhost:18080
 res=$(helm plugin list)
