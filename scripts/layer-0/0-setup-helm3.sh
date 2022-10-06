@@ -40,10 +40,10 @@ helm version
 PLUGIN_PATH=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
 echo "plugin path is: $PLUGIN_PATH; script path is: $SCRIPT_PATH"
 cd $SCRIPT_PATH
-tar xvf ../packages/helm.tar --directory $PLUGIN_PATH
-res=$(ls -lrt $PLUGIN_PATH)
+sudo tar xvf ../packages/helm.tar --directory $PLUGIN_PATH
+res=$(sudo ls -lrt $PLUGIN_PATH)
 echo "list plugin folder: $res"
-res=$(helm plugin list)
-echo "list plugins: $res"
 helm repo remove local
 helm repo add local http://localhost:18080
+res=$(helm plugin list)
+echo "list plugins: $res"
