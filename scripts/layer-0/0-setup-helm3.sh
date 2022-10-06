@@ -40,6 +40,8 @@ helm version
 PLUGIN_PATH=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
 echo "plugin path is: $PLUGIN_PATH; script path is: $SCRIPT_PATH"
 cd $SCRIPT_PATH
+
+sleep 5m
 sudo tar xvf ../packages/helm.tar --directory $PLUGIN_PATH
 res=$(sudo ls -lrt $PLUGIN_PATH)
 echo "list plugin folder: $res"
