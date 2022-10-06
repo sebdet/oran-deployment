@@ -23,6 +23,9 @@
 # 
 ###
 
+SCRIPT=$(readlink -f "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+
 #Helm package
 wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz
 mv helm-v3.5.4-linux-amd64.tar.gz /tmp/helm-v3.5.4-linux-amd64.tar.gz
@@ -31,19 +34,13 @@ tar xvfz /tmp/helm-v3.5.4-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 apt-get install git -y
 
-SCRIPT=$(readlink -f "$0")
-SCRIPT_PATH=$(dirname "$SCRIPT")
-cd $SCRIPT_PATH
 
 echo "Checking HELM ..."
 helm version
 PLUGIN_PATH=$(helm env | grep HELM_PLUGINS | cut -d'"' -f2)
 echo "plugin path is: $PLUGIN_PATH; script path is: $SCRIPT_PATH"
-cp ../packages/helm.tar $PLUGIN_PATH
-tar xvfz $plutin_path/helm.tar
-res=$(ls -lrt $PLUGIN_PATH)
-echo "list plugin folder: $res"
-rm -rf $PLUGIN_PATH/helm.tar
+cd $SCRIPT_PATH
+tar xvf ../packages/helm.tar --directory $PLUGIN_PATH
 res=$(ls -lrt $PLUGIN_PATH)
 echo "list plugin folder: $res"
 res=$(helm plugin list)
