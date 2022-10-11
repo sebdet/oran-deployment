@@ -22,8 +22,8 @@ informationservice:
   imagePullPolicy: IfNotPresent
   image:
     registry: "nexus3.o-ran-sc.org:10002/o-ran-sc"
-    name: "nonrtric-information-coordinator-service"
-    tag: 1.2.0
+    name: "nonrtric-plt-informationcoordinatorservice"
+    tag: 1.3.0
   service:
     allowHttp: true
     httpName: http

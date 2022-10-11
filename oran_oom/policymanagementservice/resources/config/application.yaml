@@ -65,8 +65,12 @@ app:
     # The HTTP proxy (if configured) will only be used for accessing NearRT RIC:s
     http.proxy-host:
     http.proxy-port: 0
+    http.proxy-type: HTTP
   # path where the service can store data
   vardata-directory: /var/policy-management-service
   # the config-file-schema-path referres to a location in the jar file. If this property is empty or missing,
   # no schema validation will be executed.
   config-file-schema-path: /application_configuration_schema.json
+  # A file containing an authorization token, which shall be inserted in each HTTP header (authorization).
+  # If the file name is empty, no authorization token is sent.
+  auth-token-file:

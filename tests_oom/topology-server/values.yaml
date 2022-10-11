@@ -17,7 +17,7 @@ replicaCount: 1
 image:
   repository: 'nexus3.o-ran-sc.org:10004/o-ran-sc'
   name: smo-nts-ng-topology-server
-  tag: 1.4.5
+  tag: 1.5.0
   pullPolicy: IfNotPresent
 
 service:

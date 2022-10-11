@@ -11,7 +11,7 @@
       "ric": [
         {
              "name":"ric1",
-             "baseUrl":"https://a1-sim-osc-0.a1-sim:8185",
+             "baseUrl":"https://a1-sim-osc-0:8185",
              "controller": "controller1",
              "managedElementIds":[
                 "kista_1",
@@ -20,7 +20,7 @@
           },
           {
             "name":"ric2",
-            "baseUrl":"https://a1-sim-osc-1.a1-sim:8185",
+            "baseUrl":"https://a1-sim-osc-1:8185",
             "controller": "controller1",
             "managedElementIds":[
                "kista_1",
@@ -29,7 +29,7 @@
           },
           {
             "name":"ric3",
-            "baseUrl":"https://a1-sim-std-0.a1-sim:8185",
+            "baseUrl":"https://a1-sim-std-0:8185",
             "controller": "controller1",
             "managedElementIds":[
                "kista_1",
@@ -38,7 +38,7 @@
           },
           {
             "name":"ric4",
-            "baseUrl":"https://a1-sim-std-1.a1-sim:8185",
+            "baseUrl":"https://a1-sim-std-1:8185",
             "controller": "controller1",
             "managedElementIds":[
                "kista_1",
@@ -47,7 +47,7 @@
           },
           {
             "name":"ric5",
-            "baseUrl":"https://a1-sim-std2-0.a1-sim:8185",
+            "baseUrl":"https://a1-sim-std2-0:8185",
             "controller": "controller1",
             "managedElementIds":[
                "kista_1",
@@ -56,7 +56,7 @@
           },
           {
             "name":"ric6",
-            "baseUrl":"https://a1-sim-std2-1.a1-sim:8185",
+            "baseUrl":"https://a1-sim-std2-1:8185",
             "controller": "controller1",
             "managedElementIds":[
                "kista_1",

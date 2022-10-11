@@ -22,8 +22,8 @@ rappcatalogueservice:
   imagePullPolicy: IfNotPresent
   image:
     registry: 'nexus3.o-ran-sc.org:10002/o-ran-sc'
-    name: nonrtric-r-app-catalogue
-    tag: 1.0.1
+    name: nonrtric-plt-rappcatalogue
+    tag: 1.1.0
   service:
     allowHttp: true
     httpName: http

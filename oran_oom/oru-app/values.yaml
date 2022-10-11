@@ -2,8 +2,8 @@
 replicaCount: 1
 image:
   repository: 'nexus3.o-ran-sc.org:10002/o-ran-sc'
-  name: nonrtric-o-ru-closed-loop-recovery
-  tag: 1.0.0
+  name: nonrtric-rapp-orufhrecovery
+  tag: 1.1.0
   pullPolicy: IfNotPresent
 
 global:

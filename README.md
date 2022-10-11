@@ -1,15 +1,15 @@
-# ORAN SMO Package
+# O-RAN SMO Package
 
 This project uses different helm charts from different Linux Foundation projects and integrate them into a unique SMO deployment.
 <p>The ONAP and ORAN project helm charts are built and then configured by using "helm override" so that it represents a valid ORAN SMO installation.</p>
-<p>It contains also provisioning scripts that can be used to bootstrap the platform and execute test usecases, network simulators, a1 simulators, cnf network simulators, etc ...</p>
+<p>It contains also provisioning scripts that can be used to bootstrap the platform and execute test use cases, network simulators, a1 simulators, cnf network simulators, etc ...</p>
 
 <strong>Note:</strong>
 The CNF part is still a "work in progress" so not well documented, it's a DU/RU/topology server deployment done by ONAP SO instantiation.
-It has been created out of the ONAP vfirewall usecase.
+It has been created out of the ONAP vfirewall use case.
 
 ## Quick Installation on blank node
-* Setup a VM with 40GB Memory, 6VCPU, 60GB of diskspace. 
+* Setup a VM with 40GB Memory, 6VCPU, 60GB of disk space. 
 * Install an ubuntu live server 20.04 LTS (https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso)
 * Install snap and restart the shell session: sudo apt-get install snapd -y
 * Execute the following commands being logged as root:
@@ -36,7 +36,7 @@ It has been created out of the ONAP vfirewall usecase.
 	```./oran-deployment/scripts/layer-2/2-install-simulators.sh```
 
 ## Quick Installation on existing kubernetes
-* Ensure you have at least 20GB Memory, 6VCPU, 60GB of diskspace. 
+* Ensure you have at least 20GB Memory, 6VCPU, 60GB of disk space. 
 * Execute the following commands being logged as root:
 
 	```git clone --recursive git@github.com:gmngueko/oran-deployment.git```
@@ -187,7 +187,7 @@ In the ./helm-override/ folder the helm config that are used by the SMO installa
 	- ONAP + ORAN "nonrtric" <strong>(RECOMMENDED ONE)</strong>:  
 	
 		```./oran-deployment/scripts/layer-2/2-install-oran.sh```
-	- ORAN "nonrtric" par only: 
+	- ORAN "nonrtric" part only: 
 	
 		```./oran-deployment/scripts/layer-2/2-install-nonrtric-only.sh```
 

@@ -22,8 +22,8 @@ policymanagementservice:
   imagePullPolicy: IfNotPresent
   image:
     registry: "nexus3.o-ran-sc.org:10002/o-ran-sc"
-    name: nonrtric-a1-policy-management-service
-    tag: 2.3.0
+    name: nonrtric-plt-a1policymanagementservice
+    tag: 2.4.0
   service:
     type: NodePort
     allowHttp: true
