@@ -35,6 +35,6 @@ apt-get install git -y
 echo "Checking HELM ..."
 helm version 
 
-helm plugin install --version v0.9.0 https://github.com/chartmuseum/helm-push.git
+helm plugin install --version v0.10.3 https://github.com/chartmuseum/helm-push.git
 helm repo remove local
 helm repo add local http://localhost:18080

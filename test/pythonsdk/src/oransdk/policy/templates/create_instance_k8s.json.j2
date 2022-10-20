@@ -74,7 +74,7 @@
             "name": "K8sParticipant0"
           },
           "provider": "ONAP",
-          "chart": "{\"chartId\":{\"name\":\"{{chartName}}\",\"version\":\"{{chartVersion}}\"},\"namespace\":\"nonrtric\",\"releaseName\":\"{{releaseName}}\",\"repository\":{\"repoName\":\"chartmuseum\",\"address\":\"{{chartmuseumIp}}\",\"protocol\":\"http\",\"port\":{{chartmuseumPort}}}}"
+          "chart": "{\"chartId\":{\"name\":\"{{chartName}}\",\"version\":\"{{chartVersion}}\"},\"namespace\":\"nonrtric\",\"releaseName\":\"{{releaseName}}\",\"repository\":{\"repoName\":\"chartmuseum\",\"address\":\"http://{{chartmuseumIp}}:{{chartmuseumPort}}\",\"protocol\":\"http\",\"port\":{{chartmuseumPort}}}}"
         },
         "metadata": {},
         "description": "Automation composition element for the K8S microservice for PMSH",

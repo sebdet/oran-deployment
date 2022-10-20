@@ -26,10 +26,11 @@
             "version": "1.0.0",
             "name": "K8sParticipant0"
           },
+          "uninitializedToPassiveTimeout": 300,
           "provider": "ONAP",
           "chart": {
             "repository": {
-              "address": "{{chartmuseumIp}}",
+              "address": "http://{{chartmuseumIp}}:{{chartmuseumPort}}",
               "repoName": "chartmuseum",
               "port": {{chartmuseumPort}},
               "protocol": "http"
